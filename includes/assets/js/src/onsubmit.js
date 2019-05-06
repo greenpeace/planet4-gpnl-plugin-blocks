@@ -20,7 +20,6 @@ $('.gpnl-petitionform').on('submit', function () {
     success: function(data) {
       // eslint-disable-next-line no-console
       console.log('^-^');
-      console.log(data);
 
       // Send conversion event to the GTM
       if (typeof dataLayer !== 'undefined') {
@@ -68,11 +67,10 @@ $('.gpnl-petitionform').on('submit', function () {
       let clangct=getUrlVars()['clangct'];
       if(clangct != undefined){clang.conversion.track();}
     },
-    error: function(data){
+    error: function(){
       // If the backend sends an error, hide the thank element and show an error urging to try again
       // eslint-disable-next-line no-console
       console.log('o_o');
-      console.log(data);
       var cardback = $(petition_form_element.parentNode.nextElementSibling);
       cardback.find('*').hide('');
       cardback.append('<p>Sorry, er gaat momenteel iets fout, probeer het nu of later opnieuw.</p>');
