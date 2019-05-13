@@ -97,7 +97,7 @@ if ( ! class_exists( 'No_Index_Controller' ) ) {
 		 * Checks if the noindex block is used, if so, removes the categories and tags
 		 */
 		public function delete_tags_and_categories() {
-			if ( ! empty( $_POST ) && has_shortcode( $_POST['content'], 'shortcake_noindex' ) ) {
+			if ( ! empty( $_POST ) && defined( $_POST['content']) && has_shortcode( $_POST['content'], 'shortcake_noindex' ) ) {
 				wp_set_post_terms( $_POST['post_ID'], [], 'post_tag' );
 				wp_set_post_terms( $_POST['post_ID'], [], 'category' );
 			}
@@ -110,6 +110,9 @@ if ( ! class_exists( 'No_Index_Controller' ) ) {
 		public function add_robots_noindex_to_wp_header() {
 			global $post;
 
+			if ( ! is_object( $post ) ) {
+				return;
+			}
 			$post_content = $post->post_content;
 
 			if ( ( null !== $post_content ) && has_shortcode( $post_content, 'shortcake_noindex' ) ) {
