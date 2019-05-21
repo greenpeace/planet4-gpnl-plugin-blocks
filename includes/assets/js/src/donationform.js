@@ -810,7 +810,8 @@ $(document).ready(function() {
 
       onSucces: function() {
         // console.log(this.finalModel);
-        var formBody = $('#Adres4');
+        // TODO: Vue strangely pre-&appends numbers, should find a more durable solution
+        var formBody = $('#3Adres4');
         formBody.addClass('card');
         formBody.empty();
         formBody.append('<div class="card-body donation-card"></div>');
