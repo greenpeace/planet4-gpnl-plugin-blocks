@@ -127,8 +127,9 @@ function flip_positionattribute (el){
 }
 
 /* eslint-disable */
-function fireShareEvent (platform){
+function fireShareEvent (platform, form_id){
   if (typeof dataLayer !== 'undefined') {
+    let form_config = 'petition_form_object_' + form_id;
     dataLayer.push({
       'event'         :'petitiebutton',
       'conv_campaign' :window[form_config].analytics_campaign,
