@@ -26,6 +26,16 @@ $('.gpnl-newsletter__form').on('submit', function () {
       $('.gpnl-newsletter__title').html('Hoera, je bent er bijna! ');
       $('.gpnl-newsletter__description').html('<h4>Bevestig je aanmelding via de mail die je van ons ontvangt. Bedankt!  </h4>');
 
+      // Send conversion event to the GTM
+      if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+          'event'         : 'nieuwsbriefformulier',
+          'conv_campaign' : post_form_value.literaturecode,
+          'conv_action'   : 'registreer',
+          'conv_label'    : 'registreer-nieuwsbrief'
+        });
+      }
+
     },
     error: function(){
       // If the backend sends an error, hide the thank element and show an error urging to try again
