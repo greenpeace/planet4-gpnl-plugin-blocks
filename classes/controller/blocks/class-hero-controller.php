@@ -165,7 +165,7 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 				'fields' => $fields,
 			];
 
-			wp_enqueue_style( 'gpnl_hero_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-hero.css', [], '2.2.29' );
+			wp_enqueue_style( 'gpnl_hero_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-hero.css', [], '2.9.2' );
 
 			// Shortcode callbacks must return content, hence, output buffering here.
 			ob_start();
