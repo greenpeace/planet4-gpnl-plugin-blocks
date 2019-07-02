@@ -1,10 +1,10 @@
-	@import "base";
+@import "base";
 
-	.page-header, .page-header-title, .page-header-subtitle, .page-header-content {
+.page-header, .page-header-title, .page-header-subtitle, .page-header-content {
 
-	  /*display: none;*/
-	  visibility: hidden;
-	  height: 0;
+  /*display: none;*/
+  visibility: hidden;
+  height: 0;
   padding: 0;
 }
 
@@ -15,24 +15,13 @@
   overflow: hidden;
   width: 100vw;
   background-size: cover;
-
-  //@include medium-and-up {
-  //  margin-top: 60px;
-  //}
-  //
-  //@include x-large-and-up {
-  //  margin-top: 65px;
-  //}
+  margin: 60px 0 0 $sm;
 
   // TODO add option for hero with only title white on green
   .hero__wrapper {
     .hero__text {
       top: 0;
       max-width: 100%;
-      margin: 30px 0 0 $sm;
-      @include small-and-up {
-        margin: 60px 0;
-      }
 
       @include medium-and-up {
         left: $xlrg;
