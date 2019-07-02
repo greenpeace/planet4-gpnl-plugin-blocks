@@ -15,25 +15,13 @@
   overflow: hidden;
   width: 100vw;
   background-size: cover;
-
-  //@include medium-and-up {
-  //  margin-top: 60px;
-  //}
-  //
-  //@include x-large-and-up {
-  //  margin-top: 65px;
-  //}
+  margin: 60px 0 0 $sm;
 
   // TODO add option for hero with only title white on green
   .hero__wrapper {
     .hero__text {
       top: 0;
-      margin-left: $sm;
       max-width: 100%;
-      padding: 30px 0;
-      @include small-and-up {
-        padding: 60px 0;
-      }
 
       @include medium-and-up {
         left: $xlrg;
