@@ -73,6 +73,24 @@ if ( ! class_exists( 'GPNL_2colembed_Controller' ) ) {
 					'type'  => 'number',
 					'value' => '',
 				],
+				[
+					'label'   => __( 'Verhouding kolommmen?', 'planet4-gpnl-blocks' ),
+					'attr'    => 'column_size',
+					'type'    => 'select',
+					'options' => [
+						[
+							'value' => '6',
+							'label' => '50% + 50%',
+							'meta'  => [
+								'selected' => '',
+							],
+						],
+						[
+							'value' => '8',
+							'label' => '66% + 33%',
+						],
+					],
+				],
 			];
 
 			// Define the Shortcode UI arguments.
