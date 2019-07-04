@@ -1,0 +1,34 @@
+{% block gpnl_2colembed %}
+  {% if ( fields ) %}
+	  <section class="block columns-block">
+		  <div class="container">
+			  {% if ( fields.title ) %}
+				  <header>
+					  <h2 class="page-section-header">{{ fields.title|e('wp_kses_post')|raw }}</h2>
+				  </header>
+			  {% endif %}
+			  {% if ( fields.description ) %}
+				  <p class="page-section-description">{{ fields.description|e('wp_kses_post')|raw }}</p>
+			  {% endif %}
+			  <div class="row">
+				  <div class="col-md-6 col-lg column-wrap ">
+					  {% if fields.column_title %}
+						  <h3>{{ fields.column_title|e('wp_kses_post')|raw }}</h3>
+					  {% endif %}
+					  {% if fields.column_description %}
+						  <p>{{ fields.column_description|e('wp_kses_post')|raw }}</p>
+					  {% endif %}
+					  {% if (fields.column_cta_text) %}
+						  <a href="{{ fields.column_cta_link }}" class="btn btn-medium btn-primary btn-block">{{ fields.column_cta_text }}</a>
+					  {% endif %}
+				  </div>
+				  <div class="col-md-6 col-lg column-wrap ">
+					  <iframe src="{{ fields.iframe_src }}" height="{{ fields.iframe_height }}" width="100%"></iframe>
+				  </div>
+			  </div>
+		  </div>
+	  </section>
+
+
+  {% endif %}
+{% endblock %}
