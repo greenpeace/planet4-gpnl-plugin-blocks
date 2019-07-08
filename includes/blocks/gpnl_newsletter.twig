@@ -1,7 +1,6 @@
 {% block gpnl_newsletter %}
-    {% if ( fields ) %}
-
-		<div class="happy-point-block-wrap block-wide">
+	{% if ( fields ) %}
+		<section class="block happy-point-block-wrap block-wide">
 			<picture>
 				<img src="{{ fields.background_src.0|default(fields.default_image) }}"
 					 style="object-position:{{ fields.focus_image }};opacity:{{ fields.opacity }};"
@@ -15,33 +14,34 @@
 				<div class="gpnl-newsletter__text">
 					{% if ( fields.title ) %}
 						<h2 class="gpnl-newsletter__title">
-						  {{ fields.title }}
+							{{ fields.title }}
 						</h2>
 					{% endif %}
 
 					{% if ( fields.subtitle ) %}
-						<p class="gpnl-newsletter__description">{{ fields.subtitle}}</p>
+						<p class="gpnl-newsletter__description">{{ fields.subtitle }}</p>
 					{% endif %}
 				</div>
 				<form class="gpnl-newsletter__form" onsubmit="return false;">
-					<fieldset  class="row">
-						<div class="form-group col-lg-5 col-md-6">
+					<fieldset class="row">
+						<div class="form-group col-12 col-md-6 col-lg-5 ">
 							<input type="text" name="name" id="name" class="form-control" placeholder="Naam"
 								   aria-describedby="helpId">
-{#							<small id="helpId" class="text-muted">Help text</small>#}
+							{#							<small id="helpId" class="text-muted">Help text</small>#}
 						</div>
-						<div class="form-group col-lg-4 col-md-6">
-							<input type="email" class="form-control" name="mail" id="mail" aria-describedby="emailHelpId"
+						<div class="form-group col-12 col-md-6 col-lg-4 ">
+							<input type="email" class="form-control" name="mail" id="mail"
+								   aria-describedby="emailHelpId"
 								   placeholder="E-mail">
-{#							<small id="emailHelpId" class="form-text text-muted">Help text</small>#}
 						</div>
-						<input type="submit" class="btn btn-primary col-lg-3 col-md-12" value="Aanmelden">
-						<input type="text" name="form_id" value="{{ fields.form_id }}" hidden readonly>
+						{#							<small id="emailHelpId" class="form-text text-muted">Help text</small>#}
+						<div class="form-group col-12 col-md-12 col-lg-3 ">
+							<input type="submit" class="btn btn-primary" value="Aanmelden">
+							<input type="text" name="form_id" value="{{ fields.form_id }}" hidden readonly>
+						</div>
 					</fieldset>
 				</form>
 			</div>
-		</div>
-
-
-    {% endif %}
+		</section>
+	{% endif %}
 {% endblock %}
