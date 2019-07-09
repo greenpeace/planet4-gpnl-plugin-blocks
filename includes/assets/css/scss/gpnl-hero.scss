@@ -17,6 +17,14 @@
   margin: 60px 0 0 $sm;
   border-bottom: 3px solid $light-green;
 
+  &.hero__small {
+    height: 250px;
+
+    .hero__description {
+      display: none;
+    }
+  }
+
   // TODO add option for hero with only title white on green
   .hero__wrapper {
     .hero__text {
