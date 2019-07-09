@@ -113,7 +113,7 @@ function watch() {
 exports.fix =  gulp.parallel(fix_css, fix_js);
 exports.sass = sass;
 exports.clean_all= gulp.parallel(clean_js, clean_css_maps, clean_js_maps);
-exports.clean_css= clean_css_maps
+exports.clean_css= clean_css_maps;
 exports.clean_js= gulp.parallel(clean_js, clean_js_maps);
 exports.uglify = uglify;
 exports.watch = watch;
