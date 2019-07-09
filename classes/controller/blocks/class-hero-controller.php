@@ -111,6 +111,14 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 						'data-plugin' => 'planet4-blocks',
 					],
 				],
+				[
+					'label' => __(
+						'Kleine hero image? Dit halveert de hoogte en verbergt de abstract.',
+						'planet4-gpnl-blocks'
+					),
+					'attr'  => 'small',
+					'type'  => 'checkbox',
+				],
 			);
 
 			// Define the Shortcode UI arguments.
@@ -147,6 +155,7 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 					'focus_image' => '',
 					'link_text'   => '',
 					'link_url'    => '',
+					'small'       => '',
 				),
 				$fields,
 				$shortcode_tag
@@ -165,7 +174,7 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 				'fields' => $fields,
 			];
 
-			wp_enqueue_style( 'gpnl_hero_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-hero.css', [], '2.9.2' );
+			wp_enqueue_style( 'gpnl_hero_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-hero.css', [], '2.10.2' );
 
 			// Shortcode callbacks must return content, hence, output buffering here.
 			ob_start();
