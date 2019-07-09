@@ -47,6 +47,7 @@
           background-color: $white;
           line-height: 2.5;
           color: $black;
+          box-decoration-break: clone;
         }
       }
 
