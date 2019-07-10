@@ -62,6 +62,24 @@ if ( ! class_exists( 'GPNL_2colembed_Controller' ) ) {
 					'value' => '',
 				],
 				[
+					'label'   => __( 'Iframe of afbeelding?', 'planet4-gpnl-blocks' ),
+					'attr'    => 'embed_option',
+					'type'    => 'select',
+					'options' => [
+						[
+							'label' => 'Iframe',
+							'value' => 'iframe',
+							'meta'  => [
+								'selected' => '',
+							],
+						],
+						[
+							'label' => 'Afbeelding',
+							'value' => 'image',
+						],
+					],
+				],
+				[
 					'label' => __( 'Iframe link', 'planet4-gpnl-blocks' ),
 					'attr'  => 'iframe_src',
 					'type'  => 'text',
@@ -72,6 +90,14 @@ if ( ! class_exists( 'GPNL_2colembed_Controller' ) ) {
 					'attr'  => 'iframe_height',
 					'type'  => 'number',
 					'value' => '',
+				],
+				[
+					'label'       => __( 'Afbeelding', 'planet4-blocks-backend' ),
+					'attr'        => 'image',
+					'type'        => 'attachment',
+					'libraryType' => [ 'image' ],
+					'addButton'   => __( 'Selecteer afbeelding', 'planet4-blocks-backend' ),
+					'frameTitle'  => __( 'Selecteer afbeelding', 'planet4-blocks-backend' ),
 				],
 				[
 					'label'   => __( 'Verhouding kolommmen?', 'planet4-gpnl-blocks' ),
@@ -116,6 +142,15 @@ if ( ! class_exists( 'GPNL_2colembed_Controller' ) ) {
 		 * @return string The complete html of the block
 		 */
 		public function prepare_template( $fields, $content, $shortcode_tag ) : string {
+
+			// If an image is selected
+			if ( isset( $fields['image'] ) && $image = wp_get_attachment_image_src( $fields['image'], 'full' ) ) {
+				// load the image from the library
+				$fields['image']        = $image[0];
+				$fields['alt_text']     = get_post_meta( $fields['image'], '_wp_attachment_image_alt', true );
+				$fields['image_srcset'] = wp_get_attachment_image_srcset( $fields['image'], 'full', wp_get_attachment_metadata( $fields['image'] ) );
+				$fields['image_sizes']  = wp_calculate_image_sizes( 'full', null, null, $fields['image'] );
+			}
 
 
 			$fields = shortcode_atts(
