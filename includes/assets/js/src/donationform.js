@@ -183,7 +183,7 @@ $(document).ready(function() {
                 <input type="number" id="customAmount" class="form-control" v-model.trim="bedrag" @input="$v.bedrag.$touch()" name="transaction-amount">
                 <span class="help-block" v-if="$v.bedrag.$error && !$v.bedrag.required">Bedrag is verplicht</span>
                 <span class="help-block" v-if="$v.bedrag.$error && $v.bedrag.required && !$v.bedrag.numeric">Bedrag moet een nummer zijn</span>
-                <span class="help-block" v-if="$v.bedrag.$error && $v.bedrag.required && $v.bedrag.numeric && !$v.bedrag.between">Het minimale donatiebedrag is {{ formconfig.min_amount }} euro</span>
+                <span class="help-block" v-if="$v.bedrag.$error && $v.bedrag.required && $v.bedrag.numeric && !$v.bedrag.between">Het donatiebedrag moet liggen tussen {{ formconfig.min_amount }} en 100000 euro</span>
               </div>
             </div>
 		</fieldset>
@@ -313,16 +313,16 @@ $(document).ready(function() {
           <div class="form-row">
             <div class="form-group col-md-12" v-bind:class="{ 'has-error': $v.email.$error }">
                <label class="sr-only" for="email">Email</label>
-              <input class="form-control" v-model.trim="email" @input="$v.email.$touch()" placeholder="Email*" name="email" id="email">
+              <input class="form-control" v-model.trim="email" @blur="$v.email.$touch()" placeholder="Email*" name="email" id="email">
               <span class="help-block" v-if="$v.email.$error && !$v.email.required">Email is verplicht</span>
-              <span class="help-block" v-if="$v.email.$error && !$v.email.email">Dit is geen valide e-mail adres</span>
+              <span class="help-block" v-if="$v.email.$error && !$v.email.email">Dit is geen geldig e-mail adres</span>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group col-md-12" v-bind:class="{ 'has-error': $v.telefoonnummer.$error }">
                <label class="sr-only" for="tel">Telefoonnummer</label>
-              <input class="form-control" v-model.trim="telefoonnummer" @input="$v.telefoonnummer.$touch()" placeholder="Telefoonnummer" name="tel" id="tel">
+              <input class="form-control" v-model.trim="telefoonnummer" @blur="$v.telefoonnummer.$touch()" placeholder="Telefoonnummer" name="tel" id="tel">
                <!--<span class="help-block" v-if="$v.telefoonnummer.$error && !$v.telefoonnummer.required">Telefoonnummer is verplicht</span>-->
                <span class="help-block" v-if="$v.telefoonnummer.$error && !$v.telefoonnummer.numeric">Telefoonnummer moet een nummer zijn</span>
                <span class="help-block" v-if="$v.telefoonnummer.$error && $v.telefoonnummer.numeric && !$v.telefoonnummer.between">Telefoonnummer moet uit 10 cijfers bestaan</span>
