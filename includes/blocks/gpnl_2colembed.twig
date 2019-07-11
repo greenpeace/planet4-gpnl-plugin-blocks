@@ -6,7 +6,7 @@
 		  <div class="container">
 			  {% if ( fields.title ) %}
 				  <header>
-					  <h2 class="page-section-header">{{ fields.title|e('wp_kses_post')|raw }}</h2>
+					  <h3 class="page-section-header">{{ fields.title|e('wp_kses_post')|raw }}</h3>
 				  </header>
 			  {% endif %}
 			  {% if ( fields.description ) %}
@@ -25,7 +25,17 @@
 					  {% endif %}
 				  </div>
 				  <div class="col-md-{{ columnsize_1 }} column-wrap ">
-					  <iframe src="{{ fields.iframe_src }}" height="{{ fields.iframe_height }}" width="100%"></iframe>
+					  {%  if fields.embed_option == 'iframe' %}
+						  <iframe src="{{ fields.iframe_src }}" height="{{ fields.iframe_height }}" width="100%"></iframe>
+					  {% elseif fields.embed_option == 'image' %}
+						  <img
+							  class="img-fluid"
+							  src="{{ fields.image }}"
+							  srcset="{{ fields.image_srcset }}"
+							  sizes="{{ fields.image_sizes }}"
+							  alt="{{ fields.alt_text }}"
+						  >
+					  {% endif %}
 				  </div>
 			  </div>
 		  </div>

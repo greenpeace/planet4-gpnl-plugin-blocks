@@ -1,7 +1,20 @@
 @import "base";
 
+.gpnl-newsletter__wrapper {
+  margin: 48px 0 32px;
+  padding: 0 !important;
+}
+
 .happy-point-block-wrap {
   height: unset;
+
+  div.form-group {
+    margin-bottom: 0;
+  }
+
+  input.form-control {
+    margin-bottom: 15px;
+  }
 
   .gpnl-newsletter__text {
     margin-top: 20px;
@@ -28,5 +41,10 @@
 
   .gpnl-newsletter__form {
     margin: 15px 15px 15px 0;
+
+    .submit-button-newsletter {
+      line-height: 2;
+      margin: 0;
+    }
   }
 }
