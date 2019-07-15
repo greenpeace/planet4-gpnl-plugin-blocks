@@ -13,7 +13,7 @@
   overflow: hidden;
   width: 100vw;
   background-size: cover;
-  margin: 60px 0 0 $sm;
+  margin: 54px 0 0 $sm;
   border-bottom: 3px solid $light-green;
 
   &.hero__small {
@@ -68,5 +68,11 @@
         box-shadow: none;
       }
     }
+  }
+}
+
+@include medium-and-up {
+  .hero {
+    margin-top: 60px;
   }
 }
