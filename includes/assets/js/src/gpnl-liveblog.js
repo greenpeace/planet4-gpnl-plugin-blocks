@@ -1,5 +1,5 @@
 var treshold = 3;
-var liveblog = $('.gpnl--liveblog');
+var liveblog = $('.gpnl__liveblog');
 var elements = liveblog.find('article');
 var numelements = elements.length;
 var hiddenelements = {};
@@ -27,7 +27,7 @@ function showMore() {
  * This results in a liveblog with nested articles. For accessibility these articles are converted to siblings
  */
 (function flattenBlog() {
-  $.each($('.gpnl--liveblog').find('article'),function (key, element) {
+  $.each($('.gpnl__liveblog').find('article'),function (key, element) {
     if (key === 0){	return; }
     $(element).appendTo(liveblog);
   });
@@ -38,7 +38,7 @@ function showMore() {
  *  IE 2018-03-11 15:00 to a string like "5 hours ago" compared to current time
  */
 (function readabledates() {
-  $.each($('.gpnl--liveblog .moment--date'), function (key, value) {
+  $.each($('.gpnl__liveblog .moment--date'), function (key, value) {
     var displaydate = moment(value.innerText).fromNow();
     $(this).html(displaydate);
   });
