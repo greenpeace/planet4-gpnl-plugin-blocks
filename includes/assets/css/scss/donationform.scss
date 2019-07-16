@@ -96,6 +96,7 @@
 .form-control {
   display: block;
   width: 100%;
+  min-width: 100px;
   padding: 6px 12px;
   padding: .375rem .75rem;
   font-size: 15px;
@@ -188,20 +189,20 @@ fieldset {
   border-radius: .5rem;
 }
 
-.form-group.has-error input {
-  border-color: red;
-}
-
 .form-group.has-error {
   margin-bottom: 1rem;
 }
 
+.form-group.has-error input, .errors, .help-block {
+  color: $crimson;
+}
+
 .errors,
 .help-block {
-  position: absolute;
   bottom: -16px;
   font-size: 10px;
-  color: red;
+  color: $crimson;
+  padding: 0 3px;
 }
 
 .form-control:disabled,
