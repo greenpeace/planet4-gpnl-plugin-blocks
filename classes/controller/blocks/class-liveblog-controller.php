@@ -77,7 +77,7 @@ if ( ! class_exists( 'GPNL_Liveblog_Controller' ) ) {
 				'gpnl_liveblog_css',
 				P4NLBKS_ASSETS_DIR . 'css/gpnl-liveblog.css',
 				[],
-				'2.5.0'
+				'2.10.3'
 			);
 			wp_enqueue_script(
 				'gpnl_liveblog_moment_js',
@@ -97,7 +97,7 @@ if ( ! class_exists( 'GPNL_Liveblog_Controller' ) ) {
 				'gpnl_liveblog_js',
 				P4NLBKS_ASSETS_DIR . 'js/gpnl-liveblog.js',
 				[ 'jquery', 'gpnl_liveblog_moment_locale_js' ],
-				'2.6.9',
+				'2.10.3',
 				true
 			);
 
