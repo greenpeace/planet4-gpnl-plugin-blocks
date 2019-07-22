@@ -188,20 +188,21 @@ fieldset {
   border-radius: .5rem;
 }
 
-.form-group.has-error input {
-  border-color: red;
-}
-
 .form-group.has-error {
   margin-bottom: 1rem;
 }
 
+.form-group.has-error input, .errors, .help-block {
+  color: $crimson;
+}
+
 .errors,
 .help-block {
-  position: absolute;
+  width: 100%;
   bottom: -16px;
   font-size: 10px;
-  color: red;
+  color: $crimson;
+  padding: 0 3px;
 }
 
 .form-control:disabled,
@@ -213,10 +214,17 @@ fieldset {
 .amount__popular {
   text-align: center;
   flex-grow: 0.3;
+  margin-bottom: .6rem;
 }
 
 .form-group {
   margin-bottom: .5rem;
+
+  #amountList {
+    label {
+      margin-bottom: .1rem;
+    }
+  }
 }
 
 #app > div > div > div.wizard-card-footer.clearfix > div.wizard-footer-left > span > button {

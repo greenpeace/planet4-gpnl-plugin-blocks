@@ -8,13 +8,12 @@
   padding: 0;
 }
 
-// TODO check margin-top for responsiveness
 .hero {
   height: 500px;
   overflow: hidden;
   width: 100vw;
   background-size: cover;
-  margin: 60px 0 0 $sm;
+  margin: 54px 0 0 $sm;
   border-bottom: 3px solid $light-green;
 
   &.hero__small {
@@ -29,18 +28,19 @@
   .hero__wrapper {
     .hero__text {
       top: 0;
+      margin: 0 -15px;
       max-width: 100%;
 
       @include medium-and-up {
-        left: $xlrg;
+        //left: $xlrg;
       }
 
       @include x-large-and-up {
-        left: 100px;
+        //left: 100px;
       }
 
       .hero__title {
-        margin: 0 0 10px 0;
+        margin: 15px 0 10px 0;
 
         span {
           padding: 15px;
@@ -64,9 +64,15 @@
       }
 
       .hero__button {
-        margin: 10px 0 0 0;
+        margin: 20px 0 0 0;
         box-shadow: none;
       }
     }
+  }
+}
+
+@include medium-and-up {
+  .hero {
+    margin-top: 60px;
   }
 }

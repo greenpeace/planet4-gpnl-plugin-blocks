@@ -43,8 +43,15 @@
 						</div>
 			        {% endif %}
 					<div class="gpnl-petition">
-						<div class="gpnl-petition-form front">
-					        <div class="counter">
+						<noscript class="gpnl-petition-form front">
+							<p>
+								Uw browser ondersteunt geen Javascript.<br>
+								Het is hierdoor niet mogelijk om een petitie te ondertekenen via deze weg.<br>
+								Bel onze Supporter Care via 0800-4223344 of stuur een mail via <a href="https://www.greenpeace.org/nl/contact/contact-formulier/">dit contactformulier.</a>
+							</p>
+						</noscript>
+						<div class="gpnl-petition-form front" style="display:none;">
+							<div class="counter">
 					          <div class="counter__slider"></div>
 					          <div class="counter__text">
 					            <span class="counter__gettext"></span>
@@ -90,6 +97,8 @@
 								</div>
 							</form>
 						</div>
+						{# Used for hiding the petitionform, unless JS is enabled #}
+						<script>jQuery('.gpnl-petition-form').show();</script>
 						<div class="gpnl-petition-thank back">
 							<div class="card">
 								<div class="card-body">
