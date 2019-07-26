@@ -35,6 +35,11 @@
 								   placeholder="E-mail">
 						</div>
 						{#							<small id="emailHelpId" class="form-text text-muted">Help text</small>#}
+						<div class="input__human">
+							<input type="text" class="form-control" name="human" id="human"
+								   aria-describedby="emailHelpId"
+								   placeholder="Vul dit veld niet in">
+						</div>
 						<div class="form-group col-12 col-md-12 col-lg-3 ">
 							<input type="submit" class="btn btn-primary submit-button-newsletter" value="Aanmelden">
 							<input type="text" name="form_id" value="{{ fields.form_id }}" hidden readonly>
