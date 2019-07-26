@@ -97,7 +97,7 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 					'type'  => 'url',
 					'meta'  => [
 						// translators: placeholder needs to represent the ordinal of the image, eg. 1st, 2nd etc.
-						'placeholder' => sprintf( __( 'Enter link text for %s image', 'planet4-blocks-backend' ) ),
+						'placeholder' => sprintf( __( 'Enter link text for image', 'planet4-blocks-backend' ) ),
 						'data-plugin' => 'planet4-blocks',
 					],
 				],
@@ -107,7 +107,7 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 					'type'  => 'url',
 					'meta'  => [
 						// translators: placeholder needs to represent the ordinal of the image, eg. 1st, 2nd etc.
-						'placeholder' => sprintf( __( 'Enter link url for %s image', 'planet4-blocks-backend' ) ),
+						'placeholder' => sprintf( __( 'Enter link url for image', 'planet4-blocks-backend' ) ),
 						'data-plugin' => 'planet4-blocks',
 					],
 				],
@@ -174,7 +174,7 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 				'fields' => $fields,
 			];
 
-			wp_enqueue_style( 'gpnl_hero_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-hero.css', [], '2.10.2a' );
+			wp_enqueue_style( 'gpnl_hero_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-hero.css', [], '2.10.4' );
 
 			// Shortcode callbacks must return content, hence, output buffering here.
 			ob_start();
