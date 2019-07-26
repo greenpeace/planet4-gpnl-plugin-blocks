@@ -14,6 +14,10 @@ $('.gpnl-newsletter__form').on('submit', function () {
 
 
   toggleDisable($(newsletter_form_element).find('*'));
+  if (post_form_value.human !== '') {
+    showErrorMessage(newsletter_form_element);
+    return
+  }
 
   $.ajax({
     type:    'POST',
@@ -41,12 +45,7 @@ $('.gpnl-newsletter__form').on('submit', function () {
       // If the backend sends an error, hide the thank element and show an error urging to try again
       // eslint-disable-next-line no-console
       console.log('o_o');
-      $(newsletter_form_element).find('*').hide();
-      $('.gpnl-newsletter__title').html('Oh nee!');
-      $('.gpnl-newsletter__description').html('<p>Hier gaat helaas iets mis, sorry. </p>');
-      $(newsletter_form_element).append(
-        '<a href=\''+window.location.href +'\' class="btn btn-primary btn-block"' +
-        '">Probeer je het nog eens? </a>');
+      showErrorMessage(newsletter_form_element);
     }
   });
 
@@ -66,4 +65,13 @@ function getFormObj(el) {
 function toggleDisable(el) {
   el.prop('disabled', !el.prop('disabled'));
 
+}
+
+function showErrorMessage(newsletter_form_element) {
+  $(newsletter_form_element).find('*').hide();
+  $('.gpnl-newsletter__title').html('Oh nee!');
+  $('.gpnl-newsletter__description').html('<p>Hier gaat helaas iets mis, sorry. </p>');
+  $(newsletter_form_element).append(
+    '<a href=\''+window.location.href +'\' class="btn btn-primary btn-block"' +
+    '">Probeer je het nog eens? </a>');
 }

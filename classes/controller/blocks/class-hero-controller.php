@@ -97,7 +97,7 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 					'type'  => 'url',
 					'meta'  => [
 						// translators: placeholder needs to represent the ordinal of the image, eg. 1st, 2nd etc.
-						'placeholder' => sprintf( __( 'Enter link text for %s image', 'planet4-blocks-backend' ) ),
+						'placeholder' => sprintf( __( 'Enter link text for image', 'planet4-blocks-backend' ) ),
 						'data-plugin' => 'planet4-blocks',
 					],
 				],
@@ -107,7 +107,7 @@ if ( ! class_exists( 'GPNL_hero_Controller' ) ) {
 					'type'  => 'url',
 					'meta'  => [
 						// translators: placeholder needs to represent the ordinal of the image, eg. 1st, 2nd etc.
-						'placeholder' => sprintf( __( 'Enter link url for %s image', 'planet4-blocks-backend' ) ),
+						'placeholder' => sprintf( __( 'Enter link url for image', 'planet4-blocks-backend' ) ),
 						'data-plugin' => 'planet4-blocks',
 					],
 				],
