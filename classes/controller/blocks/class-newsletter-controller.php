@@ -233,6 +233,17 @@ function newsletter_form_process () {
 	// Get and sanitize the formdata
 	$naam  = wp_strip_all_tags( $_POST['name'] );
 	$email = wp_strip_all_tags( $_POST['mail'] );
+	$human = wp_strip_all_tags( $_POST['human'] );
+
+	if ( "" !== $human ) {
+		wp_send_json_error(
+			[
+				'statuscode' => 400,
+				// 'cUrlresult'    => $result,
+			],
+			500
+		);
+	}
 
 	$data_array = [
 		'voornaam'       => $naam,
