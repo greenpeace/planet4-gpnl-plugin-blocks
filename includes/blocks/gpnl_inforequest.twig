@@ -11,18 +11,17 @@
 			</noscript>
 			<h2>{{ fields.formtitle }}</h2>
 			<form class="gpnl-request__form" onsubmit="return false;" style="display:none;">
-				<div class="form-group">
-					<label hidden for="name">Voornaam</label>
-					<input name="name" required type="text" class="form-control" placeholder="Voornaam">
+				<div class="row">
+					<div class="form-group col">
+						<label hidden for="name">Voornaam</label>
+						<input name="name" required type="text" class="form-control" placeholder="Voornaam">
+					</div>
+					<div class="form-group col">
+						<label hidden for="surname">Achternaam</label>
+						<input name="surname" required type="text" class="form-control" placeholder="Achternaam">
+					</div>
 				</div>
-				<div class="form-group">
-					<label hidden for="middle-name">Tussenvoegsel</label>
-					<input name="middle-name" type="text" class="form-control" placeholder="Tussenvoegsel">
-				</div>
-				<div class="form-group">
-					<label hidden for="surname">Achternaam</label>
-					<input name="surname" required type="text" class="form-control" placeholder="Achternaam">
-				</div>
+
 				<div class="form-group">
 					<label hidden for="mail">Email</label>
 					<input name="mail"  required type="email" class="form-control" placeholder="E-mail">
@@ -31,26 +30,31 @@
 					<label hidden for="schoolname">Naam school</label>
 					<input name="schoolname" required type="text" class="form-control" placeholder="Naam school">
 				</div>
-				<div class="form-group">
-					<label hidden for="postal-code">Postcode</label>
-					<input name="postal-code" required type="text" class="form-control" placeholder="Postcode">
+				<div class="row">
+					<div class="form-group col">
+						<label hidden for="postal-code">Postcode</label>
+						<input name="postal-code" required type="text" pattern="[0-9]{4}[a-zA-Z]{2}" maxlength="6" class="form-control" placeholder="Postcode">
+					</div>
+					<div class="form-group col">
+						<label hidden for="housenumber">Huisnummer</label>
+						<input name="housenumber" required type="text" class="form-control" placeholder="Huisnummer">
+					</div>
+					<div class="form-group col">
+						<label hidden for="housenumberaddition">Toevoeging</label>
+						<input name="housenumberaddition" type="text" class="form-control" placeholder="Toevoeging">
+					</div>
 				</div>
-				<div class="form-group">
-					<label hidden for="housenumber">Huisnummer</label>
-					<input name="housenumber" required type="text" class="form-control" placeholder="Huisnummer">
+				<div class="row">
+					<div class="form-group col">
+						<label hidden for="street">Straatnaam</label>
+						<input name="street" required disabled type="text" class="form-control" placeholder="Straatnaam">
+					</div>
+					<div class="form-group col">
+						<label hidden for=city">Stad</label>
+						<input name="city" required disabled type="text" class="form-control" placeholder="Stad">
+					</div>
 				</div>
-				<div class="form-group">
-					<label hidden for="housenumberaddition">Toevoeging</label>
-					<input name="housenumberaddition" type="text" class="form-control" placeholder="Toevoeging">
-				</div>
-				<div class="form-group">
-					<label hidden for="street">Straatnaam</label>
-					<input name="street" required disabled type="text" class="form-control" placeholder="Straatnaam">
-				</div>
-				<div class="form-group">
-					<label hidden for=city">Stad</label>
-					<input name="city" required disabled type="text" class="form-control" placeholder="Stad">
-				</div>
+
 				<div class="form-group">
 					<select name="subscription">
 						<option disabled selected value> {{ fields.itemtitle }} </option>
@@ -60,7 +64,7 @@
 
 					</select>
 				</div>
-				<div class="input__human">
+				<div class="input__human" style="display: none">
 					<input type="text" class="form-control" name="human" id="human"
 						   aria-describedby="emailHelpId"
 						   placeholder="Vul dit veld niet in">
