@@ -213,7 +213,6 @@ function request_form_process() {
 
 	// Get and sanitize the formdata
 	$firstname           = wp_strip_all_tags( $_POST['name'] );
-	$middlename          = wp_strip_all_tags( $_POST['middle-name'] );
 	$surname             = wp_strip_all_tags( $_POST['surname'] );
 	$schoolname          = wp_strip_all_tags( $_POST['schoolname'] );
 	$postalcode          = wp_strip_all_tags( $_POST['postal-code'] );
@@ -237,7 +236,7 @@ function request_form_process() {
 
 	$data_array = [
 		'txtVoornaamDocent' => $firstname,
-		'txtTussenvoegsel'  => $middlename,
+		'txtTussenvoegsel'  => '',
 		'txtAchternaam'     => $surname,
 		'txtNaamSchool'     => $schoolname,
 		'txtPostcode'       => $postalcode,
