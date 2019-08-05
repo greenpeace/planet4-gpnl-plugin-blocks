@@ -16,7 +16,7 @@ $('.gpnl-newsletter__form').on('submit', function () {
   toggleDisable($(newsletter_form_element).find('*'));
   if (post_form_value.human !== '') {
     showErrorMessage(newsletter_form_element);
-    return
+    return;
   }
 
   $.ajax({
