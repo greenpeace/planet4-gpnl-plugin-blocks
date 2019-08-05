@@ -84,6 +84,8 @@ if ( ! class_exists( 'GPNL_Educationcovers_Controller' ) ) {
 					$pages[ $i ]->tags = wp_json_encode( $post_tag_names );
 					$tagcloud          = array_merge( $tagcloud, $post_tag_names );
 				}
+
+				$pages[ $i ]->link = get_permalink( $page_id );
 				$i++;
 			}
 

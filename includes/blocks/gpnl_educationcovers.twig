@@ -35,7 +35,7 @@
 						<p class="educationcovers__card__p">{{ cover.post_excerpt|truncate(20)|e('wp_kses_post')|raw }}</p>
 						{% endif %}
 						<a class="btn btn-action btn-block cover-card-btn"
-						   href=" # ">Lees meer</a>
+						   href=" {{ cover.link }} ">Lees meer</a>
 					</div>
 
 				</div>
