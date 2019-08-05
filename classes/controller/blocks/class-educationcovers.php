@@ -58,7 +58,7 @@ if ( ! class_exists( 'GPNL_Educationcovers_Controller' ) ) {
 		 */
 		public function prepare_template( $fields, $content, $shortcode_tag ) : string {
 
-			// wp_enqueue_style( 'gpnl_educationcovers_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-liveblog.css', [], '2.4.0' );
+			 wp_enqueue_style( 'gpnl_educationcovers_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-educationcovers.css', [], '2.11.0' );
 			 wp_enqueue_script( 'gpnl_educationcovers_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-educationcovers.js', [ 'jquery' ], '2.11.0', true );
 
 			$args     = array(
