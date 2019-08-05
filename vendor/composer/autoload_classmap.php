@@ -6,9 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin' => $vendorDir . '/dealerdirect/phpcodesniffer-composer-installer/src/Plugin.php',
     'P4NLBKS\\Controllers\\Blocks\\Controller' => $baseDir . '/classes/controller/blocks/class-controller.php',
     'P4NLBKS\\Controllers\\Blocks\\Donation_Controller' => $baseDir . '/classes/controller/blocks/class-donation-controller.php',
     'P4NLBKS\\Controllers\\Blocks\\GPNL_2colembed_Controller' => $baseDir . '/classes/controller/blocks/class-2colembed-controller.php',
+    'P4NLBKS\\Controllers\\Blocks\\GPNL_Educationcovers_Controller' => $baseDir . '/classes/controller/blocks/class-educationcovers.php',
     'P4NLBKS\\Controllers\\Blocks\\GPNL_Liveblog_Controller' => $baseDir . '/classes/controller/blocks/class-liveblog-controller.php',
     'P4NLBKS\\Controllers\\Blocks\\GPNL_Liveblogitem_Controller' => $baseDir . '/classes/controller/blocks/class-liveblogitem-controller.php',
     'P4NLBKS\\Controllers\\Blocks\\GPNL_Map_Controller' => $baseDir . '/classes/controller/blocks/class-map-controller.php',
