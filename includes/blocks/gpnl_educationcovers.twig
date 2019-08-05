@@ -1,14 +1,29 @@
 {% block gpnl_educationcovers %}
     {% if ( fields ) %}
-		<h3>Onderwerpen: </h3>
-		{% if fields.tags %}
-			<div id="tagselector">
-				{% for tag in fields.tags %}
-					<input type="checkbox" id="{{ tag }}" style="opacity: unset; position:unset;">
-					<label for="{{ tag }}">{{ tag }}</label>
-				{% endfor %}
+		<div class="row">
+			<div class="col">
+				<h3>Selecteer een thema: </h3>
+				{% if fields.tags %}
+					<div class="tagselector">
+						{% for tag in fields.tags %}
+							<input type="checkbox" id="{{ tag }}" name="{{ tag }}" style="opacity: unset; position:unset;">
+							<label for="{{ tag }}">{{ tag }}</label>
+						{% endfor %}
+					</div>
+				{% endif %}
 			</div>
-		{% endif %}
+			<div class="col">
+				<h3>Selecteer een doelgroep: </h3>
+				{% if fields.audiences %}
+					<div class="tagselector">
+						{% for audience in fields.audiences %}
+							<input type="checkbox" id="{{ audience }}" name="{{ audience }}" style="opacity: unset; position:unset;">
+							<label for="{{ audience }}">{{ audience }}</label>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+		</div>
 		<div class="row limit-visibility">
 			{% for cover in fields.pages %}
 				<div class="col-lg-4 col-md-6 cover-card-column" data-tags="{{ cover.tags }}">

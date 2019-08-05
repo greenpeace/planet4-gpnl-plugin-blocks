@@ -66,31 +66,37 @@ if ( ! class_exists( 'GPNL_Educationcovers_Controller' ) ) {
 				'category_name' => 'lesmateriaal',
 				'post_type'     => 'page',
 			);
-			$pages    = get_posts( $args );
 			$tagcloud = [];
 			$i        = 0;
+
+			$pages = get_posts( $args );
 			foreach ( $pages as $page ) {
+				// Fetch the featured image and tags from each of the entries
 				$page_id            = $page->ID;
 				$pages[ $i ]->image = get_the_post_thumbnail_url( $page_id, 'large' );
 				$post_tags          = get_the_tags( $page_id );
-				$post_tag_names     = [];
+				// Add the names of the tags to the associated page and the global tagcloud
+				$post_tag_names = [];
 				if ( ! empty( $post_tags ) ) {
 					foreach ( $post_tags as $post_tag ) {
-						if ( ! in_array( $post_tag->name, $tagcloud, true ) ) {
-							array_push( $tagcloud, $post_tag->name );
-						}
 						array_push( $post_tag_names, $post_tag->name );
 					}
+					$pages[ $i ]->tags = wp_json_encode( $post_tag_names );
+					$tagcloud          = array_merge( $tagcloud, $post_tag_names );
 				}
-				$pages[ $i ]->tags = wp_json_encode($post_tag_names);
 				$i++;
 			}
+
+			// Filter out audiences, remove duplicates and sort the tags
+			$audiences = [ 'PO', 'VO', 'DO' ];
+			$tagcloud  = array_diff( array_unique( $tagcloud ), $audiences );
 			sort( $tagcloud );
 
 			$fields = shortcode_atts(
 				[
-					'pages' => $pages,
-					'tags'  => $tagcloud,
+					'pages'     => $pages,
+					'tags'      => $tagcloud,
+					'audiences' => $audiences,
 				],
 				$fields,
 				$shortcode_tag

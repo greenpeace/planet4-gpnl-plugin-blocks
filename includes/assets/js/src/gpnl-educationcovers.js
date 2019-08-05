@@ -1,7 +1,7 @@
 var tags = [];
 var covers = $('.cover-card-column');
-$( '#tagselector input[type=checkbox]' ).on( 'click', function () {
-  tags = $('#tagselector').find('input[type="checkbox"]:checked')
+$( '.tagselector input[type=checkbox]' ).on( 'click', function () {
+  tags = $('.tagselector').find('input[type="checkbox"]:checked')
     .map(function() { return this.id; })
     .get();
   if (tags.length == 0){
