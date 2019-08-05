@@ -1,0 +1,2 @@
+"use strict";var tags=[],covers=$(".cover-card-column");function filterCovers(e){covers.hide(),covers.map(function(){var t=this;$(e).each(function(){$(t).data("tags").includes(this)&&$(t).show()})})}$(".tagselector input[type=checkbox]").on("click",function(){0==(tags=$(".tagselector").find('input[type="checkbox"]:checked').map(function(){return this.id}).get()).length?covers.show():filterCovers(tags)});
+//# sourceMappingURL=maps/gpnl-educationcovers.js.map
