@@ -29,7 +29,9 @@
 				<div class="col-lg-3 col-md-4 cover-card-column" data-tags="{{ cover.tags }}">
 					<div class="cover-card card-one" style="background-image: url({{ cover.image }});">
 						<div class="cover-card-content">
-							<h2 class="cover-card-heading">{{ cover.post_title|e('wp_kses_post')|raw }}</h2>
+							<a href="{{ cover.link|e('esc_url') }}">
+								<h2 class="cover-card-heading">{{ cover.post_title|e('wp_kses_post')|raw }}</h2>
+							</a>
 						</div>
 						{% if cover.post_excerpt %}
 						<p class="educationcovers__card__p">{{ cover.post_excerpt|truncate(20)|e('wp_kses_post')|raw }}</p>
