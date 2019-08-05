@@ -85,12 +85,17 @@ if ( ! class_exists( 'GPNL_Educationcovers_Controller' ) ) {
 				$pages[ $i ]->tags = wp_json_encode($post_tag_names);
 				$i++;
 			}
+
+			// Filter out audiences, remove duplicates and sort the tags
+			$audiences = [ 'PO', 'VO', 'DO' ];
+			$tagcloud  = array_diff( array_unique( $tagcloud ), $audiences );
 			sort( $tagcloud );
 
 			$fields = shortcode_atts(
 				[
-					'pages' => $pages,
-					'tags'  => $tagcloud,
+					'pages'     => $pages,
+					'tags'      => $tagcloud,
+					'audiences' => $audiences,
 				],
 				$fields,
 				$shortcode_tag
