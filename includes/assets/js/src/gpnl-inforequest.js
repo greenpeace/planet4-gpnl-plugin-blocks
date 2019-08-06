@@ -1,4 +1,11 @@
 var request_form_element = {};
+$('.hideshowbtn').on('click', function () {
+  let btn = $(this);
+  let form  = btn.data('target');
+  $(form).show(1000);
+  $('.hideshowbtn').hide(1000);
+});
+
 $('.gpnl-request__form').on('submit', function () {
 
   request_form_element = this;

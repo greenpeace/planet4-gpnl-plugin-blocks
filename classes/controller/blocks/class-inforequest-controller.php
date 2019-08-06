@@ -293,3 +293,36 @@ function request_form_process() {
 add_action( 'wp_ajax_request_form_process', 'P4NLBKS\Controllers\Blocks\request_form_process' );
 // use this version for if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_request_form_process', 'P4NLBKS\Controllers\Blocks\request_form_process' );
+
+
+
+function check_form_process() {
+	$email    = wp_strip_all_tags( $_POST['mail'] );
+	$url      = 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' . $email;
+	$response = wp_remote_get( $url );
+	if ( is_array( $response ) ) {
+		$header = $response['headers']; // array of http header lines
+		$body   = $response['body']; // use the content
+	}
+
+	// if ( $http_code >= 400 || $iserrorpage ) {
+	// wp_send_json_error(
+	// [
+	// 'statuscode' => $http_code,
+	// ],
+	// 500
+	// );
+	// }
+	wp_send_json_success(
+		[
+			'header' => $header,
+			'body'   => $body,
+		],
+		200
+	);
+}
+
+// use this version for if you want the callback to work for users who are logged in
+add_action( 'wp_ajax_check_form_process', 'P4NLBKS\Controllers\Blocks\check_form_process' );
+// use this version for if you want the callback to work for users who are not logged in
+add_action( 'wp_ajax_nopriv_check_form_process', 'P4NLBKS\Controllers\Blocks\check_form_process' );
