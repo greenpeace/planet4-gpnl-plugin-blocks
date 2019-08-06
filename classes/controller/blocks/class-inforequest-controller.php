@@ -298,11 +298,16 @@ add_action( 'wp_ajax_nopriv_request_form_process', 'P4NLBKS\Controllers\Blocks\r
 
 function check_form_process() {
 	$email    = wp_strip_all_tags( $_POST['mail'] );
-	$url      = 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' . $email;
-	$response = wp_remote_get( $url );
+	$url      = 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' . rawurlencode( $email );
+	$args = [
+		'timeout'     => 5,
+		'redirection' => 5,
+	];
+
+	$response = wp_remote_get( $url, $args );
 	if ( is_array( $response ) ) {
-		$header = $response['headers']; // array of http header lines
-		$body   = $response['body']; // use the content
+		$response_code = wp_remote_retrieve_response_code( $response );
+		$body = wp_remote_retrieve_body($response);
 	}
 
 	// if ( $http_code >= 400 || $iserrorpage ) {
@@ -315,8 +320,11 @@ function check_form_process() {
 	// }
 	wp_send_json_success(
 		[
-			'header' => $header,
-			'body'   => $body,
+			'header'   => $response_code,
+			'body'     => $body,
+			'mail'     => $email,
+			'url'      => $url,
+			'response' => $response,
 		],
 		200
 	);
