@@ -58,7 +58,7 @@ if ( ! class_exists( 'GPNL_Educationcovers_Controller' ) ) {
 		 */
 		public function prepare_template( $fields, $content, $shortcode_tag ) : string {
 
-			// wp_enqueue_style( 'gpnl_educationcovers_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-liveblog.css', [], '2.4.0' );
+			 wp_enqueue_style( 'gpnl_educationcovers_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-educationcovers.css', [], '2.11.0' );
 			 wp_enqueue_script( 'gpnl_educationcovers_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-educationcovers.js', [ 'jquery' ], '2.11.0', true );
 
 			$args     = array(
@@ -79,11 +79,13 @@ if ( ! class_exists( 'GPNL_Educationcovers_Controller' ) ) {
 				$post_tag_names = [];
 				if ( ! empty( $post_tags ) ) {
 					foreach ( $post_tags as $post_tag ) {
-						array_push( $post_tag_names, $post_tag->name );
+						array_push( $post_tag_names, html_entity_decode($post_tag->name) );
 					}
 					$pages[ $i ]->tags = wp_json_encode( $post_tag_names );
 					$tagcloud          = array_merge( $tagcloud, $post_tag_names );
 				}
+
+				$pages[ $i ]->link = get_permalink( $page_id );
 				$i++;
 			}
 
