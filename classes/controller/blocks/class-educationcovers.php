@@ -79,7 +79,7 @@ if ( ! class_exists( 'GPNL_Educationcovers_Controller' ) ) {
 				$post_tag_names = [];
 				if ( ! empty( $post_tags ) ) {
 					foreach ( $post_tags as $post_tag ) {
-						array_push( $post_tag_names, $post_tag->name );
+						array_push( $post_tag_names, html_entity_decode($post_tag->name) );
 					}
 					$pages[ $i ]->tags = wp_json_encode( $post_tag_names );
 					$tagcloud          = array_merge( $tagcloud, $post_tag_names );
