@@ -90,7 +90,7 @@ if ( ! class_exists( 'GPNL_Educationcovers_Controller' ) ) {
 			}
 
 			// Filter out audiences, remove duplicates and sort the tags
-			$audiences = [ 'PO', 'VO', 'DO' ];
+			$audiences = [ 'PO', 'VO', 'MBO', 'DO' ];
 			$tagcloud  = array_diff( array_unique( $tagcloud ), $audiences );
 			sort( $tagcloud );
 
