@@ -10,7 +10,7 @@
 				</p>
 			</noscript>
 			<h2>{{ fields.formtitle }}</h2>
-			<form class="gpnl-request__form" onsubmit="return false;" style="display:none;">
+			<form class="gpnl-request__form inforequest_form" onsubmit="return false;" style="display:none;">
 					<div class="row">
 						<div class="form-group col">
 							<label hidden for="name">Voornaam</label>
@@ -74,6 +74,7 @@
 						<label class="gpnl-petition-checkbox-" for="consent"><small class="form-check-label">{{ fields.consent }}</small></label>
 					</div>
 					<input type="submit" class="btn btn-primary btn-block signBtn" value="{{ fields.sign }}">
+					<input type="reset" class="btn btn-primary btn-block resetBtn" value="Annuleren">
 					<div class="small policies">
 						<div class="row">
 							<div class="col-8">
@@ -92,7 +93,7 @@
 
 
 				</form>
-			<form class="gpnl-check__form" onsubmit="return false;" style="display:none;">
+			<form class="gpnl-check__form inforequest_form" onsubmit="return false;" style="display:none;">
 					<div class="form-group">
 						<label hidden for="mail">Email</label>
 						<input name="mail"  required type="email" class="form-control" placeholder="E-mail">
@@ -104,11 +105,10 @@
 							   placeholder="Vul dit veld niet in">
 					</div>
 					<input type="submit" class="btn btn-primary btn-block signBtn" value="Inloggen">
+					<input type="reset" class="btn btn-primary btn-block resetBtn" value="Annuleren">
 			</form>
 			<input type="submit" class="btn btn-primary hideshowbtn" value="Registreren" data-target=".gpnl-request__form">
 			<input type="submit" class="btn btn-primary hideshowbtn" value="Inloggen" data-target=".gpnl-check__form">
-
-			</div>
 
 		</section>
 

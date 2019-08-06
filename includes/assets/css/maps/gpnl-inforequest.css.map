@@ -1,0 +1,1 @@
+{"version":3,"sources":["gpnl-inforequest.scss"],"names":[],"mappings":"AAEA,sBAAA,4BAAA,4BACE,iBAAA,QACA,aAAA","file":"../gpnl-inforequest.css","sourcesContent":["@import \"base\";\n\n.btn-primary.resetBtn {\n  background-color: $slate-grey;\n  border-color: $slate-grey;\n\n  &:hover, &:focus {\n    background-color: $slate-grey;\n    border-color: $slate-grey;\n  }\n}\n"]}

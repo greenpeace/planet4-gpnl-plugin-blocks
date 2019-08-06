@@ -1,0 +1,11 @@
+@import "base";
+
+.btn-primary.resetBtn {
+  background-color: $slate-grey;
+  border-color: $slate-grey;
+
+  &:hover, &:focus {
+    background-color: $slate-grey;
+    border-color: $slate-grey;
+  }
+}

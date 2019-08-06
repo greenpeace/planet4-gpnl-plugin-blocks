@@ -139,7 +139,7 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 		 */
 		public function prepare_template( $fields, $content, $shortcode_tag ) : string {
 
-			// wp_enqueue_style( 'gpnl_inforequest_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-liveblog.css', [], '2.4.0' );
+			 wp_enqueue_style( 'gpnl_inforequest_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-inforequest.css', [], '2.11.0' );
 			 wp_enqueue_script( 'gpnl_request_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-inforequest.js', [ 'jquery' ], '2.11.0', true );
 
 			$fields = shortcode_atts(

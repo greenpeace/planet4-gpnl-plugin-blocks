@@ -7,6 +7,12 @@ $('.hideshowbtn').on('click', function () {
   $('.hideshowbtn').hide(1000);
 });
 
+$('.inforequest_form').on('reset', function () {
+  $(this).hide(1000);
+  $('.hideshowbtn').show(1000);
+});
+
+
 $('.gpnl-request__form').on('submit', function () {
   request_form_element = this;
   var post_form_value = getFormObj(request_form_element);
@@ -66,6 +72,7 @@ $('.gpnl-check__form').on('submit', function () {
     }
   });
 });
+
 
 // Get the key+value from the input fields in the form
 function getFormObj(el) {
