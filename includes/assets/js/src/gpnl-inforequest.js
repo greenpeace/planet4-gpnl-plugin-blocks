@@ -9,7 +9,6 @@ $('.hideshowbtn').on('click', function () {
 $('.gpnl-request__form').on('submit', function () {
 
   request_form_element = this;
-  console.log('Submitting...');
 
   var post_form_value = getFormObj(request_form_element);
   var form_config = 'request_form_object';
@@ -17,22 +16,17 @@ $('.gpnl-request__form').on('submit', function () {
   post_form_value.nonce  = window[form_config].nonce;
   post_form_value.literaturecode  = window[form_config].literaturecode;
 
-  console.log('Disabling...');
   toggleDisable($(request_form_element).find('*'));
   if (post_form_value.human !== '') {
     showErrorMessage(request_form_element);
     return;
   }
 
-  console.log('Ajax posting...');
   $.ajax({
     type:    'POST',
     url:     window[form_config].ajaxUrl,
     data:    post_form_value,
-    success: function(data) {
-      // eslint-disable-next-line no-console
-      console.log('^-^');
-      console.log(data);
+    success: function() {
       $(request_form_element).find('*').hide();
       $(request_form_element).append('<h2>Hoera, je bent er bijna!</h2>');
 
@@ -47,11 +41,8 @@ $('.gpnl-request__form').on('submit', function () {
       // }
 
     },
-    error: function(data){
+    error: function(){
       // If the backend sends an error, hide the thank element and show an error urging to try again
-      // eslint-disable-next-line no-console
-      console.log('o_o');
-      console.log(data);
       showErrorMessage(request_form_element);
     }
   });
@@ -80,7 +71,5 @@ function showErrorMessage(request_form_element) {
 
 // Toggle the disabled state on form elements
 function toggleDisable(el) {
-  console.log('Toggling disable');
   el.prop('disabled', !el.prop('disabled'));
-  console.log('Disabled..');
 }

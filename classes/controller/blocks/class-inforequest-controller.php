@@ -113,7 +113,7 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 
 			// Define the Shortcode UI arguments.
 			$shortcode_ui_args = [
-				'label'         => __( 'GPNL | Infoaanvraag', 'planet4-gpnl-blocks' ),
+				'label'         => __( 'GPNL | Docentenregistratie', 'planet4-gpnl-blocks' ),
 				'listItemImage' => '<img src="' . esc_url( plugins_url() . '/planet4-gpnl-plugin-blocks/admin/images/icon_noindex.png' ) . '" />',
 				'attrs'         => $fields,
 				'post_type'     => P4NLBKS_ALLOWED_PAGETYPE,
@@ -188,7 +188,7 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 				'request_form_object',
 				[
 					'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
-					'nonce'          => wp_create_nonce( 'GPNL_Newsletters' ),
+					'nonce'          => wp_create_nonce( 'GPNL_Inforequest' ),
 					'literaturecode' => '04935',
 				]
 			);
@@ -206,7 +206,7 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 
 function request_form_process() {
 
-	check_ajax_referer( 'GPNL_Newsletters', 'nonce' );
+	check_ajax_referer( 'GPNL_Inforequest', 'nonce' );
 
 	// get codes for processing in the database and sanitize
 	$literatuurcode = htmlspecialchars( wp_strip_all_tags( $_POST['literaturecode'] ) );
@@ -269,8 +269,8 @@ function request_form_process() {
 	$http_location = curl_getinfo( $request, CURLINFO_REDIRECT_URL );
 	curl_close( $request );
 
-	$errorpage       = '/registreren/errorpage.htm?aspxerrorpath=/registreren/schoolaanmelding.aspx';
-	$iserrorpage = (false !== strpos( $http_location, $errorpage ) ? 1 : 0);
+	$errorpage   = '/registreren/errorpage.htm?aspxerrorpath=/registreren/schoolaanmelding.aspx';
+	$iserrorpage = ( false !== strpos( $http_location, $errorpage ) ? 1 : 0 );
 
 	// Give the appropriate response to the frontend
 	if ( $http_code >= 400 || $iserrorpage ) {
