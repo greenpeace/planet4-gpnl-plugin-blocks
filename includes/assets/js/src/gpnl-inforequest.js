@@ -1,5 +1,4 @@
 var request_form_element = {};
-var check_form_element = {};
 $('.hideshowbtn').on('click', function () {
   let btn = $(this);
   let form  = btn.data('target');
@@ -44,31 +43,18 @@ $('.gpnl-request__form').on('submit', function () {
 });
 
 $('.gpnl-check__form').on('submit', function () {
-  check_form_element = this;
-  var post_form_value = getFormObj(check_form_element);
-  var form_config = 'request_form_object';
-  post_form_value.action = 'check_form_process';
-  post_form_value.nonce  = window[form_config].nonce;
-
-  toggleDisable($(check_form_element).find('*'));
-  if (post_form_value.human !== '') {
-    showErrorMessage(check_form_element);
-    return;
-  }
-
+  let mail = $('.gpnl-check__form input[name="mail"]').val();
   $.ajax({
-    type:    'POST',
-    url:     window[form_config].ajaxUrl,
-    data:    post_form_value,
-    success: function(data) {
-      $(check_form_element).find('*').hide();
-      $(check_form_element).append('<h2>Hoera, je bent er bijna!</h2>');
-      console.log(data);
-
-    },
-    error: function(){
-      // If the backend sends an error, hide the thank element and show an error urging to try again
-      showErrorMessage(check_form_element);
+    type: 'GET',
+    url: 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' + mail,
+    complete: function (data) {
+      // If we do not know the email, we display the consentbox again
+      if (data.responseText.includes('false')) {
+        console.log("Ik ken deze niet: " + mail);
+      }
+      else {
+        console.log("Ik ken " + mail);
+      }
     }
   });
 });
