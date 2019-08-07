@@ -1,4 +1,5 @@
 var request_form_element = {};
+var check_form_element = {};
 $('.hideshowbtn').on('click', function () {
   let btn = $(this);
   let form  = btn.data('target');
@@ -10,7 +11,6 @@ $('.inforequest_form').on('reset', function () {
   $(this).hide(1000);
   $('.hideshowbtn').show(1000);
 });
-
 
 $('.gpnl-request__form').on('submit', function () {
   request_form_element = this;
@@ -31,8 +31,9 @@ $('.gpnl-request__form').on('submit', function () {
     url:     window[form_config].ajaxUrl,
     data:    post_form_value,
     success: function() {
-      $(request_form_element).find('*').hide();
-      $(request_form_element).append('<h2>Hoera, je bent er bijna!</h2>');
+      $(request_form_element).find('*').hide(1000);
+      $('.inforequest__title').html('<h3>Dank je voor je aanmelding!</h3>');
+      $(request_form_element).prepend('<p>Je kan nu gebruikmaken van de lesmaterialen.</p>');
 
     },
     error: function(){
@@ -43,22 +44,37 @@ $('.gpnl-request__form').on('submit', function () {
 });
 
 $('.gpnl-check__form').on('submit', function () {
-  let mail = $('.gpnl-check__form input[name="mail"]').val();
+  check_form_element = this;
+  var post_form_value = getFormObj(check_form_element);
+  var form_config = 'request_form_object';
+  post_form_value.action = 'check_form_process';
+  post_form_value.nonce  = window[form_config].nonce;
+
+  toggleDisable($(check_form_element).find('*'));
+  if (post_form_value.human !== '') {
+    showErrorMessage(check_form_element);
+    return;
+  }
+
   $.ajax({
-    type: 'GET',
-    url: 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' + mail,
-    complete: function (data) {
-      // If we do not know the email, we display the consentbox again
-      if (data.responseText.includes('false')) {
-        console.log("Ik ken deze niet: " + mail);
-      }
-      else {
-        console.log("Ik ken " + mail);
-      }
+    type:    'POST',
+    url:     window[form_config].ajaxUrl,
+    data:    post_form_value,
+    success: function() {
+      // $(check_form_element).find('*').hide();
+      // $(check_form_element).append('<h2>Hoera, je bent er bijna!</h2>');
+
+    },
+    error: function(){
+      // If the backend sends an error, hide the thank element and show an error urging to try again
+      $('.resetBtn').remove('*');
+      $('.gpnl-check__form').hide(1000);
+      $('.gpnl-request__form').prepend('<p>Dit emailadres is niet bij ons bekend. Wil je je inschrijven?');
+      $('.gpnl-request__form').show(1000);
+      $('.hideshowbtn').remove('*');
     }
   });
 });
-
 
 // Get the key+value from the input fields in the form
 function getFormObj(el) {

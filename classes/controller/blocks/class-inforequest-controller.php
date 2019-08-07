@@ -300,35 +300,29 @@ function check_form_process() {
 
 	check_ajax_referer( 'GPNL_Inforequest', 'nonce' );
 
-	$email    = wp_strip_all_tags( $_POST['mail'] );
-	$url      = 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' . rawurlencode( $email );
-	$args = [
-		'timeout'     => 5,
-		'redirection' => 5,
+	$email           = wp_strip_all_tags( $_POST['mail'] );
+	$url             = 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' . rawurlencode( $email );
+	$args['headers'] = [
+		'Origin' => 'https://www.greenpeace.org',
 	];
 
 	$response = wp_remote_get( $url, $args );
 	if ( is_array( $response ) ) {
-		$response_code = wp_remote_retrieve_response_code( $response );
-		$body = wp_remote_retrieve_body($response);
+		$http_code = wp_remote_retrieve_response_code( $response );
+		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
+		$success   = substr( $body, 0, strlen( $body ) - 2 );
+		$success   = $success === 'true' ? true : false;
+		$test      = gettype( $success );
 	}
 
-	// if ( $http_code >= 400 || $iserrorpage ) {
-	// wp_send_json_error(
-	// [
-	// 'statuscode' => $http_code,
-	// ],
-	// 500
-	// );
-	// }
+	if ( $http_code >= 400 || ! $success ) {
+		wp_send_json_error(
+			null,
+			500
+		);
+	}
 	wp_send_json_success(
-		[
-			'header'   => $response_code,
-			'body'     => $body,
-			'mail'     => $email,
-			'url'      => $url,
-			'response' => $response,
-		],
+		null,
 		200
 	);
 }
