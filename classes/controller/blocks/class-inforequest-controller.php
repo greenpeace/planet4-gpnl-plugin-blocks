@@ -109,6 +109,21 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 					'type'  => 'text',
 					'value' => 'Registreer',
 				],
+				[
+					'label'   => __( 'Waar wordt dit blok gebruikt?', 'planet4-gpnl-blocks' ),
+					'attr'    => 'hider',
+					'type'    => 'select',
+					'options' => [
+						[
+							'value' => '0',
+							'label' => 'Op de hoofdpagina',
+						],
+						[
+							'value' => '1',
+							'label' => 'Op een lesmateriaalpagina',
+						],
+					],
+				],
 			];
 
 			// Define the Shortcode UI arguments.
@@ -158,6 +173,7 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 					'mcode5_label' => '',
 					'consent'      => '',
 					'sign'         => '',
+					'hider'        => '',
 
 				],
 				$fields,
@@ -190,6 +206,7 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 					'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 					'nonce'          => wp_create_nonce( 'GPNL_Inforequest' ),
 					'literaturecode' => '04935',
+					'hider'          => $fields['hider'],
 				]
 			);
 
