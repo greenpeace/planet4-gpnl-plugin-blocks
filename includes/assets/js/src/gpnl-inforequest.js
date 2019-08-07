@@ -1,5 +1,24 @@
 var request_form_element = {};
 var check_form_element = {};
+var form_config = 'request_form_object';
+
+$(document).ready(function() {
+  let auth = new URLSearchParams(window.location.search).has('e');
+  if ( '1' === window[form_config].hider ) {
+    $('.inforequest__wrapper').nextAll().hide();
+    $('.inforequest__title').html('<h3>Lesmateriaal downloaden</h3>');
+    $('.inforequest__title').after('<p class="inforequest__message">Registreer of log in om het lesmateriaal te downloaden.</p>');
+  }
+  if (null !== readCookie('gpnl_education') || auth ){
+    $('.inforequest__title').html('<h3>Welkom terug!</h3>');
+    $('.inforequest__message').html('<p>Je kan nu gebruikmaken van de lesmaterialen.</p>');
+    $('.inforequest__wrapper').nextAll().show(1000);
+  }
+  else{
+    $('.hideshowbtn').show(1000);
+  }
+});
+
 $('.hideshowbtn').on('click', function () {
   let btn = $(this);
   let form  = btn.data('target');
@@ -15,7 +34,6 @@ $('.inforequest_form').on('reset', function () {
 $('.gpnl-request__form').on('submit', function () {
   request_form_element = this;
   var post_form_value = getFormObj(request_form_element);
-  var form_config = 'request_form_object';
   post_form_value.action = 'request_form_process';
   post_form_value.nonce  = window[form_config].nonce;
   post_form_value.literaturecode  = window[form_config].literaturecode;
@@ -34,6 +52,17 @@ $('.gpnl-request__form').on('submit', function () {
       $(request_form_element).find('*').hide(1000);
       $('.inforequest__title').html('<h3>Dank je voor je aanmelding!</h3>');
       $(request_form_element).prepend('<p>Je kan nu gebruikmaken van de lesmaterialen.</p>');
+      if (null !== readCookie('greenpeace')){
+        createCookie('gpnl_education', 1, 365);
+        if (window[form_config].hider === '1') {
+          $('.inforequest__wrapper').nextAll().show(1000);
+          $('.inforequest__message').hide(1000);
+
+        }
+      }
+      else{
+        enableDownloadlinks();
+      }
 
     },
     error: function(){
@@ -46,7 +75,6 @@ $('.gpnl-request__form').on('submit', function () {
 $('.gpnl-check__form').on('submit', function () {
   check_form_element = this;
   var post_form_value = getFormObj(check_form_element);
-  var form_config = 'request_form_object';
   post_form_value.action = 'check_form_process';
   post_form_value.nonce  = window[form_config].nonce;
 
@@ -61,8 +89,19 @@ $('.gpnl-check__form').on('submit', function () {
     url:     window[form_config].ajaxUrl,
     data:    post_form_value,
     success: function() {
-      // $(check_form_element).find('*').hide();
-      // $(check_form_element).append('<h2>Hoera, je bent er bijna!</h2>');
+      $(check_form_element).find('*').hide(1000);
+      $('.inforequest__title').html('<h3>Welkom terug!</h3>');
+      $(check_form_element).prepend('<p>Je kan nu gebruikmaken van de lesmaterialen.</p>');
+      if (null !== readCookie('greenpeace')){
+        createCookie('gpnl_education', 1, 365);
+        if (window[form_config].hider === '1') {
+          $('.inforequest__wrapper').nextAll().show(1000);
+          $('.inforequest__message').hide(1000);
+        }
+      }
+      else {
+        enableDownloadlinks();
+      }
 
     },
     error: function(){
@@ -98,4 +137,36 @@ function showErrorMessage(request_form_element) {
 // Toggle the disabled state on form elements
 function toggleDisable(el) {
   el.prop('disabled', !el.prop('disabled'));
+}
+
+function createCookie(name, value, days) {
+  var date = new Date();
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = encodeURI(name) + '=' + encodeURI(value) + ';domain=.' + document.domain + ';path=/;' + '; expires=' + date.toGMTString();
+}
+
+function readCookie(name) {
+  var nameEQ = name + '=';
+  var ca = document.cookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1, c.length);
+    }
+    if (c.indexOf(nameEQ) === 0) {
+      return c.substring(nameEQ.length, c.length);
+    }
+  }
+  return null;
+}
+
+function enableDownloadlinks() {
+  $('.cover-card-column').each(function(){
+    let cover = this
+    $(cover).find('a').each(function(){
+      let link = this;
+      let href = $(this).attr('href');
+      $(link).attr('href', href + '?e=1');
+    });
+  });
 }
