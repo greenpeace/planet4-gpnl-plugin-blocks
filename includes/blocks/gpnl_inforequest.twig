@@ -1,6 +1,6 @@
 {% block gpnl_inforequest %}
     {% if ( fields ) %}
-		<section>
+		<section class="block inforequest__wrapper">
 
 			<noscript>
 				<p>
@@ -9,8 +9,13 @@
 					Bel onze Supporter Care via 0800-4223344 of stuur een mail via <a href="https://www.greenpeace.org/nl/contact/contact-formulier/">dit contactformulier.</a>
 				</p>
 			</noscript>
-			<h2 class="inforequest__title">{{ fields.formtitle }}</h2>
-			<form class="gpnl-request__form inforequest_form" onsubmit="return false;" style="display:none;">
+			<h3 class="inforequest__title">{{ fields.formtitle }}</h3>
+			<div class="inforequest__form-collection">
+
+				<form class="gpnl-request__form inforequest_form" onsubmit="return false;" style="display:none;">
+					<p>Vul het onderstaande formulier in en krijg toegang tot het Greenpeace-materiaal: lessen, docentenhandleidingen en werkbladen.
+
+						Na registratie ontvang je een downloadlink naar alle materialen. Ook ontvang je 6 keer per jaar de docentennieuwsbrief met actuele tips om je lessen nóg groener en boeiender te maken.</p>
 					<div class="row">
 						<div class="form-group col">
 							<label hidden for="name">Voornaam</label>
@@ -93,7 +98,8 @@
 
 
 				</form>
-			<form class="gpnl-check__form inforequest_form" onsubmit="return false;" style="display:none;">
+				<form class="gpnl-check__form inforequest_form" onsubmit="return false;" style="display:none;">
+					<p>Heb je je al eens eerder opgegeven? Vul je emailadres dan hieronder in.</p>
 					<div class="form-group">
 						<label hidden for="mail">Email</label>
 						<input name="mail"  required type="email" class="form-control" placeholder="E-mail">
