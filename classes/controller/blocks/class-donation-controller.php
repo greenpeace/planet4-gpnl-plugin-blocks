@@ -224,11 +224,11 @@ if ( ! class_exists( 'Donation_Controller' ) ) {
 			];
 
 
-			wp_enqueue_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.min.js', null, '', true );
-            wp_enqueue_script( 'vueform', 'https://cdn.jsdelivr.net/npm/vue-form-wizard@0.8.4/dist/vue-form-wizard.min.js', [ 'vue' ], '0.8.4', true );
-            wp_enqueue_script( 'vueresource', 'https://cdn.jsdelivr.net/npm/vue-resource@1.5.0/dist/vue-resource.min.js', [ 'vue', 'vueform' ], '1.5.0', true );
-            wp_enqueue_script( 'vuelidate', 'https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/vuelidate.min.js', [ 'vue', 'vueform' ], '0.7.4', true );
-            wp_enqueue_script( 'vuelidators', 'https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/validators.min.js', [ 'vue', 'vueform' ], '0.7.4', true );
+			wp_enqueue_script( 'vue', 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.15/vue.min.js', null, '', true );
+            wp_enqueue_script( 'vueform', P4NLBKS_ASSETS_DIR . 'js/vue-form-wizard.min.js', [ 'vue' ], '0.8.4', true );
+            wp_enqueue_script( 'vueresource', 'https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.0/vue-resource.min.js', [ 'vue', 'vueform' ], '1.5.0', true );
+            wp_enqueue_script( 'vuelidate', P4NLBKS_ASSETS_DIR . 'js/vuelidate.min.js', [ 'vue', 'vueform' ], '0.7.4', true );
+            wp_enqueue_script( 'vuelidators', P4NLBKS_ASSETS_DIR . 'js/validators.min.js', [ 'vue', 'vueform' ], '0.7.4', true );
             wp_enqueue_script( 'donationform', P4NLBKS_ASSETS_DIR . 'js/donationform.js', ['vue', 'vueresource', 'vueform', 'vuelidate', 'vuelidators'], '2.10.2', true );
 			// Pass options to frontend code
 			wp_localize_script(
@@ -260,7 +260,7 @@ if ( ! class_exists( 'Donation_Controller' ) ) {
 				)
 			);
 
-            wp_enqueue_style( 'vueform_style', 'https://cdn.jsdelivr.net/npm/vue-form-wizard@0.8.4/dist/vue-form-wizard.min.css', [], '2.7.3' );
+            wp_enqueue_style( 'vueform_style', P4NLBKS_ASSETS_DIR . 'css/vue-form-wizard.min.css', [], '2.7.3' );
             wp_enqueue_style( 'gpnl_donationform_style', P4NLBKS_ASSETS_DIR . 'css/donationform.css', 'vueform_style', '2.10.3' );
 
             // Shortcode callbacks must return content, hence, output buffering here.
