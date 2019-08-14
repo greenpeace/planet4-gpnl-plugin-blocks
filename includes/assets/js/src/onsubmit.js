@@ -3,7 +3,7 @@ $('.gpnl-petitionform').on('submit', function () {
   // Get the  parameter from the petition form and add the action and CSRF protection
   var post_form_value = getFormObj(petition_form_element);
   var form_config = 'petition_form_object_' + post_form_value['form_id'];
-    
+
   post_form_value.action = 'petition_form_process';
   post_form_value.nonce  = window[form_config].nonce;
   post_form_value.ad_campaign = window[form_config].ad_campaign;
@@ -29,30 +29,26 @@ $('.gpnl-petitionform').on('submit', function () {
           'conv_action'   : window[form_config].ga_action,
           'conv_label'    :'registreer'
         });
-      }
 
-      // if consent was given by entering phonenumber
-      if (post_form_value.phone !== '') {
-        // Send conversion event to the GTM
-        if (typeof dataLayer !== 'undefined') {
+        // if consent was given by entering phonenumber
+        if (post_form_value.phone !== '') {
+          // Send conversion event to the GTM
           dataLayer.push({
             'event'         :'petitiebutton',
             'conv_campaign' : window[form_config].analytics_campaign,
             'conv_action'   :'telnr',
             'conv_label'    :'Ja'
           });
+          // If an ad campaign is run by an external company fire the conversiontracking
+          if (window[form_config].ad_campaign === 'SB') {
+            fbq('track', 'Lead');
+            // if it is run by social blue, also deduplicate
+            socialBlueDeDuplicate(post_form_value['mail'], data['data']['phonesanitized'], window[form_config].apref);
+          } else if (window[form_config].ad_campaign === 'JA') {
+            fbq('track', window[form_config].jalt_track);
+          }
         }
-        // If an ad campaign is run by an external company fire the conversiontracking
-        if (window[form_config].ad_campaign === 'SB') {
-          fbq('track', 'Lead');
-          // if it is run by social blue, also deduplicate
-          socialBlueDeDuplicate(post_form_value['mail'], data['data']['phonesanitized'], window[form_config].apref);
-        } else if (window[form_config].ad_campaign === 'JA') {
-          fbq('track', window[form_config].jalt_track);
-        }
-      }
-      else{
-        if (typeof dataLayer !== 'undefined') {
+        else{
           dataLayer.push({
             'event'         :'petitiebutton',
             'conv_campaign' : window[form_config].analytics_campaign,
@@ -60,7 +56,10 @@ $('.gpnl-petitionform').on('submit', function () {
             'conv_label'    :'Nee'
           });
         }
+
       }
+
+
 
       // cardflip the card, positionattribute flips to make sure no problems arises with different lengths of the front and back of the card, finally hide the front
       cardflip(petition_form_element);
