@@ -363,8 +363,8 @@ function petition_form_process() {
 	$literatuurcode = htmlspecialchars( wp_strip_all_tags( $_POST['literaturecode'] ) );
 
 	// Get and sanitize the formdata
-	$naam  = rawurlencode( wp_strip_all_tags( $_POST['name'] ) );
-	$email = rawurlencode( wp_strip_all_tags( $_POST['mail'] ) );
+	$naam  = wp_strip_all_tags( $_POST['name'] );
+	$email = wp_strip_all_tags( $_POST['mail'] );
 
 	// Accept only numeric characters in the phonenumber
 	$phonenumber = preg_replace( '/[^0-9]/', '', wp_strip_all_tags( $_POST['phone'] ) );
@@ -382,15 +382,15 @@ function petition_form_process() {
 	$consent = htmlspecialchars( wp_strip_all_tags( $_POST['consent'] ) );
 	$consent = ( 'on' === $consent ? 0 : 1 );
 
-	$baseurl = 'https://www.mygreenpeace.nl/registreren/pixel.aspx';
+	$baseurl = 'https://www.mygreenpeace.nl/registreren/pixel.aspx?';
 
 	$data_array = [
-		'?source=' => $marketingcode,
-		'per='     => $literatuurcode,
-		'fn='      => $naam,
-		'email='   => $email,
-		'tel='     => $phonenumber,
-		'stop='    => $consent,
+		'source' => $marketingcode,
+		'per'    => $literatuurcode,
+		'fn'     => $naam,
+		'email'  => $email,
+		'tel'    => $phonenumber,
+		'stop'   => $consent,
 	];
 
 	$querystring = http_build_query($data_array);
