@@ -57,7 +57,10 @@ $('.gpnl-petitionform').on('submit', function () {
             'event'         :'petitiebutton',
             'conv_campaign' : window[form_config].analytics_campaign,
             'conv_action'   :'telnr',
-            'conv_label'    :'Ja'
+            'conv_label'    :'Ja',
+            // 'conv_action'   : window[form_config].ga_action,
+            // 'conv_label'    :'telnr',
+            // 'conv_value'    : 1,
           });
           // If an ad campaign is run by an external company fire the conversiontracking
           if (window[form_config].ad_campaign === 'SB') {
@@ -73,7 +76,10 @@ $('.gpnl-petitionform').on('submit', function () {
             'event'         :'petitiebutton',
             'conv_campaign' : window[form_config].analytics_campaign,
             'conv_action'   :'telnr',
-            'conv_label'    :'Nee'
+            'conv_label'    :'Nee',
+            // 'conv_action'   : window[form_config].ga_action,
+            // 'conv_label'    : 'telnr',
+            // 'conv_value'    : 0,
           });
         }
 
