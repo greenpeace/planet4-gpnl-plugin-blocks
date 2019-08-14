@@ -30,6 +30,26 @@ $('.gpnl-petitionform').on('submit', function () {
           'conv_label'    :'registreer'
         });
 
+        let phonetmp = parseInt(data['data']['phoneresult']);
+        let phoneresult = (0 === phonetmp || phonetmp === 1) ? phonetmp : null;
+        dataLayer.push({
+          'event'         :'petitiebutton',
+          'conv_campaign' : window[form_config].analytics_campaign,
+          'conv_action'   : window[form_config].ga_action,
+          'conv_label'    :'phoneknown',
+          'conv_value'    : phoneresult,
+        });
+
+        let mailtmp = parseInt(data['data']['mailresult']);
+        let mailresult = (0 === mailtmp || mailtmp === 1) ? mailtmp : null;
+        dataLayer.push({
+          'event'         :'petitiebutton',
+          'conv_campaign' : window[form_config].analytics_campaign,
+          'conv_action'   : window[form_config].ga_action,
+          'conv_label'    :'mailknown',
+          'conv_value'    : mailresult,
+        });
+
         // if consent was given by entering phonenumber
         if (post_form_value.phone !== '') {
           // Send conversion event to the GTM
