@@ -363,8 +363,8 @@ function petition_form_process() {
 	$literatuurcode = htmlspecialchars( wp_strip_all_tags( $_POST['literaturecode'] ) );
 
 	// Get and sanitize the formdata
-	$naam  = wp_strip_all_tags( $_POST['name'] );
-	$email = wp_strip_all_tags( $_POST['mail'] );
+	$naam  = rawurlencode( wp_strip_all_tags( $_POST['name'] ) );
+	$email = rawurlencode( wp_strip_all_tags( $_POST['mail'] ) );
 
 	// Accept only numeric characters in the phonenumber
 	$phonenumber = preg_replace( '/[^0-9]/', '', wp_strip_all_tags( $_POST['phone'] ) );
@@ -402,11 +402,11 @@ function petition_form_process() {
 	curl_setopt( $request, CURLOPT_RETURNTRANSFER, 1 );
 
 	$result   = curl_exec( $request );
-	$httpcode = curl_getinfo( $request, CURLINFO_HTTP_CODE );
+	$httpcode = intval( curl_getinfo( $request, CURLINFO_HTTP_CODE ) );
 	curl_close( $request );
 
 	// Give the appropriate response to the frontend
-	if ( false === $result ) {
+	if ( $httpcode >= 400 || false === $result ) {
 		wp_send_json_error(
 			[
 				'statuscode' => $httpcode,
@@ -414,9 +414,25 @@ function petition_form_process() {
 			500
 		);
 	}
+
+	$known = checkEmail( $email );
+	$mail  = $known[1];
+	if ( intval( $known[0] ) >= 400 ) {
+		$mail = $known[0];
+	}
+
+	$known = checkPhone( $phonenumber );
+	$tel   = $known[1];
+	if ( intval( $known[0] ) >= 400 ) {
+		$tel = $known[0];
+	}
+
 	wp_send_json_success(
 		[
-			'statuscode' => $httpcode,
+			'statuscode'     => $httpcode,
+			'phonesanitized' => $phonenumber,
+			'mailresult'     => $mail,
+			'phoneresult'    => $tel,
 		],
 		200
 	);
@@ -427,3 +443,35 @@ function petition_form_process() {
 add_action( 'wp_ajax_petition_form_process', 'P4NLBKS\Controllers\Blocks\petition_form_process' );
 // use this version for if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_petition_form_process', 'P4NLBKS\Controllers\Blocks\petition_form_process' );
+
+function checkEmail( $email ) {
+	$url             = 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' . rawurlencode( $email );
+	$args['headers'] = [
+		'Origin' => 'https://www.greenpeace.org',
+	];
+
+	$response = wp_remote_get( $url, $args );
+	if ( is_array( $response ) ) {
+		$http_code = wp_remote_retrieve_response_code( $response );
+		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
+		$success   = substr( $body, 0, strlen( $body ) - 2 );
+		$success   = $success === 'true' ? 1 : 0;
+	}
+	return [ $http_code, $success ];
+}
+
+function checkPhone( $phonenumber ) {
+	$url             = 'https://secure.greenpeacephp.nl/kenikdezetel.php?telnr=' . rawurlencode( $phonenumber );
+	$args['headers'] = [
+		'Origin' => 'https://www.greenpeace.org',
+	];
+
+	$response = wp_remote_get( $url, $args );
+	if ( is_array( $response ) ) {
+		$http_code = wp_remote_retrieve_response_code( $response );
+		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
+		$success   = substr( $body, 0, strlen( $body ) - 2 );
+		$success   = $success === 'true' ? 1 : 0;
+	}
+	return [ $http_code, $success ];
+}
