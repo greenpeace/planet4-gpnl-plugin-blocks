@@ -71,4 +71,5 @@ P4NLBKS\Loader::get_instance( [
 	'P4NLBKS\Controllers\Blocks\GPNL_Liveblog_Controller',
 	'P4NLBKS\Controllers\Blocks\GPNL_Liveblogitem_Controller',
 	'P4NLBKS\Controllers\Blocks\GPNL_Newsletter_Controller',
+	'P4NLBKS\Controllers\Blocks\GPNL_Election_Controller',
 ], 'P4NLBKS\Views\View' );
