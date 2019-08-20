@@ -26,12 +26,74 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 		public function prepare_fields() {
 			$fields = [
 				[
-					'label' => __( 'Test', 'planet4-gpnl-blocks' ),
-					'attr'  => 'test',
+					'label' => __( 'Titel', 'planet4-gpnl-blocks' ),
+					'attr'  => 'title',
 					'type'  => 'text',
-					'value' => 'bla',
+					'value' => '',
+				],
+				[
+					'label'       => __( 'Achtergrondafbeelding', 'planet4-blocks-backend' ),
+					'attr'        => 'backgroundimage',
+					'type'        => 'attachment',
+					'libraryType' => [ 'image' ],
+					'addButton'   => __( 'Selecteer afbeelding', 'planet4-blocks-backend' ),
+					'frameTitle'  => __( 'Selecteer afbeelding', 'planet4-blocks-backend' ),
+				],
+				[
+					'label' => __( 'Opt in tekst', 'planet4-gpnl-blocks' ),
+					'attr'  => 'consent',
+					'type'  => 'textarea',
+					'value' => 'Als je dit aanvinkt, mag Greenpeace je per e-mail op de hoogte houden over onze campagnes. Ook vragen we je af en toe om steun. Afmelden kan natuurlijk altijd.',
 				],
 			];
+
+			for ( $i = 1; $i <= 5; $i++ ) {
+				$fields[] =
+					[
+						'label' => '<hr>'.sprintf( __( 'Optie %s: titel', 'planet4-blocks-backend' ), $i ),
+						'attr'  => 'title_' . $i,
+						'type'  => 'text',
+						'meta'  => [
+							// translators: placeholder needs to represent the ordinal of the task/column, eg. 1st, 2nd etc.
+							'placeholder' => sprintf( __( 'Titel van optie %s', 'planet4-blocks-backend' ), $i ),
+						],
+					];
+
+				$fields[] =
+					[
+						// translators: placeholder needs to represent the ordinal of the task/column, eg. 1st, 2nd etc.
+						'label' => sprintf( __( 'Optie %s: Ondertitel', 'planet4-blocks-backend' ), $i ),
+						'attr'  => 'subtitle_' . $i,
+						'type'  => 'textarea',
+						'meta'  => [
+							// translators: placeholder needs to represent the ordinal of the task/column, eg. 1st, 2nd etc.
+							'placeholder' => sprintf( __( 'Ondertitel / omschrijving van optie %s', 'planet4-blocks-backend' ), $i ),
+						],
+					];
+
+				$fields[] =
+					[
+						// translators: placeholder needs to represent the ordinal of the task/column, eg. 1st, 2nd etc.
+						'label'       => sprintf( __( 'Optie %s: Image', 'planet4-blocks-backend' ), $i ),
+						'attr'        => 'attachment_' . $i,
+						'type'        => 'attachment',
+						'libraryType' => [ 'image' ],
+						'addButton'   => __( 'Select Image', 'planet4-blocks-backend' ),
+						'frameTitle'  => __( 'Select Image', 'planet4-blocks-backend' ),
+					];
+
+				$fields[] =
+					[
+						// translators: placeholder needs to represent the ordinal of the task/column, eg. 1st, 2nd etc.
+						'label' => sprintf( __( 'Optie %s: Marketingcode', 'planet4-blocks-backend' ), $i ),
+						'attr'  => 'mcode_' . $i,
+						'type'  => 'text',
+						'meta'  => [
+							// translators: placeholder needs to represent the ordinal of the task/column, eg. 1st, 2nd etc.
+							'placeholder' => sprintf( __( 'Marketingcode van optie %s', 'planet4-blocks-backend' ), $i ),
+						],
+					];
+			}
 
 			// Define the Shortcode UI arguments.
 			$shortcode_ui_args = [
