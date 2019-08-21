@@ -152,7 +152,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 
 			wp_enqueue_style( 'gpnl_education_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-educationcovers.css', [], '2.4.0' );
 			wp_enqueue_style( 'gpnl_election_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-election.css', [], '2.4.0' );
-			wp_enqueue_script( 'gpnl_election_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-election.js', [ 'jquery' ], '2.4.0', true );
+			wp_enqueue_script( 'gpnl_election_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-election.js', [ 'jquery', 'slick' ], '2.4.0', true );
 			// Enqueue the script:
 			wp_enqueue_script( 'jquery-docready-script', P4NLBKS_ASSETS_DIR . 'js/onsubmit.js', [ 'jquery' ], '2.9.1', true );
 			$attributes = [
