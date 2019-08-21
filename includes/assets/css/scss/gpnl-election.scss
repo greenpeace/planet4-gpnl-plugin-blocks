@@ -1,3 +1,5 @@
+@import "base";
+
 .modal-backdrop {
   z-index: -1;
 }
@@ -5,8 +7,6 @@
 .fade {
   transition: opacity .1s linear;
 }
-
-@import "base";
 
 .page-header, .page-header-title, .page-header-subtitle, .page-header-content {
   .top-page-tags {
@@ -60,4 +60,19 @@ input[type=checkbox].gpnl-petition-checkbox {
 
 .gpnl-petition-checkbox-label small {
   margin-left: 1.5rem;
+}
+
+.full-width-container {
+  margin: 54px calc(calc(50% - 50vw) + 32px) 32px;
+  @media screen and (min-width: $large-width) {
+    margin: 54px calc(50% - 50vw) 32px;
+  }
+}
+
+.slick-next::before, .slick-prev::before {
+  color: $blood-orange;
+}
+
+.slick-dots li.slick-active button::before {
+  color: $dark-green;
 }
