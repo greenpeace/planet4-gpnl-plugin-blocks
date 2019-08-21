@@ -333,13 +333,14 @@ function get_address() {
 
 	check_ajax_referer( 'GPNL_get_address', 'nonce' );
 
-
 	// getting the options from the gnnp-settings where the API-key and API-URL are stored.
 	$options = get_option( 'planet4nl_options' );
 
-	// Get data from form.
+	// Get data from form and validate
 	$zipcode  = wp_strip_all_tags( $_POST['zipcode'] );
+	validate_zipcode($zipcode) or die();
 	$house_no = wp_strip_all_tags( $_POST['house_no'] );
+	is_numeric($house_no) or die();
 
 	$data_array = [
 		'postcode'   => $zipcode,
@@ -351,9 +352,6 @@ function get_address() {
 
 	// URL for production
 	$url = $options['register_url'] . '/validate/postcode';
-
-	// test URL
-//	$url = 'https://www.mygreenpeace.nl/GPN.RegistrerenApi.Test/validate/postcode';
 
 	$curl = curl_init( $url );
 
@@ -384,7 +382,6 @@ function get_address() {
 		wp_send_json_error(
 			[
 				'statuscode' => $http_code,
-//				 'cUrlresult'    => $result,
 			],
 			$http_code
 		);
@@ -428,6 +425,15 @@ function check_form_process() {
 		null,
 		200
 	);
+}
+
+function validate_zipcode($zipcode)
+{
+	$regex = '/^(?:NL-)?(\d{4})\s*([A-Z]{2})$/i';
+
+	if ( preg_match($regex,$zipcode) ) {
+		return true;
+	}
 }
 
 // use this version for if you want the callback to work for users who are logged in

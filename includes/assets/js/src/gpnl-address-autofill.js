@@ -20,22 +20,28 @@ $(document).ready(function () {
       nonce: window[address_object].nonce
     };
 
-    // Do a ajax call to the wp_admin admin_ajax.php,
-    // which triggers processing function in the petition block
-    $.ajax({
-      type: 'POST',
-      url: window[address_object].ajaxUrl,
-      data: ajax_values,
-      success: function (t) {
+    // validate zipcode and house-number and only make ajax call when valid.
+    var zipRegex = /^[1-9][0-9]{3}[\s]?[A-Za-z]{2}$/i;
+    if ( zipRegex.test(zipcodeValue) === true && !isNaN(houseNoValue) ) {
 
-        var streetInput = $('#street');
-        var cityInput = $('#city');
+      // Do a ajax call to the wp_admin admin_ajax.php,
+      // which triggers processing function in the petition block
+      $.ajax({
+        type: 'POST',
+        url: window[address_object].ajaxUrl,
+        data: ajax_values,
+        success: function (t) {
 
-        streetInput.val(t.data.cUrlresult.result.straat);
-        cityInput.val(t.data.cUrlresult.result.woonplaats);
+          var streetInput = $('#street');
+          var cityInput = $('#city');
 
-      }
-    });
+          streetInput.val(t.data.cUrlresult.result.straat);
+          cityInput.val(t.data.cUrlresult.result.woonplaats);
+
+        }
+      });
+
+    }
 
   });
 
