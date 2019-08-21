@@ -68,3 +68,11 @@ input[type=checkbox].gpnl-petition-checkbox {
     margin: 54px calc(50% - 50vw) 32px;
   }
 }
+
+.slick-next::before, .slick-prev::before {
+  color: $blood-orange;
+}
+
+.slick-dots li.slick-active button::before {
+  color: $dark-green;
+}
