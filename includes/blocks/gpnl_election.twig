@@ -1,8 +1,58 @@
 {% block gpnl_election %}
   {% if ( fields ) %}
-	{{ fields.test }}
-	{{ fields.test }}
+	  <div style="background-image: url({{ fields.backgroundimage.src }});margin: 54px calc(50% - 50vw) 32px;">
+		  <div class="page-template">
+			  <h1>{{ fields.title }}</h1>
 
+			  <div class="row limit-visibility" style="margin: 54px calc(50% - 50vw) 32px;">
+				  {% set i = 1 %}
+				  {% for option in options %}
+					  <div class="col-xl cover-card-column">
+						  <div class="cover-card card-one" style="background-image: url({{ option.attachment.src }});">
+							  <div class="cover-card-content">
+								  <a data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">
+									  <h2 class="cover-card-heading">{{ option.title|e('wp_kses_post')|raw }}</h2>
+								  </a>
+							  </div>
+							  {% if option.subtitle %}
+								  <p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
+							  {% endif %}
+							  <a class="btn btn-action btn-block cover-card-btn"
+								 data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Meer info</a>
+						  </div>
+
+					  </div>
+					  {% set i = i + 1 %}
+				  {% endfor %}
+			  </div>
+		  </div>
+	  </div>
+	  <div>
+		  <div class="modal fade" id="electionModal" tabindex="-1" role="dialog" aria-labelledby="electionModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered" role="document">
+				  <div class="modal-content">
+					  <div class="modal-header">
+						  <h2 class="modal-title" id="electionModalLabel"></h2>
+						  <button type="button" class="close" data-dismiss="modal" aria-label="Sluit">
+							  <span aria-hidden="true">&times;</span>
+						  </button>
+					  </div>
+					  <div class="modal-body">
+					  </div>
+					  <div class="modal-footer">
+						  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
+						  <button type="button" class="btn btn-primary">Stem</button>
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+	  </div>
+
+
+{#	  <div>#}
+{#		  <pre>{{ dump(fields) }}</pre>#}
+{#		  <pre>{{ dump(options) }}</pre>#}
+{#	  </div>#}
 
   {% endif %}
 {% endblock %}
