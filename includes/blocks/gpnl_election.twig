@@ -38,49 +38,53 @@
 							  <span aria-hidden="true">&times;</span>
 						  </button>
 					  </div>
-					  <div class="modal-body">
-					  </div>
-					  <div class="modal-form front">
-						  <form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
-							  <div class="form-group">
-								  <label hidden for="name">Naam</label>
-								  <input name="name" required type="text" class="form-control" placeholder="Voornaam">
-							  </div>
-							  <div class="form-group">
-								  <label hidden for="mail">Email</label>
-								  <input name="mail"  required type="email" class="form-control" placeholder="E-mail">
-							  </div>
+					  <div class="modal-body"></div>
+					  <div class="modal-form gpnl-petition">
+						  <div class="front">
+							  <form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
+								  <div class="form-group">
+									  <label hidden for="name">Naam</label>
+									  <input name="name" required type="text" class="form-control" placeholder="Voornaam">
+								  </div>
+								  <div class="form-group">
+									  <label hidden for="mail">Email</label>
+									  <input name="mail"  required type="email" class="form-control" placeholder="E-mail">
+								  </div>
 
-							  <div class="form-group">
-								  <label hidden for="phone">Telefoonnummer</label>
-								  <input name="phone" type="text" class="form-control" placeholder="Telefoonnummer">
-							  </div>
-							  <div class="form-group optin">
-								  <input class="form-check-input gpnl-petition-checkbox" name="consent" type="checkbox" />
-								  <label class="gpnl-petition-checkbox-label" for="consent"><small class="form-check-label">{{ fields.consent }}</small></label>
-							  </div>
-							  <label for="phone"><small >Vul je je telefoonnummer in? Dan kan Greenpeace jou telefonisch benaderen voor giftverzoeken of updates rondom lopende campagnes.</small></label>
-						  </form>
-					  </div>
-					  <div class="gpnl-petition-thank back">
-						  <div class="card">
-							  <div class="card-body">
-								  <h5 class="card-title">{{ fields.thanktitle|e('wp_kses_post')|raw }}</h5>
-								  <p class="card-text">{{ fields.thanktext|e('wp_kses_post')|raw }}</p>
-								  <a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebuttontext }}</a>
-								  {% if not fields.hidesharingbuttons %}
-									  <div class="gpnl-petitionshare">
-										  <a class="btn btn-primary btn-block gpnl-share-facebook"
-											 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
-											  FACEBOOK
-										  </a>
-										  <a class="btn btn-primary btn-block gpnl-share-twitter"
-											 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
-											  TWITTER
-										  </a>
-										  {#<a class="btn btn-primary btn-block gpnl-share-whatsapp" target="_blank" href="whatsapp://send?text={{ fields.whatsapptext }} via {{ fields.current_url }}" role="button" onclick="fireShareEvent('whatsapp');">WHATSAPP</a>#}
-									  </div>
-								  {% endif %}
+								  <div class="form-group">
+									  <label hidden for="phone">Telefoonnummer</label>
+									  <input name="phone" type="text" class="form-control" placeholder="Telefoonnummer">
+								  </div>
+								  <div class="form-group optin">
+									  <input class="form-check-input gpnl-petition-checkbox" name="consent" type="checkbox" />
+									  <label class="gpnl-petition-checkbox-label" for="consent"><small class="form-check-label">{{ fields.consent }}</small></label>
+								  </div>
+								  <label for="phone"><small >Vul je je telefoonnummer in? Dan kan Greenpeace jou telefonisch benaderen voor giftverzoeken of updates rondom lopende campagnes.</small></label>
+								  <input type="text" name="marketingcode" value="" hidden readonly>
+								  <input type="text" name="literaturecode" value="{{ fields.literaturecode }}" hidden readonly>
+								  <input type="text" name="form_id" value="" hidden readonly>
+							  </form>
+						  </div>
+						  <div class="gpnl-petition-thank back">
+							  <div class="card">
+								  <div class="card-body">
+									  <h5 class="card-title">{{ fields.thanktitle|e('wp_kses_post')|raw }}</h5>
+									  <p class="card-text">{{ fields.thanktext|e('wp_kses_post')|raw }}</p>
+									  <a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebutton }}</a>
+									  {% if not fields.hidesharingbuttons %}
+										  <div class="gpnl-petitionshare">
+											  <a class="btn btn-primary btn-block gpnl-share-facebook"
+												 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
+												  FACEBOOK
+											  </a>
+											  <a class="btn btn-primary btn-block gpnl-share-twitter"
+												 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
+												  TWITTER
+											  </a>
+											  {#<a class="btn btn-primary btn-block gpnl-share-whatsapp" target="_blank" href="whatsapp://send?text={{ fields.whatsapptext }} via {{ fields.current_url }}" role="button" onclick="fireShareEvent('whatsapp');">WHATSAPP</a>#}
+										  </div>
+									  {% endif %}
+								  </div>
 							  </div>
 						  </div>
 					  </div>

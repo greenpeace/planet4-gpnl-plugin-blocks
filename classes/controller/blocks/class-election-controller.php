@@ -40,8 +40,20 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'frameTitle'  => __( 'Selecteer afbeelding', 'planet4-blocks-backend' ),
 				],
 				[
+					'label' => __( 'Bedankt titel', 'planet4-gpnl-blocks' ),
+					'attr'  => 'thanktitle',
+					'type'  => 'textarea',
+					'value' => '',
+				],
+				[
 					'label' => __( 'Bedankt tekst', 'planet4-gpnl-blocks' ),
 					'attr'  => 'thanktext',
+					'type'  => 'textarea',
+					'value' => '',
+				],
+				[
+					'label' => __( 'Doneerknop tekst', 'planet4-gpnl-blocks' ),
+					'attr'  => 'donatebutton',
 					'type'  => 'textarea',
 					'value' => '',
 				],
@@ -166,7 +178,9 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			$attributes = [
 				'title'           => '',
 				'backgroundimage' => '',
+				'thanktitle'      => '',
 				'thanktext'       => '',
+				'donatebutton'    => '',
 				'consent'         => '',
 				'campaignpolicy'  => '',
 				'literaturecode'  => '',
