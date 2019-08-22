@@ -1,7 +1,8 @@
 @import "base";
 
-.modal-backdrop {
-  z-index: -1;
+.modal {
+  position: fixed !important;
+  z-index: 1050 !important;
 }
 
 .fade {
@@ -75,4 +76,8 @@ input[type=checkbox].gpnl-petition-checkbox {
 
 .slick-dots li.slick-active button::before {
   color: $dark-green;
+}
+
+.educationcovers__card__p {
+  width: 100%;
 }
