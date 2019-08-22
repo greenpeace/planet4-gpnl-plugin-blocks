@@ -163,7 +163,6 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 
 			wp_enqueue_script( 'gpnl_election_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-election.js', [ 'jquery', 'slick' ], '2.11.0-pre', true );
 			// Enqueue the script:
-			wp_enqueue_script( 'jquery-docready-script', P4NLBKS_ASSETS_DIR . 'js/onsubmit.js', [ 'jquery' ], '2.11.0-pre', true );
 			$attributes = [
 				'title'           => '',
 				'backgroundimage' => '',
@@ -219,7 +218,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			];
 			// Pass options to frontend code
 			wp_localize_script(
-				'jquery-docready-script',
+				'gpnl_election_js',
 				'election_object',
 				array(
 					'ajaxUrl'            => admin_url( 'admin-ajax.php' ),
