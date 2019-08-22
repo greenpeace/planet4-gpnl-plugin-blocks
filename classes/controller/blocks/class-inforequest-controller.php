@@ -2,6 +2,8 @@
 
 namespace P4NLBKS\Controllers\Blocks;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
+
 if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 
 	/**
@@ -16,9 +18,8 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 		 */
 		const BLOCK_NAME = 'gpnl_inforequest';
 
-
 		/**
-		Shortcode UI setup for the inforequest shortcode.
+		 * Shortcode UI setup for the inforequest shortcode.
 		 * It is called when the Shortcake action hook `register_shortcode_ui` is called.
 		 */
 		public function prepare_fields() {
@@ -37,8 +38,8 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 				],
 				[
 					'label' => '<hr class="hr-dashed"><br><div class="message notice-info">' .
-						__( 'Voer hieronder minimaal 1 en maximaal 5 artikelen in ' ) . '</div>' .
-						'<p>' . __( 'Optie 1: Marketingcode', 'planet4-gpnl-blocks' ) . '</p>',
+					           __( 'Voer hieronder minimaal 1 en maximaal 5 artikelen in ' ) . '</div>' .
+					           '<p>' . __( 'Optie 1: Marketingcode', 'planet4-gpnl-blocks' ) . '</p>',
 					'attr'  => 'mcode1_code',
 					'type'  => 'text',
 					'value' => '',
@@ -146,16 +147,17 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 		 * Callback for the shortcake_noindex shortcode.
 		 * It renders the shortcode based on supplied attributes.
 		 *
-		 * @param array  $fields        Array of fields that are to be used in the template.
-		 * @param string $content       The content of the post.
+		 * @param array $fields Array of fields that are to be used in the template.
+		 * @param string $content The content of the post.
 		 * @param string $shortcode_tag The shortcode tag (shortcake_blockname).
 		 *
 		 * @return string The complete html of the block
 		 */
-		public function prepare_template( $fields, $content, $shortcode_tag ) : string {
+		public function prepare_template( $fields, $content, $shortcode_tag ): string {
 
-			 wp_enqueue_style( 'gpnl_inforequest_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-inforequest.css', [], '2.11.0' );
-			 wp_enqueue_script( 'gpnl_request_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-inforequest.js', [ 'jquery' ], '2.11.0', true );
+			wp_enqueue_style( 'gpnl_inforequest_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-inforequest.css', [], '2.11.0' );
+			wp_enqueue_script( 'gpnl_request_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-inforequest.js', [ 'jquery' ], '2.11.0', true );
+			wp_enqueue_script( 'gpnl_address_autofill', P4NLBKS_ASSETS_DIR . 'js/gpnl-address-autofill.js', [ 'jquery' ], '0.0.1', true );
 
 			$fields = shortcode_atts(
 				[
@@ -183,11 +185,12 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 			$mcode_attributes = array_filter( $fields, [ $this, 'isMarketingcodeAttribute' ], ARRAY_FILTER_USE_KEY );
 			$sorted_mcodes    = [];
 			$postfixes        = [ '_code', '_label' ];
-			for ( $i = 1; $i < 6; $i++ ) {
+			for ( $i = 1; $i < 6; $i ++ ) {
 				$key = 'mcode' . $i;
 				foreach ( $postfixes as $postfix ) {
 					if ( '' === $mcode_attributes[ $key . $postfix ] ) {
-						continue; }
+						continue;
+					}
 					$sorted_mcodes[ $i ][ $postfix ] = $mcode_attributes[ $key . $postfix ];
 				}
 			}
@@ -198,7 +201,7 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 				'fields' => $fields,
 			];
 
-			// Pass options to frontend code
+			// Pass options to frontend code.
 			wp_localize_script(
 				'gpnl_request_js',
 				'request_form_object',
@@ -207,6 +210,16 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 					'nonce'          => wp_create_nonce( 'GPNL_Inforequest' ),
 					'literaturecode' => '04935',
 					'hider'          => $fields['hider'],
+				]
+			);
+
+			// Pass option for address autofill to frontend code.
+			wp_localize_script(
+				'gpnl_address_autofill',
+				'get_address_object',
+				[
+					'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
+					'nonce'          => wp_create_nonce( 'GPNL_get_address' ),
 				]
 			);
 
@@ -311,7 +324,74 @@ add_action( 'wp_ajax_request_form_process', 'P4NLBKS\Controllers\Blocks\request_
 // use this version for if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_request_form_process', 'P4NLBKS\Controllers\Blocks\request_form_process' );
 
+/**
+ * Get address with API call.
+ */
+function get_address() {
 
+	check_ajax_referer( 'GPNL_get_address', 'nonce' );
+
+	// getting the options from the gnnp-settings where the API-key and API-URL are stored.
+	$options = get_option( 'planet4nl_options' );
+
+	// Get data from form and validate
+	$zipcode = wp_strip_all_tags( $_POST['zipcode'] );
+	validate_zipcode($zipcode) or die();
+	$house_no = wp_strip_all_tags( $_POST['house_no'] );
+	is_numeric($house_no) or die();
+
+	$data_array = [
+		'postcode'   => $zipcode,
+		'huisnummer' => $house_no,
+		'wachtwoord' => $options['gpnl_api_key']
+	];
+
+	$data = wp_json_encode( $data_array );
+
+	// URL for production
+	$url = $options['register_url'] . '/validate/postcode';
+
+	$curl = curl_init( $url );
+
+	// API call options:
+	curl_setopt( $curl, CURLOPT_POSTFIELDS, $data );
+	curl_setopt( $curl, CURLOPT_URL, $url );
+	curl_setopt( $curl, CURLOPT_HTTPHEADER,
+		[
+			'Content-Type:application/json',
+			'Content-Length: ' . strlen( $data )
+		]
+	);
+	curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, "POST" );
+	curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
+	curl_setopt( $curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+
+
+	// Execute API call
+	$result = json_decode( curl_exec( $curl ) );
+	// Get HTTP statuscode
+	$http_code = curl_getinfo( $curl, CURLINFO_HTTP_CODE );
+
+	curl_close( $curl );
+
+	// Give the appropriate response to the frontend
+	if ( false === $result || 200 !== $http_code ) {
+		wp_send_json_error(
+			[
+				'statuscode' => $http_code,
+			],
+			$http_code
+		);
+	}
+
+	wp_send_json_success(
+		[
+			'statuscode' => $http_code,
+			'cUrlresult' => $result,
+		],
+		$http_code
+	);
+}
 
 function check_form_process() {
 
@@ -344,7 +424,21 @@ function check_form_process() {
 	);
 }
 
+function validate_zipcode($zipcode)
+{
+	$regex = '/^(?:NL-)?(\d{4})\s*([A-Z]{2})$/i';
+
+	if ( preg_match($regex,$zipcode) ) {
+		return true;
+	}
+}
+
 // use this version for if you want the callback to work for users who are logged in
 add_action( 'wp_ajax_check_form_process', 'P4NLBKS\Controllers\Blocks\check_form_process' );
 // use this version for if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_check_form_process', 'P4NLBKS\Controllers\Blocks\check_form_process' );
+
+// call php function whenever the ajax call is made to get the address for non-logged in users
+add_action( 'wp_ajax_nopriv_get_address', 'P4NLBKS\Controllers\Blocks\get_address' );
+// call php function whenever the ajax call is made to get the address for logged in users
+add_action( 'wp_ajax_get_address', 'P4NLBKS\Controllers\Blocks\get_address' );
