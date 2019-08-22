@@ -91,6 +91,11 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 						'placeholder' => __( 'Vanaf hoeveel stemmen is de stemmenteller zichtbaar?', 'planet4-blocks-backend' ),
 					],
 				],
+				[
+					'label' => __( 'Verberg stemresultaat', 'planet4-gpnl-blocks' ),
+					'attr'  => 'hideresults',
+					'type'  => 'checkbox',
+				],
 			];
 
 			for ( $i = 1; $i <= 5; $i++ ) {
@@ -195,6 +200,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				'literaturecode'  => '',
 				'campaigncode'    => '',
 				'countermin'      => '',
+				'hideresults'     => '',
 			];
 
 			$options = [];
@@ -254,6 +260,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'nonce'              => wp_create_nonce( 'GPNL_Petitions' ),
 					'analytics_campaign' => $fields['campaigncode'],
 					'literature_code'    => $fields['literaturecode'],
+					'hideresults'        => $fields['hideresults'],
 				)
 			);
 
