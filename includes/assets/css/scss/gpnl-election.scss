@@ -65,8 +65,10 @@ input[type=checkbox].gpnl-petition-checkbox {
 
 .full-width-container {
   margin: 54px calc(calc(50% - 50vw) + 24px) 32px;
+  padding: 0 !important;
   @media screen and (min-width: $large-width) {
     margin: 54px calc(50% - 50vw) 32px;
+    padding: 0 15px;
   }
 }
 
@@ -82,4 +84,8 @@ input[type=checkbox].gpnl-petition-checkbox {
 
 .educationcovers__card__p {
   width: 100%;
+}
+
+.cover-card-column {
+  padding: 0 10px;
 }
