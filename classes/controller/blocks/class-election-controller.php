@@ -82,6 +82,15 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'attr'  => 'campaigncode',
 					'type'  => 'text',
 				],
+				[
+					'label' => __( 'Teller: minimaal # stemmen', 'planet4-gpnl-blocks' ),
+					'attr'  => 'countermin',
+					'type'  => 'number',
+					'meta'  => [
+						// translators: placeholder needs to represent the ordinal of the task/column, eg. 1st, 2nd etc.
+						'placeholder' => __( 'Vanaf hoeveel stemmen is de stemmenteller zichtbaar?', 'planet4-blocks-backend' ),
+					],
+				],
 			];
 
 			for ( $i = 1; $i <= 5; $i++ ) {
@@ -185,6 +194,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				'campaignpolicy'  => '',
 				'literaturecode'  => '',
 				'campaigncode'    => '',
+				'countermin'      => '',
 			];
 
 			$options = [];

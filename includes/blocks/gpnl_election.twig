@@ -3,6 +3,7 @@
 	  <div style="background-image: url({{ fields.backgroundimage.src }});margin: 54px calc(50% - 50vw) 32px;">
 		  <div class="page-template">
 			  <h1>{{ fields.title }}</h1>
+			  <h3 id="counter_total" data-num=""></h3>
 
 			  <div class="row limit-visibility full-width-container election-options">
 				  {% set i = 1 %}
@@ -18,6 +19,12 @@
 								  {% if option.subtitle %}
 									  <p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
 								  {% endif %}
+								  <div class="counter subcounter" style="display: none">
+									  <div class="counter__slider"></div>
+									  <div class="counter__text">
+										  <span class="counter__gettext"></span>
+									  </div>
+								  </div>
 								  <a class="btn btn-action btn-block cover-card-btn"
 									 data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Stem</a>
 							  </div>
@@ -83,7 +90,6 @@
 												 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
 												  TWITTER
 											  </a>
-											  {#<a class="btn btn-primary btn-block gpnl-share-whatsapp" target="_blank" href="whatsapp://send?text={{ fields.whatsapptext }} via {{ fields.current_url }}" role="button" onclick="fireShareEvent('whatsapp');">WHATSAPP</a>#}
 										  </div>
 									  {% endif %}
 								  </div>
@@ -99,10 +105,10 @@
 		  </div>
 
 
-	  <div>
-		  <pre>{{ dump(fields) }}</pre>
-		  <pre>{{ dump(options) }}</pre>
-	  </div>
+{#	  <div>#}
+{#		  <pre>{{ dump(fields) }}</pre>#}
+{#		  <pre>{{ dump(options) }}</pre>#}
+{#	  </div>#}
 
   {% endif %}
 {% endblock %}
