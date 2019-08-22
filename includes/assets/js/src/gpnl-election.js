@@ -95,7 +95,7 @@ $(document).ready(function() {
   let config = 'election_object';
   // totaal aantal stemmen opvragen
   let form = {
-    tellerCode: config.analytics_campaign,
+    tellerCode: window[config].analytics_campaign,
   };
   let num = prefillByGuid('teller', form);
   $('#counter_total').data('num', num);
