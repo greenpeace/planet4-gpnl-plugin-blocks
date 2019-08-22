@@ -189,7 +189,8 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 
 			$options = [];
 			for ( $i = 1; $i <= 5; $i++ ) {
-				$option_tmp    =
+				if ( isset( $fields[ 'title_' . $i ] ) ) {
+					$option_tmp    =
 					[
 						'title'       => $fields[ 'title_' . $i ],
 						'subtitle'    => $fields[ 'subtitle_' . $i ],
@@ -200,19 +201,22 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 								'src' => wp_get_attachment_image_src( $fields[ 'attachment_' . $i ], 'large' )[0],
 							],
 					];
-				$options[ $i ] = $option_tmp;
+					$options[ $i ] = $option_tmp;
 
-				// Pass options to frontend code
-				wp_localize_script(
-					'gpnl_election_js',
-					'election_object_' . $i,
-					array(
-						'title'       => $fields[ 'title_' . $i ],
-						'subtitle'    => $fields[ 'subtitle_' . $i ],
-						'description' => $fields[ 'description_' . $i ],
-						'mcode'       => $fields[ 'mcode_' . $i ],
-					)
-				);
+					// Pass options to frontend code
+					wp_localize_script(
+						'gpnl_election_js',
+						'election_object_' . $i,
+						array(
+							'title'       => $fields[ 'title_' . $i ],
+							'subtitle'    => $fields[ 'subtitle_' . $i ],
+							'description' => $fields[ 'description_' . $i ],
+							'mcode'       => $fields[ 'mcode_' . $i ],
+						)
+					);
+				} else {
+					break;
+				}
 			}
 
 			$fields = shortcode_atts(

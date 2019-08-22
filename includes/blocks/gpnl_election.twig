@@ -7,27 +7,29 @@
 			  <div class="row limit-visibility full-width-container election-options">
 				  {% set i = 1 %}
 				  {% for option in options %}
-					  <div class="col-xl cover-card-column">
-						  <div class="cover-card card-one" style="background-image: url({{ option.attachment.src }});background-position: center center;">
-							  <div class="cover-card-content">
-								  <a data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">
-									  <h2 class="cover-card-heading">{{ option.title|e('wp_kses_post')|raw }}</h2>
-								  </a>
+					  {% if (option.title) %}
+						  <div class="col-xl cover-card-column">
+							  <div class="cover-card card-one" style="background-image: url({{ option.attachment.src }});background-position: center center;">
+								  <div class="cover-card-content">
+									  <a data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">
+										  <h2 class="cover-card-heading">{{ option.title|e('wp_kses_post')|raw }}</h2>
+									  </a>
+								  </div>
+								  {% if option.subtitle %}
+									  <p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
+								  {% endif %}
+								  <a class="btn btn-action btn-block cover-card-btn"
+									 data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Stem</a>
 							  </div>
-							  {% if option.subtitle %}
-								  <p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
-							  {% endif %}
-							  <a class="btn btn-action btn-block cover-card-btn"
-								 data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Stem</a>
-						  </div>
 
-					  </div>
-					  {% set i = i + 1 %}
+						  </div>
+						  {% set i = i + 1 %}
+					  {% endif %}
 				  {% endfor %}
 			  </div>
 		  </div>
 	  </div>
-		  <div class="modal fade" id="electionModal" tabindex="-1" role="dialog" aria-labelledby="electionModalLabel" aria-hidden="true">
+		  <div class="modal fade" id="electionModal" tabindex="-1" role="dialog" aria-labelledby="electionModalLabel" aria-hidden="true" data-num="{{ i - 1 }}">
 			  <div class="modal-dialog modal-dialog-centered" role="document">
 				  <div class="modal-content">
 					  <div class="modal-header">
@@ -97,10 +99,10 @@
 		  </div>
 
 
-{#	  <div>#}
-{#		  <pre>{{ dump(fields) }}</pre>#}
-{#		  <pre>{{ dump(options) }}</pre>#}
-{#	  </div>#}
+	  <div>
+		  <pre>{{ dump(fields) }}</pre>
+		  <pre>{{ dump(options) }}</pre>
+	  </div>
 
   {% endif %}
 {% endblock %}
