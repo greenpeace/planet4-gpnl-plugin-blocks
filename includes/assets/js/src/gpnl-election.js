@@ -32,6 +32,7 @@ jQuery(function ($) {
       arrows:         true,
       dots:           true,
       centerMode:     true,
+      centerPadding:  '20px',
       initialSlide:   3,
       responsive: [
         {
