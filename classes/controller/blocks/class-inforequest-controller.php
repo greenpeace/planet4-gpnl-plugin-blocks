@@ -213,15 +213,13 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 				]
 			);
 
-			// Pass options to frontend code.
+			// Pass option for address autofill to frontend code.
 			wp_localize_script(
 				'gpnl_address_autofill',
 				'get_address_object',
 				[
 					'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
 					'nonce'          => wp_create_nonce( 'GPNL_get_address' ),
-					'literaturecode' => '04935',
-					'hider'          => $fields['hider'],
 				]
 			);
 
@@ -337,7 +335,7 @@ function get_address() {
 	$options = get_option( 'planet4nl_options' );
 
 	// Get data from form and validate
-	$zipcode  = wp_strip_all_tags( $_POST['zipcode'] );
+	$zipcode = wp_strip_all_tags( $_POST['zipcode'] );
 	validate_zipcode($zipcode) or die();
 	$house_no = wp_strip_all_tags( $_POST['house_no'] );
 	is_numeric($house_no) or die();
@@ -375,7 +373,6 @@ function get_address() {
 	$http_code = curl_getinfo( $curl, CURLINFO_HTTP_CODE );
 
 	curl_close( $curl );
-
 
 	// Give the appropriate response to the frontend
 	if ( false === $result || 200 !== $http_code ) {
