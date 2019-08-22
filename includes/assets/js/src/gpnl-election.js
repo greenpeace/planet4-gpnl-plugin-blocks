@@ -7,6 +7,8 @@ $('#electionModal').on('show.bs.modal', function (event) {
   modal.find('.modal-title').text('Stem op ' + window[config].title);
   modal.find('.modal-subtitle').text(window[config].subtitle);
   modal.find('.modal-body').text( window[config].description );
+  modal.find('input[name=\'form_id\']').val(id);
+  modal.find('input[name=\'marketingcode\']').val(window[config].mcode);
 });
 
 jQuery(function ($) {
@@ -46,88 +48,91 @@ jQuery(function ($) {
 
 $('.gpnl-petitionform').on('submit', function () {
   var petition_form_element = this;
-  console.log(petition_form_element);
   // Get the  parameter from the petition form and add the action and CSRF protection
   var post_form_value = getFormObj(petition_form_element);
-  var form_config = 'petition_form_object_' + post_form_value['form_id'];
+  var form_config = 'election_object';
 
   post_form_value.action = 'petition_form_process';
   post_form_value.nonce  = window[form_config].nonce;
-  post_form_value.ad_campaign = window[form_config].ad_campaign;
+  // post_form_value.ad_campaign = window[form_config].ad_campaign;
 
   // Disable the form so people can't resubmit
   toggleDisable($(petition_form_element).find('*'));
+  toggleDisable($('.btn-submit'));
+
 
   // Do a ajax call to the wp_admin admin_ajax.php,
   // which triggers processing function in the petition block
-  $.ajax({
-    type:    'POST',
-    url:     window[form_config].ajaxUrl,
-    data:    post_form_value,
-    success: function(data) {
-      // eslint-disable-next-line no-console
-      console.log('^-^');
-      console.log(petition_form_element);
-
-      // Send conversion event to the GTM
-      if (typeof dataLayer !== 'undefined') {
-        dataLayer.push({
-          'event'         :'petitiebutton',
-          'conv_campaign' : window[form_config].analytics_campaign,
-          'conv_action'   : window[form_config].ga_action,
-          'conv_label'    :'registreer'
-        });
-      }
-
-      // if consent was given by entering phonenumber
-      if (post_form_value.phone !== '') {
-        // Send conversion event to the GTM
-        if (typeof dataLayer !== 'undefined') {
-          dataLayer.push({
-            'event'         :'petitiebutton',
-            'conv_campaign' : window[form_config].analytics_campaign,
-            'conv_action'   :'telnr',
-            'conv_label'    :'Ja'
-          });
-        }
-        // If an ad campaign is run by an external company fire the conversiontracking
-        if (window[form_config].ad_campaign === 'SB') {
-          fbq('track', 'Lead');
-          // if it is run by social blue, also deduplicate
-          socialBlueDeDuplicate(post_form_value['mail'], data['data']['phone'], window[form_config].apref);
-        } else if (window[form_config].ad_campaign === 'JA') {
-          fbq('track', window[form_config].jalt_track);
-        }
-      }
-      else{
-        if (typeof dataLayer !== 'undefined') {
-          dataLayer.push({
-            'event'         :'petitiebutton',
-            'conv_campaign' : window[form_config].analytics_campaign,
-            'conv_action'   :'telnr',
-            'conv_label'    :'Nee'
-          });
-        }
-      }
-
-      // cardflip the card, positionattribute flips to make sure no problems arises with different lengths of the front and back of the card, finally hide the front
+  // $.ajax({
+  //   type:    'POST',
+  //   url:     window[form_config].ajaxUrl,
+  //   data:    post_form_value,
+  //   success: function(data) {
+  //     // eslint-disable-next-line no-console
+  //     console.log('^-^');
+  //
+  //     // Send conversion event to the GTM
+  //     if (typeof dataLayer !== 'undefined') {
+  //       dataLayer.push({
+  //         'event'         :'petitiebutton',
+  //         'conv_campaign' : window[form_config].analytics_campaign,
+  //         'conv_action'   : window[form_config].ga_action,
+  //         'conv_label'    :'registreer'
+  //       });
+  //     }
+  //
+  //     // if consent was given by entering phonenumber
+  //     if (post_form_value.phone !== '') {
+  //       // Send conversion event to the GTM
+  //       if (typeof dataLayer !== 'undefined') {
+  //         dataLayer.push({
+  //           'event'         :'petitiebutton',
+  //           'conv_campaign' : window[form_config].analytics_campaign,
+  //           'conv_action'   :'telnr',
+  //           'conv_label'    :'Ja'
+  //         });
+  //       }
+  //       // If an ad campaign is run by an external company fire the conversiontracking
+  //       if (window[form_config].ad_campaign === 'SB') {
+  //         fbq('track', 'Lead');
+  //         // if it is run by social blue, also deduplicate
+  //         socialBlueDeDuplicate(post_form_value['mail'], data['data']['phone'], window[form_config].apref);
+  //       } else if (window[form_config].ad_campaign === 'JA') {
+  //         fbq('track', window[form_config].jalt_track);
+  //       }
+  //     }
+  //     else{
+  //       if (typeof dataLayer !== 'undefined') {
+  //         dataLayer.push({
+  //           'event'         :'petitiebutton',
+  //           'conv_campaign' : window[form_config].analytics_campaign,
+  //           'conv_action'   :'telnr',
+  //           'conv_label'    :'Nee'
+  //         });
+  //       }
+  //     }
+  //
+  //     // cardflip the card, positionattribute flips to make sure no problems arises with different lengths of the front and back of the card, finally hide the front
       cardflip(petition_form_element);
-      let clangct=getUrlVars()['clangct'];
-      if(clangct != undefined){clang.conversion.track();}
-    },
-    error: function(){
-      // If the backend sends an error, hide the thank element and show an error urging to try again
-      // eslint-disable-next-line no-console
-      console.log('o_o');
-      var cardback = $(petition_form_element.parentNode.nextElementSibling);
-      cardback.find('*').hide('');
-      cardback.append('<p>Sorry, er gaat momenteel iets fout, probeer het nu of later opnieuw.</p>');
-      cardback.append(
-        '<a href=\''+window.location.href +'\' class="btn btn-primary btn-block"' +
-        '">Probeer opnieuw</a>');
-      cardflip(petition_form_element);
-    }
-  });
+      $('#electionModal').on('hidden.bs.modal', function () {
+        $($('.gpnl-petition-thank')[0]).hide();
+      });
+  //     let clangct=getUrlVars()['clangct'];
+  //     if(clangct != undefined){clang.conversion.track();}
+  //   },
+  //   error: function(){
+  //     // If the backend sends an error, hide the thank element and show an error urging to try again
+  //     // eslint-disable-next-line no-console
+  //     console.log('o_o');
+  //     var cardback = $(petition_form_element.parentNode.nextElementSibling);
+  //     cardback.find('*').hide('');
+  //     cardback.append('<p>Sorry, er gaat momenteel iets fout, probeer het nu of later opnieuw.</p>');
+  //     cardback.append(
+  //       '<a href=\''+window.location.href +'\' class="btn btn-primary btn-block"' +
+  //       '">Probeer opnieuw</a>');
+  //     cardflip(petition_form_element);
+  //   }
+  // });
 });
 
 // Get the key+value from the input fields in the form
@@ -153,7 +158,7 @@ function cardflip(el) {
   let card = $(el.parentNode.parentNode);
 
   // first hide the signing button
-  $(element.find('.signBtn')).toggle();
+  $('.btn-submit').toggle();
   $(element.find('.policies')).toggle();
   // then cardflip the position attribute on the front and back of the card to support different lengths front and back
   $(parent.nextElementSibling).css( 'position', flip_positionattribute(parent.nextElementSibling));
