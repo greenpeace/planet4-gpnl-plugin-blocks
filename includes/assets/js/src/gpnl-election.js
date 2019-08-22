@@ -48,7 +48,7 @@ $(document).ready(function() {
 
   // Hide the consentbox if the opt=in url var is set. (this is for set for ie mailings)
   var opt = getUrlVars()['opt'];
-  var url_cg = getUrlVars()['cg'];
+  this.url_cg = getUrlVars()['cg'];
   var isfacebook = document.referrer.indexOf('facebook') !== -1;
   var istwitter = document.referrer.indexOf('twitter') !== -1;
 
@@ -101,57 +101,6 @@ $(document).ready(function() {
   $('#counter_total').data('num', num);
   $('#counter_total').text(num + ' stemmen');
 
-  // soap request naar charibase
-  function prefillByGuid(type, form) {
-    var config = 'election_object';
-    var xmlhttp = new XMLHttpRequest();
-    var query_id = '';
-    var requestValue = '';
-    // waar gaat het om? Een teller of een prefill?
-    if (type === 'prefill') {
-      query_id = 'GET_FIRST_NAME_EMAIL';
-      requestValue = url_cg;
-    } else if (type === 'teller') {
-      query_id = 'CAMP_TTL_PETITIONS';
-      requestValue = form.tellerCode;
-    }
-    xmlhttp.open('POST', 'https://www.mygreenpeace.nl/GPN.WebServices/WIDSService.asmx', true);
-    // build SOAP request
-    var sr = '<' + '?' + 'xml version="1.0" encoding="utf-8"?>' +
-      '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
-      '  <soap:Body>' +
-      '    <WatIsDestand xmlns="http://www.mygreenpeace.nl/GPN.WebServices/">' +
-      '      <queryId>' + query_id + '</queryId>' +
-      '      <requestValue>' + requestValue + '</requestValue>' +
-      '    </WatIsDestand>' +
-      '  </soap:Body>' +
-      '</soap:Envelope>';
-
-    xmlhttp.onreadystatechange = function () {
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) { // 200 = OK
-        var response = xmlhttp.responseXML.getElementsByTagName('WatIsDestandResult')[0].firstChild.nodeValue;
-        if (response !== '') {
-          var res = response.split('|');
-          // waar gaat het om? Een teller of een prefill
-          if (type === 'prefill') {
-            var naam = res[0];
-            $(form).find('input[name=\'name\']').val(naam);
-            var email = res[1];
-            $(form).find('input[name=\'mail\']').val(email);
-          } else if (type === 'teller') {
-            if (res[0] >= config.counter_min) {
-              return Number(res[0]);
-            }
-          }
-        }
-      }
-    };
-    // Send the POST request
-    xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-    xmlhttp.setRequestHeader('SOAPAction', 'http://www.mygreenpeace.nl/GPN.WebServices/WatIsDestand');
-    xmlhttp.send(sr);
-    // send request
-  }
 });
 
 $('.gpnl-petitionform').on('submit', function () {
@@ -184,7 +133,7 @@ $('.gpnl-petitionform').on('submit', function () {
     // opvragen stemmen per opties (verborgen tot na stemmen)
     $('.subcounter').each(function(){
       let id = $(this).data('id');
-      var form_config = 'election_object_' + id;
+      let form_config = 'election_object_' + id;
       this.tellerCode = form_config.mcode;
       let num_option = prefillByGuid('teller', this);
       showCounter(num_option, this);
@@ -363,4 +312,56 @@ function showCounter(num_responses, counter){
   $(counter).find('.counter__slider').animate({width: perc_slider+'%', opacity: 1}, 2000, 'easeInOutCubic');
   $(counter).find('.counter__gettext').html(perc_slider + '% van de stemmen');
   $(counter).find('.counter__text').fadeIn(2000);
+}
+
+// soap request naar charibase
+function prefillByGuid(type, form) {
+  var config = 'election_object';
+  var xmlhttp = new XMLHttpRequest();
+  var query_id = '';
+  var requestValue = '';
+  // waar gaat het om? Een teller of een prefill?
+  if (type === 'prefill') {
+    query_id = 'GET_FIRST_NAME_EMAIL';
+    requestValue = form.url_cg;
+  } else if (type === 'teller') {
+    query_id = 'CAMP_TTL_PETITIONS';
+    requestValue = form.tellerCode;
+  }
+  xmlhttp.open('POST', 'https://www.mygreenpeace.nl/GPN.WebServices/WIDSService.asmx', true);
+  // build SOAP request
+  var sr = '<' + '?' + 'xml version="1.0" encoding="utf-8"?>' +
+    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+    '  <soap:Body>' +
+    '    <WatIsDestand xmlns="http://www.mygreenpeace.nl/GPN.WebServices/">' +
+    '      <queryId>' + query_id + '</queryId>' +
+    '      <requestValue>' + requestValue + '</requestValue>' +
+    '    </WatIsDestand>' +
+    '  </soap:Body>' +
+    '</soap:Envelope>';
+
+  xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) { // 200 = OK
+      var response = xmlhttp.responseXML.getElementsByTagName('WatIsDestandResult')[0].firstChild.nodeValue;
+      if (response !== '') {
+        var res = response.split('|');
+        // waar gaat het om? Een teller of een prefill
+        if (type === 'prefill') {
+          var naam = res[0];
+          $(form).find('input[name=\'name\']').val(naam);
+          var email = res[1];
+          $(form).find('input[name=\'mail\']').val(email);
+        } else if (type === 'teller') {
+          if (res[0] >= config.counter_min) {
+            return Number(res[0]);
+          }
+        }
+      }
+    }
+  };
+  // Send the POST request
+  xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+  xmlhttp.setRequestHeader('SOAPAction', 'http://www.mygreenpeace.nl/GPN.WebServices/WatIsDestand');
+  xmlhttp.send(sr);
+  // send request
 }
