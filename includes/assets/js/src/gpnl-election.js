@@ -5,7 +5,7 @@ $('#electionModal').on('show.bs.modal', function (event) {
   var config = 'election_object_' + id;
 
   modal.find('.modal-title').text('Stem op ' + window[config].title);
-  modal.find('.modal-subtitle').text(' - ' + window[config].subtitle);
+  modal.find('.modal-subtitle').text(window[config].subtitle);
   modal.find('.modal-body').text( window[config].description );
 });
 

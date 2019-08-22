@@ -89,3 +89,14 @@ input[type=checkbox].gpnl-petition-checkbox {
 .cover-card-column {
   padding: 0 10px;
 }
+
+.btn.btn-action.btn-block.cover-card-btn {
+  @media screen and (max-width: $extra-small-width) {
+    padding: 0 15px;
+    right: 5px;
+  }
+  @media screen and (max-width: $small-width) {
+    padding: 0 20px;
+    right: 10px;
+  }
+}

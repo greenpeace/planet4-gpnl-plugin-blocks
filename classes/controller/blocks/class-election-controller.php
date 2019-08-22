@@ -190,7 +190,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 
 				// Pass options to frontend code
 				wp_localize_script(
-					'jquery-docready-script',
+					'gpnl_election_js',
 					'election_object_' . $i,
 					array(
 						'title'       => $fields[ 'title_' . $i ],

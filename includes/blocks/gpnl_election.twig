@@ -32,7 +32,8 @@
 				  <div class="modal-content">
 					  <div class="modal-header">
 						  <h2 class="modal-title" id="electionModalLabel"></h2>
-						  <i><h2 class="modal-subtitle" id="electionModalLabel"></h2></i>
+						  <h2> - </h2>
+						  <i><h2 class="modal-subtitle"></h2></i>
 						  <button type="button" class="close" data-dismiss="modal" aria-label="Sluit">
 							  <span aria-hidden="true">&times;</span>
 						  </button>
@@ -40,7 +41,7 @@
 					  <div class="modal-body">
 					  </div>
 					  <div class="modal-form front">
-						  <form class="gpnl-petitionform" onsubmit="return false;">
+						  <form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
 							  <div class="form-group">
 								  <label hidden for="name">Naam</label>
 								  <input name="name" required type="text" class="form-control" placeholder="Voornaam">
@@ -85,7 +86,7 @@
 					  </div>
 					  <div class="modal-footer">
 						  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
-						  <button type="button" class="btn btn-primary btn-submit">Stem</button>
+						  <button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
 					  </div>
 				  </div>
 			  </div>
