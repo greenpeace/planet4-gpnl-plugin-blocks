@@ -64,7 +64,7 @@ input[type=checkbox].gpnl-petition-checkbox {
 }
 
 .full-width-container {
-  margin: 54px calc(calc(50% - 50vw) + 32px) 32px;
+  margin: 54px calc(calc(50% - 50vw) + 24px) 32px;
   @media screen and (min-width: $large-width) {
     margin: 54px calc(50% - 50vw) 32px;
   }
