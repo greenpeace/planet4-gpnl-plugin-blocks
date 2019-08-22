@@ -15,6 +15,7 @@ jQuery(function ($) {
 
   // convert an element to slider using slick js
   function slickify(element) {
+    let numOptions = $('#electionModal').data('num');
     $(element).slick({
       infinite:       false,
       mobileFirst:    true,
@@ -28,7 +29,7 @@ jQuery(function ($) {
       responsive: [
         {
           breakpoint: 992,
-          settings: { slidesToShow: 5 }
+          settings: { slidesToShow: numOptions }
         },
         {
           breakpoint: 768,
