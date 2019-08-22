@@ -72,6 +72,8 @@ input[type=checkbox].gpnl-petition-checkbox {
 
 .slick-next::before, .slick-prev::before {
   color: $blood-orange;
+  font-size: 30px;
+  opacity: 1;
 }
 
 .slick-dots li.slick-active button::before {

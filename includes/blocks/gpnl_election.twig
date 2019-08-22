@@ -39,7 +39,7 @@
 					  </div>
 					  <div class="modal-body">
 					  </div>
-					  <div class="modal-form">
+					  <div class="modal-form front">
 						  <form class="gpnl-petitionform" style="display: none" onsubmit="return false;">
 							  <div class="form-group">
 								  <label hidden for="name">Naam</label>
@@ -60,6 +60,28 @@
 							  </div>
 							  <label for="phone"><small >Vul je je telefoonnummer in? Dan kan Greenpeace jou telefonisch benaderen voor giftverzoeken of updates rondom lopende campagnes.</small></label>
 						  </form>
+					  </div>
+					  <div class="gpnl-petition-thank back">
+						  <div class="card">
+							  <div class="card-body">
+								  <h5 class="card-title">{{ fields.thanktitle|e('wp_kses_post')|raw }}</h5>
+								  <p class="card-text">{{ fields.thanktext|e('wp_kses_post')|raw }}</p>
+								  <a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebuttontext }}</a>
+								  {% if not fields.hidesharingbuttons %}
+									  <div class="gpnl-petitionshare">
+										  <a class="btn btn-primary btn-block gpnl-share-facebook"
+											 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
+											  FACEBOOK
+										  </a>
+										  <a class="btn btn-primary btn-block gpnl-share-twitter"
+											 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
+											  TWITTER
+										  </a>
+										  {#<a class="btn btn-primary btn-block gpnl-share-whatsapp" target="_blank" href="whatsapp://send?text={{ fields.whatsapptext }} via {{ fields.current_url }}" role="button" onclick="fireShareEvent('whatsapp');">WHATSAPP</a>#}
+									  </div>
+								  {% endif %}
+							  </div>
+						  </div>
 					  </div>
 					  <div class="modal-footer">
 						  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
