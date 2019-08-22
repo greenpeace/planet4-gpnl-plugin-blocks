@@ -18,27 +18,27 @@ $(document).ready(function() {
   function slickify(element) {
     let numOptions = $('#electionModal').data('num');
     $(element).slick({
-      infinite:       false,
-      mobileFirst:    true,
-      slidesToShow:   1,
+      infinite: false,
+      mobileFirst: true,
+      slidesToShow: 1,
       slidesToScroll: 1,
-      arrows:         true,
-      dots:           true,
-      centerMode:     true,
-      centerPadding:  '20px',
-      initialSlide:   3,
+      arrows: true,
+      dots: true,
+      centerMode: true,
+      centerPadding: '20px',
+      initialSlide: 3,
       responsive: [
         {
           breakpoint: 992,
-          settings: { slidesToShow: numOptions }
+          settings: {slidesToShow: numOptions}
         },
         {
           breakpoint: 768,
-          settings: { slidesToShow: 3 }
+          settings: {slidesToShow: 3}
         },
         {
           breakpoint: 576,
-          settings: { slidesToShow: 2 }
+          settings: {slidesToShow: 2}
         }
       ]
     });
@@ -47,27 +47,27 @@ $(document).ready(function() {
   slickify('.election-options');
 
   // Hide the consentbox if the opt=in url var is set. (this is for set for ie mailings)
-  var opt=getUrlVars()['opt'];
-  var url_cg = getUrlVars()['cg'];
+  var opt = getUrlVars()['opt'];
+  this.url_cg = getUrlVars()['cg'];
   var isfacebook = document.referrer.indexOf('facebook') !== -1;
   var istwitter = document.referrer.indexOf('twitter') !== -1;
 
-  let clangct=getUrlVars()['clangct'];
+  let clangct = getUrlVars()['clangct'];
 
-  if(clangct != undefined){
+  if (clangct != undefined) {
     $.ajax({
-      url: '/wp-content/plugins/planet4-gpnl-plugin-blocks/includes/assets/js/clang-landing.js?clangct='+clangct,
+      url: '/wp-content/plugins/planet4-gpnl-plugin-blocks/includes/assets/js/clang-landing.js?clangct=' + clangct,
       dataType: 'script',
     });
   }
 
-  if(opt!= undefined && $('.optin').length != 0 && opt=='in'){
+  if (opt != undefined && $('.optin').length != 0 && opt == 'in') {
     $('.optin').hide();
-    $('.gpnl-petition-checkbox').prop( 'checked', true );
+    $('.gpnl-petition-checkbox').prop('checked', true);
 
     // Here we check if we know the mail being entered if the opt=in var is set.
     // If we don't know the entered mail we should display the consentbox
-    $( 'input[name=\'mail\']' ).keyup(function() {
+    $('input[name=\'mail\']').keyup(function () {
       // First loosely check if the value in the mailinput is indeed a mailadress, if it indeed is, we pass it onto the database checker
       // eslint-disable-next-line
       var mailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{3,})$/i;
@@ -76,18 +76,18 @@ $(document).ready(function() {
         $.ajax({
           type: 'GET',
           url: 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' + mail,
-          complete: function(data) {
+          complete: function (data) {
             // If we do not know the email, we display the consentbox again
             if (data.responseText.includes('false')) {
               $('.optin').show();
-              $('.gpnl-petition-checkbox').prop( 'checked', false );
+              $('.gpnl-petition-checkbox').prop('checked', false);
             }
           }
         });
       }
     });
 
-    if ( !(istwitter || isfacebook) && url_cg != undefined   ){
+    if (!(istwitter || isfacebook) && url_cg != undefined) {
       prefillByGuid('prefill', this);
     }
   }
@@ -95,95 +95,22 @@ $(document).ready(function() {
   let config = 'election_object';
   // totaal aantal stemmen opvragen
   let form = {
-    'tellerCode' : config.analytics_campaign,
+    tellerCode: config.analytics_campaign,
   };
   let num = prefillByGuid('teller', form);
   $('#counter_total').data('num', num);
   $('#counter_total').text(num + ' stemmen');
 
-
-  // opvragen stemmen per opties (verborgen tot na stemmen)
-  $('.subcounter').each(function(){
-    let id = $(this).data('id');
-    var form_config = 'election_object_' + id;
-    this.tellerCode = form_config.mcode;
-    let num_option = prefillByGuid('teller', this);
-    showCounter(num_option, this);
-  });
-
-  // soap request naar charibase
-  function prefillByGuid(type, form){
-    var config = 'election_object';
-    var xmlhttp = new XMLHttpRequest();
-    var query_id = '';
-    var requestValue = '';
-    // waar gaat het om? Een teller of een prefill?
-    if (type === 'prefill'){
-      query_id = 'GET_FIRST_NAME_EMAIL';
-      requestValue = url_cg;
-    } else if (type === 'teller'){
-      query_id = 'CAMP_TTL_PETITIONS';
-      requestValue = form.tellerCode;
-    }
-    xmlhttp.open('POST', 'https://www.mygreenpeace.nl/GPN.WebServices/WIDSService.asmx', true);
-    // build SOAP request
-    var sr = '<'+'?'+'xml version="1.0" encoding="utf-8"?>' +
-      '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
-      '  <soap:Body>' +
-      '    <WatIsDestand xmlns="http://www.mygreenpeace.nl/GPN.WebServices/">' +
-      '      <queryId>'+query_id+'</queryId>' +
-      '      <requestValue>'+requestValue+'</requestValue>' +
-      '    </WatIsDestand>' +
-      '  </soap:Body>' +
-      '</soap:Envelope>';
-
-    xmlhttp.onreadystatechange = function () {
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200){ // 200 = OK
-        var response = xmlhttp.responseXML.getElementsByTagName('WatIsDestandResult')[0].firstChild.nodeValue;
-        if (response!==''){
-          var res = response.split('|');
-          // waar gaat het om? Een teller of een prefill
-          if (type === 'prefill'){
-            var naam = res[0];
-            $(form).find('input[name=\'name\']').val(naam);
-            var email = res[1];
-            $(form).find('input[name=\'mail\']').val(email);
-          } else if (type === 'teller'){
-            if (res[0] >= config.counter_min){
-              return Number(res[0]);
-            }
-          }
-        }
-      }
-    };
-    // Send the POST request
-    xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-    xmlhttp.setRequestHeader('SOAPAction', 'http://www.mygreenpeace.nl/GPN.WebServices/WatIsDestand');
-    xmlhttp.send(sr);
-    // send request
-  }
-
-  // TODO add language preference detection for better formatting of numbers
-  function showCounter(num_responses, counter){
-    let total = $('#counter_total').data('num');
-    $(counter).find('.counter').show();
-    let perc_slider = Math.round(100 *(num_responses / total));
-
-    $(counter).find('.counter__slider').animate({width: perc_slider+'%', opacity: 1}, 2000, 'easeInOutCubic');
-    $(counter).find('.counter__gettext').html(perc_slider + '% van de stemmen');
-    $(counter).find('.counter__text').fadeIn(2000);
-  }
 });
-
 
 $('.gpnl-petitionform').on('submit', function () {
   var petition_form_element = this;
   // Get the  parameter from the petition form and add the action and CSRF protection
   var post_form_value = getFormObj(petition_form_element);
-  var form_config = 'election_object';
+  var global_config = 'election_object';
 
   post_form_value.action = 'petition_form_process';
-  post_form_value.nonce  = window[form_config].nonce;
+  post_form_value.nonce  = window[global_config].nonce;
   // post_form_value.ad_campaign = window[form_config].ad_campaign;
 
   // Disable the form so people can't resubmit
@@ -200,6 +127,18 @@ $('.gpnl-petitionform').on('submit', function () {
   //   success: function(data) {
   //     // eslint-disable-next-line no-console
   //     console.log('^-^');
+
+
+  if ( !global_config.hideresults ) {
+    // opvragen stemmen per opties (verborgen tot na stemmen)
+    $('.subcounter').each(function(){
+      let id = $(this).data('id');
+      let form_config = 'election_object_' + id;
+      this.tellerCode = form_config.mcode;
+      let num_option = prefillByGuid('teller', this);
+      showCounter(num_option, this);
+    });
+  }
   //
   //     // Send conversion event to the GTM
   //     if (typeof dataLayer !== 'undefined') {
@@ -361,4 +300,68 @@ function getUrlVars(){
     vars[hash[0]] = hash[1];
   }
   return vars;
+}
+
+
+// TODO add language preference detection for better formatting of numbers
+function showCounter(num_responses, counter){
+  let total = $('#counter_total').data('num');
+  $(counter).find('.counter').show();
+  let perc_slider = Math.round(100 *(num_responses / total));
+
+  $(counter).find('.counter__slider').animate({width: perc_slider+'%', opacity: 1}, 2000, 'easeInOutCubic');
+  $(counter).find('.counter__gettext').html(perc_slider + '% van de stemmen');
+  $(counter).find('.counter__text').fadeIn(2000);
+}
+
+// soap request naar charibase
+function prefillByGuid(type, form) {
+  var config = 'election_object';
+  var xmlhttp = new XMLHttpRequest();
+  var query_id = '';
+  var requestValue = '';
+  // waar gaat het om? Een teller of een prefill?
+  if (type === 'prefill') {
+    query_id = 'GET_FIRST_NAME_EMAIL';
+    requestValue = form.url_cg;
+  } else if (type === 'teller') {
+    query_id = 'CAMP_TTL_PETITIONS';
+    requestValue = form.tellerCode;
+  }
+  xmlhttp.open('POST', 'https://www.mygreenpeace.nl/GPN.WebServices/WIDSService.asmx', true);
+  // build SOAP request
+  var sr = '<' + '?' + 'xml version="1.0" encoding="utf-8"?>' +
+    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+    '  <soap:Body>' +
+    '    <WatIsDestand xmlns="http://www.mygreenpeace.nl/GPN.WebServices/">' +
+    '      <queryId>' + query_id + '</queryId>' +
+    '      <requestValue>' + requestValue + '</requestValue>' +
+    '    </WatIsDestand>' +
+    '  </soap:Body>' +
+    '</soap:Envelope>';
+
+  xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) { // 200 = OK
+      var response = xmlhttp.responseXML.getElementsByTagName('WatIsDestandResult')[0].firstChild.nodeValue;
+      if (response !== '') {
+        var res = response.split('|');
+        // waar gaat het om? Een teller of een prefill
+        if (type === 'prefill') {
+          var naam = res[0];
+          $(form).find('input[name=\'name\']').val(naam);
+          var email = res[1];
+          $(form).find('input[name=\'mail\']').val(email);
+        } else if (type === 'teller') {
+          if (res[0] >= config.counter_min) {
+            return Number(res[0]);
+          }
+        }
+      }
+    }
+  };
+  // Send the POST request
+  xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+  xmlhttp.setRequestHeader('SOAPAction', 'http://www.mygreenpeace.nl/GPN.WebServices/WatIsDestand');
+  xmlhttp.send(sr);
+  // send request
 }
