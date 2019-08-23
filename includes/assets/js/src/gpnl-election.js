@@ -12,7 +12,6 @@ $('#electionModal').on('show.bs.modal', function (event) {
   modal.find('input[name=\'marketingcode\']').val(window[config].mcode);
 });
 
-
 $(document).ready(function() {
   // convert an element to slider using slick js
   function slickify(element) {
@@ -103,107 +102,116 @@ $(document).ready(function() {
 
 });
 
+console.log(window.getFormObj(1));
+console.log(prefillByGuid('teller', window['election_object']));
+
+
 $('.gpnl-petitionform').on('submit', function () {
+
+
   var petition_form_element = this;
   // Get the  parameter from the petition form and add the action and CSRF protection
   var post_form_value = getFormObj(petition_form_element);
   var global_config = 'election_object';
 
+
   post_form_value.action = 'petition_form_process';
   post_form_value.nonce  = window[global_config].nonce;
-  // post_form_value.ad_campaign = window[form_config].ad_campaign;
+  post_form_value.ad_campaign = window[global_config].ad_campaign;
 
   // Disable the form so people can't resubmit
   toggleDisable($(petition_form_element).find('*'));
   toggleDisable($('.btn-submit'));
 
-
   // Do a ajax call to the wp_admin admin_ajax.php,
   // which triggers processing function in the petition block
-  // $.ajax({
-  //   type:    'POST',
-  //   url:     window[form_config].ajaxUrl,
-  //   data:    post_form_value,
-  //   success: function(data) {
-  //     // eslint-disable-next-line no-console
-  //     console.log('^-^');
+  $.ajax({
+    type:    'POST',
+    url:     window[global_config].ajaxUrl,
+    data:    post_form_value,
+    success: function(data) {
+      // eslint-disable-next-line no-console
+      console.log('^-^');
+
+      // if (!global_config.hideresults) {
+      //   // opvragen stemmen per opties (verborgen tot na stemmen)
+      //   $('.subcounter').each(function () {
+      //     let id = $(this).data('id');
+      //     let form_config = 'election_object_' + id;
+      //     this.tellerCode = form_config.mcode;
+      //     let num_option = prefillByGuid('teller', this);
+      //     showCounter(num_option, this);
+      //   });
+      // }
+
+      // Send conversion event to the GTM
+      if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+          'event'         :'petitiebutton',
+          'conv_campaign' : form_config.analytics_campaign,
+          'conv_action'   : form_config.ga_action,
+          'conv_label'    :'registreer'
+        });
+      }
+
+      // if consent was given by entering phonenumber
+      if (post_form_value.phone !== '') {
+        // Send conversion event to the GTM
+        if (typeof dataLayer !== 'undefined') {
+          dataLayer.push({
+            'event'         :'petitiebutton',
+            'conv_campaign' : window[form_config].analytics_campaign,
+            'conv_action'   :'telnr',
+            'conv_label'    :'Ja'
+          });
+        }
+        // If an ad campaign is run by an external company fire the conversiontracking
+        if (window[form_config].ad_campaign === 'SB') {
+          fbq('track', 'Lead');
+          // if it is run by social blue, also deduplicate
+          socialBlueDeDuplicate(post_form_value['mail'], data['data']['phone'], window[form_config].apref);
+        } else if (window[form_config].ad_campaign === 'JA') {
+          fbq('track', window[form_config].jalt_track);
+        }
+      }
+      else{
+        if (typeof dataLayer !== 'undefined') {
+          dataLayer.push({
+            'event'         :'petitiebutton',
+            'conv_campaign' : window[form_config].analytics_campaign,
+            'conv_action'   :'telnr',
+            'conv_label'    :'Nee'
+          });
+        }
+      }
+
+      // cardflip the card, positionattribute flips to make sure no problems arises with different lengths of the front and back of the card, finally hide the front
+      cardflip(petition_form_element);
+      console.log(      prefillByGuid('teller', window[global_config]));
 
 
-  if ( !global_config.hideresults ) {
-    // opvragen stemmen per opties (verborgen tot na stemmen)
-    $('.subcounter').each(function(){
-      let id = $(this).data('id');
-      let form_config = 'election_object_' + id;
-      this.tellerCode = form_config.mcode;
-      let num_option = prefillByGuid('teller', this);
-      showCounter(num_option, this);
-    });
-  }
-  //
-  //     // Send conversion event to the GTM
-  //     if (typeof dataLayer !== 'undefined') {
-  //       dataLayer.push({
-  //         'event'         :'petitiebutton',
-  //         'conv_campaign' : window[form_config].analytics_campaign,
-  //         'conv_action'   : window[form_config].ga_action,
-  //         'conv_label'    :'registreer'
-  //       });
-  //     }
-  //
-  //     // if consent was given by entering phonenumber
-  //     if (post_form_value.phone !== '') {
-  //       // Send conversion event to the GTM
-  //       if (typeof dataLayer !== 'undefined') {
-  //         dataLayer.push({
-  //           'event'         :'petitiebutton',
-  //           'conv_campaign' : window[form_config].analytics_campaign,
-  //           'conv_action'   :'telnr',
-  //           'conv_label'    :'Ja'
-  //         });
-  //       }
-  //       // If an ad campaign is run by an external company fire the conversiontracking
-  //       if (window[form_config].ad_campaign === 'SB') {
-  //         fbq('track', 'Lead');
-  //         // if it is run by social blue, also deduplicate
-  //         socialBlueDeDuplicate(post_form_value['mail'], data['data']['phone'], window[form_config].apref);
-  //       } else if (window[form_config].ad_campaign === 'JA') {
-  //         fbq('track', window[form_config].jalt_track);
-  //       }
-  //     }
-  //     else{
-  //       if (typeof dataLayer !== 'undefined') {
-  //         dataLayer.push({
-  //           'event'         :'petitiebutton',
-  //           'conv_campaign' : window[form_config].analytics_campaign,
-  //           'conv_action'   :'telnr',
-  //           'conv_label'    :'Nee'
-  //         });
-  //       }
-  //     }
-  //
-  //     // cardflip the card, positionattribute flips to make sure no problems arises with different lengths of the front and back of the card, finally hide the front
-  cardflip(petition_form_element);
+      // Bedankt melding verbergen na sluiten van modal window?
+      $('#electionModal').on('hidden.bs.modal', function () {
+        $($('.gpnl-petition-thank')[0]).hide();
+      });
+      let clangct=getUrlVars()['clangct'];
+      if(clangct != undefined){clang.conversion.track();}
+    },
+    error: function(){
+      // If the backend sends an error, hide the thank element and show an error urging to try again
+      // eslint-disable-next-line no-console
+      console.log('o_o');
+      var cardback = $(petition_form_element.parentNode.nextElementSibling);
+      cardback.find('*').hide('');
+      cardback.append('<p>Sorry, er gaat momenteel iets fout, probeer het nu of later opnieuw.</p>');
+      cardback.append(
+        '<a href=\''+window.location.href +'\' class="btn btn-primary btn-block"' +
+        '">Probeer opnieuw</a>');
+      cardflip(petition_form_element);
+    }
+  });
 
-  // Bedankt melding verbergen na sluiten van modal window?
-  // $('#electionModal').on('hidden.bs.modal', function () {
-  //   $($('.gpnl-petition-thank')[0]).hide();
-  // });
-  //     let clangct=getUrlVars()['clangct'];
-  //     if(clangct != undefined){clang.conversion.track();}
-  //   },
-  //   error: function(){
-  //     // If the backend sends an error, hide the thank element and show an error urging to try again
-  //     // eslint-disable-next-line no-console
-  //     console.log('o_o');
-  //     var cardback = $(petition_form_element.parentNode.nextElementSibling);
-  //     cardback.find('*').hide('');
-  //     cardback.append('<p>Sorry, er gaat momenteel iets fout, probeer het nu of later opnieuw.</p>');
-  //     cardback.append(
-  //       '<a href=\''+window.location.href +'\' class="btn btn-primary btn-block"' +
-  //       '">Probeer opnieuw</a>');
-  //     cardflip(petition_form_element);
-  //   }
-  // });
+
 });
 
 // Get the key+value from the input fields in the form
@@ -301,7 +309,6 @@ function getUrlVars(){
   }
   return vars;
 }
-
 
 // TODO add language preference detection for better formatting of numbers
 function showCounter(num_responses, counter){
