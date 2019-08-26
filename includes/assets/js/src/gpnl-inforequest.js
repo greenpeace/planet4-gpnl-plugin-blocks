@@ -162,7 +162,7 @@ function readCookie(name) {
 
 function enableDownloadlinks() {
   $('.cover-card-column').each(function(){
-    let cover = this;
+    let cover = this
     $(cover).find('a').each(function(){
       let link = this;
       let href = $(this).attr('href');

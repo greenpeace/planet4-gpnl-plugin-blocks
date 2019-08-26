@@ -1,8 +1,6 @@
 var donationformVue = {};
 var url_vars = {};
 
-var address_object = 'get_address_object';
-
 // REFACTOR IE11 doesn't support UrlSearchParams, so custom UrlParam function.
 // 	Consider polyfilling it now? or wait until we drop IE11 support and switch then?
 function getUrlVars(){
@@ -18,10 +16,7 @@ function getUrlVars(){
   return vars;
 }
 
-
-
 $(document).ready(function() {
-
   let clangct=getUrlVars()['clangct'];
 
   if(clangct != undefined){
@@ -135,6 +130,7 @@ $(document).ready(function() {
   Vue.use(VueFormWizard);
 
   Vue.config.devtools = true;
+
 
   Vue.component('step1', {
     template: `
@@ -404,8 +400,6 @@ $(document).ready(function() {
   });
 
   Vue.component('step3', {
-
-
     template: `
         <div>
           <div class="form-row">
@@ -717,29 +711,21 @@ $(document).ready(function() {
         var zipcodeValue = zipcodeInput.value;
         var houseNoValue = houseNoInput.value;
 
-        var ajax_values = {
-          action: 'get_address_donation_form',
-          zipcode: zipcodeValue,
-          house_no: houseNoValue,
-          nonce: window[address_object].nonce
-        };
-
-        var self = this;
-
-        $.ajax({
-          type: 'POST',
-          url: window[address_object].ajaxUrl,
-          data: ajax_values,
-          success: function (t) {
-
-            let street = t.data.cUrlresult.result.straat;
-            let city = t.data.cUrlresult.result.woonplaats;
-
-            self.populateFields(street, city);
-
-          }
+        Vue.http.interceptors.push((request, next) => {
+          request.headers.set('x-api-key', 'P7TdlkQG4k4ppvVyAXmdD4TR9v5fW4YT8qv4TzOY');
+          request.headers.set('Accept', 'application/hal+json');
+          next();
         });
 
+        this.$http.get('https://api.postcodeapi.nu/v2/addresses/?postcode='+ zipcodeValue +'&number=' + houseNoValue +'')
+          .then(function (response) {
+            let street = response.body._embedded.addresses[0].street;
+            let city = response.body._embedded.addresses[0].city.label;
+
+            this.populateFields(street, city);
+          }, function () {
+
+          });
       },
 
       populateFields: function(street, city) {
@@ -755,8 +741,6 @@ $(document).ready(function() {
     },
     props: ['frequency'],
   });
-
-
 
 
   donationformVue = new Vue({
