@@ -1,4 +1,4 @@
-// Force wide blocks outside the containerfetchAddress
+// Force wide blocks outside the container
 // TODO check if this does interefere with the regular blocks-wide (caroussel-header & happy point)
 $(document).ready(function() {
   'use strict';
