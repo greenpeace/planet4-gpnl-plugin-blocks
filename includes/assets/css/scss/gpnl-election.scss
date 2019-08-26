@@ -15,17 +15,6 @@
     margin-top: 15px;
   }
 
-  .page-header, .page-header-title, .page-header-subtitle, .page-header-content {
-    .top-page-tags {
-      display: none;
-    }
-
-    /*display: none;*/
-    visibility: hidden;
-    height: 0;
-    padding: 0;
-  }
-
   .cover-card {
     padding-bottom: 140%;
     position: relative;
@@ -138,12 +127,23 @@
   .gpnl-petition-checkbox-label small {
     margin-left: 1.5rem;
   }
+
+  .modal-content {
+    border-top: 4px solid #6c0;
+  }
+
+  .fade {
+    transition: opacity .1s linear;
+  }
 }
 
-.modal-content {
-  border-top: 4px solid #6c0;
-}
+.page-header, .page-header-title, .page-header-subtitle, .page-header-content {
+  .top-page-tags {
+    display: none;
+  }
 
-.fade {
-  transition: opacity .1s linear;
+  /*display: none;*/
+  visibility: hidden;
+  height: 0;
+  padding: 0;
 }
