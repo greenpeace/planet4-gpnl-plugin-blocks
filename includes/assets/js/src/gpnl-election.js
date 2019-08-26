@@ -95,15 +95,10 @@ $(document).ready(function() {
   // totaal aantal stemmen opvragen
   let form = {
     tellerCode: window[config].analytics_campaign,
+    type: 'total'
   };
-  let num = prefillByGuid('teller', form);
-  $('#counter_total').data('num', num);
-  $('#counter_total').text(num + ' stemmen');
-
+  prefillByGuid('teller', form);
 });
-
-console.log(window.getFormObj(1));
-console.log(prefillByGuid('teller', window['election_object']));
 
 
 $('.gpnl-petitionform').on('submit', function () {
@@ -323,7 +318,7 @@ function showCounter(num_responses, counter){
 
 // soap request naar charibase
 function prefillByGuid(type, form) {
-  var config = 'election_object';
+  var config = window['election_object'];
   var xmlhttp = new XMLHttpRequest();
   var query_id = '';
   var requestValue = '';
@@ -359,8 +354,12 @@ function prefillByGuid(type, form) {
           var email = res[1];
           $(form).find('input[name=\'mail\']').val(email);
         } else if (type === 'teller') {
-          if (res[0] >= config.counter_min) {
-            return Number(res[0]);
+          if (Number(response) >= config.counter_min) {
+            if (form.type === 'total'){
+              $('#counter_total').data('num', response);
+              $('#counter_total').text(response + ' stemmen');
+            }
+            return Number(response);
           }
         }
       }

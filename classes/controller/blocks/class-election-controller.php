@@ -275,6 +275,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'analytics_campaign' => $fields['campaigncode'],
 					'literature_code'    => $fields['literaturecode'],
 					'hideresults'        => $fields['hideresults'],
+					'counter_min'        => $fields['countermin'],
 				)
 			);
 
