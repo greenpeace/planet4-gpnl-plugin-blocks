@@ -11,13 +11,10 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 	 */
 	class GPNL_Election_Controller extends Controller {
 
-
-
 		/**
 		 * @const string BLOCK_NAME
 		 */
 		const BLOCK_NAME = 'gpnl_election';
-
 
 		/**
 		Shortcode UI setup for the election shortcode.
@@ -64,6 +61,11 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'value' => 'Als je dit aanvinkt, mag Greenpeace je per e-mail op de hoogte houden over onze campagnes. Ook vragen we je af en toe om steun. Afmelden kan natuurlijk altijd.',
 				],
 				[
+					'label' => __( 'Tot wanneer kan er gestemd worden? (<u>tot</u>, niet tot en met)', 'planet4-gpnl-blocks' ),
+					'attr'  => 'until',
+					'type'  => 'date',
+				],
+				[
 					'label' => __( 'Link naar actievoorwaarden', 'planet4-gpnl-blocks' ),
 					'attr'  => 'campaignpolicy',
 					'type'  => 'text',
@@ -83,18 +85,29 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'type'  => 'text',
 				],
 				[
-					'label' => __( 'Teller: minimaal # stemmen', 'planet4-gpnl-blocks' ),
+					'label' => __( 'Teller: minimaal # stemmen voor zichtbaarheid', 'planet4-gpnl-blocks' ),
 					'attr'  => 'countermin',
 					'type'  => 'number',
 					'meta'  => [
 						// translators: placeholder needs to represent the ordinal of the task/column, eg. 1st, 2nd etc.
-						'placeholder' => __( 'Vanaf hoeveel stemmen is de stemmenteller zichtbaar?', 'planet4-blocks-backend' ),
+						'placeholder' => __( 'Vanaf hoeveel stemmen is de teller zichtbaar?', 'planet4-blocks-backend' ),
 					],
 				],
 				[
-					'label' => __( 'Verberg stemresultaat', 'planet4-gpnl-blocks' ),
-					'attr'  => 'hideresults',
-					'type'  => 'checkbox',
+					'label'   => __( 'Verberg stemresultaat', 'planet4-gpnl-blocks' ),
+					'attr'    => 'hideresults',
+					'type'    => 'select',
+					// somehow setting values to true/false will crash the wordpress editor.
+					'options' => [
+						[
+							'value' => '0',
+							'label' => __( 'nee' ),
+						],
+						[
+							'value' => '1',
+							'label' => __( 'ja' ),
+						],
+					],
 				],
 			];
 
@@ -191,6 +204,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			// Enqueue the script:
 			$attributes = [
 				'title'           => '',
+				'until'           => '',
 				'backgroundimage' => '',
 				'thanktitle'      => '',
 				'thanktext'       => '',

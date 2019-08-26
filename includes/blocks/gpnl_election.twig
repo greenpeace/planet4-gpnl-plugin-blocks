@@ -1,114 +1,139 @@
 {% block gpnl_election %}
-  {% if ( fields ) %}
-	  <div style="background-image: url({{ fields.backgroundimage.src }});margin: 54px calc(50% - 50vw) 32px;">
-		  <div class="page-template">
-			  <h1>{{ fields.title }}</h1>
-			  <h3 id="counter_total" data-num=""></h3>
+	{% if ( fields ) %}
+		<section class="block block-election">
+			<div class="inner_block" style="background-image: url({{ fields.backgroundimage.src }})">
+				<div class="page-template">
+					<h1>{{ fields.title }}</h1>
 
-			  <div class="row limit-visibility full-width-container election-options">
-				  {% set i = 1 %}
-				  {% for option in options %}
-					  {% if (option.title) %}
-						  <div class="col-xl cover-card-column">
-							  <div class="cover-card card-one" style="background-image: url({{ option.attachment.src }});background-position: center center;">
-								  <div class="cover-card-content">
-									  <a data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">
-										  <h2 class="cover-card-heading">{{ option.title|e('wp_kses_post')|raw }}</h2>
-									  </a>
-								  </div>
-								  {% if option.subtitle %}
-									  <p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
-								  {% endif %}
-								  <div class="counter subcounter" style="display: none">
-									  <div class="counter__slider"></div>
-									  <div class="counter__text">
-										  <span class="counter__gettext"></span>
+					{# Showing a line of text explaining how many days are left to vote #}
+					{% set difference = date(endDate).diff(date(fields.until)) %}
+					{% set leftDays = difference.days %}
+					<span>
+						{% if leftDays <= 0 %}
+							Stemmen is niet meer mogelijk.
+						{% elseif leftDays == 0 %}
+							 Je kunt alleen vandaag nog stemmen!
+						{% elseif leftDays == 1 %}
+							Je kunt nog maar 1 dag stemmen!
+						{% elseif leftDays <= 7 %}
+							Stemmen kan nog maar {{ leftDays }} dagen!
+							{% else %}
+							Stemmen kan tot {{ fields.until | date ("d F Y")}}.
+						{% endif %}</span>
+
+					<h3 id="counter_total" data-num=""> </h3>
+
+					<div class="row limit-visibility full-width-container election-options">
+						{% set i = 1 %}
+						{% for option in options %}
+							{% if (option.title) %}
+								<div class="col-xl cover-card-column">
+									<div class="fixed-ratio-wrapper">
+
+									<div class="cover-card card-one" style="background-image: url({{ option.attachment.src }});background-position: center center;">
+										<div class="cover-card-content">
+											<a data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">
+												<h2 class="cover-card-heading">{{ option.title|e('wp_kses_post')|raw }}</h2>
+											</a>
+										</div>
+										{% if option.subtitle %}
+											<p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
+										{% endif %}
+										<div class="counter subcounter" style="display: none">
+											<div class="counter__slider"></div>
+											<div class="counter__text">
+												<span class="counter__gettext"></span>
+											</div>
+										</div>
+										<a class="btn btn-action btn-block cover-card-btn"
+										   data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Stem</a>
+									</div>
+
+									</div>
+
+
+								</div>
+								{% set i = i + 1 %}
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</section>
+
+{#			  <div>#}
+{#				  <pre>{{ dump(fields) }}</pre>#}
+{#				  <pre>{{ dump(options) }}</pre>#}
+{#			  </div>#}
+
+	  {# Voting modal #}
+	  <div class="modal fade" id="electionModal" tabindex="-1" role="dialog" aria-labelledby="electionModalLabel" aria-hidden="true" data-num="{{ i - 1 }}">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+			  <div class="modal-content">
+				  <div class="modal-header">
+					  <h2 class="modal-title" id="electionModalLabel"></h2>
+					  <h2> - </h2>
+					  <i> <h2 class="modal-subtitle"></h2></i>
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Sluit">
+						  <span aria-hidden="true">&times;</span>
+					  </button>
+				  </div>
+				  <div class="modal-body"></div>
+				  <div class="modal-form gpnl-petition">
+					  <div class="front">
+						  <form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
+							  <div class="form-group">
+								  <label hidden for="name">Naam</label>
+								  <input name="name" required type="text" class="form-control" placeholder="Voornaam">
+							  </div>
+							  <div class="form-group">
+								  <label hidden for="mail">Email</label>
+								  <input name="mail"  required type="email" class="form-control" placeholder="E-mail">
+							  </div>
+
+							  <div class="form-group">
+								  <label hidden for="phone">Telefoonnummer</label>
+								  <input name="phone" type="text" class="form-control" placeholder="Telefoonnummer">
+							  </div>
+							  <div class="form-group optin">
+								  <input class="form-check-input gpnl-petition-checkbox" name="consent" type="checkbox" />
+								  <label class="gpnl-petition-checkbox-label" for="consent"><small class="form-check-label">{{ fields.consent }}</small></label>
+							  </div>
+							  <label for="phone"><small >Vul je je telefoonnummer in? Dan kan Greenpeace jou telefonisch benaderen voor giftverzoeken of updates rondom lopende campagnes.</small></label>
+							  <input type="text" name="marketingcode" value="" hidden readonly>
+							  <input type="text" name="literaturecode" value="{{ fields.literaturecode }}" hidden readonly>
+							  <input type="text" name="form_id" value="" hidden readonly>
+						  </form>
+					  </div>
+					  <div class="gpnl-petition-thank back">
+						  <div class="card">
+							  <div class="card-body">
+								  <h5 class="card-title">{{ fields.thanktitle|e('wp_kses_post')|raw }}</h5>
+								  <p class="card-text">{{ fields.thanktext|e('wp_kses_post')|raw }}</p>
+								  <a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebutton }}</a>
+								  {% if not fields.hidesharingbuttons %}
+									  <div class="gpnl-petitionshare">
+										  <a class="btn btn-primary btn-block gpnl-share-facebook"
+											 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
+											  FACEBOOK
+										  </a>
+										  <a class="btn btn-primary btn-block gpnl-share-twitter"
+											 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
+											  TWITTER
+										  </a>
 									  </div>
-								  </div>
-								  <a class="btn btn-action btn-block cover-card-btn"
-									 data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Stem</a>
-							  </div>
-
-						  </div>
-						  {% set i = i + 1 %}
-					  {% endif %}
-				  {% endfor %}
-			  </div>
-		  </div>
-	  </div>
-		  <div class="modal fade" id="electionModal" tabindex="-1" role="dialog" aria-labelledby="electionModalLabel" aria-hidden="true" data-num="{{ i - 1 }}">
-			  <div class="modal-dialog modal-dialog-centered" role="document">
-				  <div class="modal-content">
-					  <div class="modal-header">
-						  <h2 class="modal-title" id="electionModalLabel"></h2>
-						  <h2> - </h2>
-						  <i><h2 class="modal-subtitle"></h2></i>
-						  <button type="button" class="close" data-dismiss="modal" aria-label="Sluit">
-							  <span aria-hidden="true">&times;</span>
-						  </button>
-					  </div>
-					  <div class="modal-body"></div>
-					  <div class="modal-form gpnl-petition">
-						  <div class="front">
-							  <form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
-								  <div class="form-group">
-									  <label hidden for="name">Naam</label>
-									  <input name="name" required type="text" class="form-control" placeholder="Voornaam">
-								  </div>
-								  <div class="form-group">
-									  <label hidden for="mail">Email</label>
-									  <input name="mail"  required type="email" class="form-control" placeholder="E-mail">
-								  </div>
-
-								  <div class="form-group">
-									  <label hidden for="phone">Telefoonnummer</label>
-									  <input name="phone" type="text" class="form-control" placeholder="Telefoonnummer">
-								  </div>
-								  <div class="form-group optin">
-									  <input class="form-check-input gpnl-petition-checkbox" name="consent" type="checkbox" />
-									  <label class="gpnl-petition-checkbox-label" for="consent"><small class="form-check-label">{{ fields.consent }}</small></label>
-								  </div>
-								  <label for="phone"><small >Vul je je telefoonnummer in? Dan kan Greenpeace jou telefonisch benaderen voor giftverzoeken of updates rondom lopende campagnes.</small></label>
-								  <input type="text" name="marketingcode" value="" hidden readonly>
-								  <input type="text" name="literaturecode" value="{{ fields.literaturecode }}" hidden readonly>
-								  <input type="text" name="form_id" value="" hidden readonly>
-							  </form>
-						  </div>
-						  <div class="gpnl-petition-thank back">
-							  <div class="card">
-								  <div class="card-body">
-									  <h5 class="card-title">{{ fields.thanktitle|e('wp_kses_post')|raw }}</h5>
-									  <p class="card-text">{{ fields.thanktext|e('wp_kses_post')|raw }}</p>
-									  <a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebutton }}</a>
-									  {% if not fields.hidesharingbuttons %}
-										  <div class="gpnl-petitionshare">
-											  <a class="btn btn-primary btn-block gpnl-share-facebook"
-												 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
-												  FACEBOOK
-											  </a>
-											  <a class="btn btn-primary btn-block gpnl-share-twitter"
-												 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
-												  TWITTER
-											  </a>
-										  </div>
-									  {% endif %}
-								  </div>
+								  {% endif %}
 							  </div>
 						  </div>
 					  </div>
-					  <div class="modal-footer">
-						  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
-						  <button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
-					  </div>
+				  </div>
+				  <div class="modal-footer">
+					  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
+					  <button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
 				  </div>
 			  </div>
 		  </div>
-
-
-{#	  <div>#}
-{#		  <pre>{{ dump(fields) }}</pre>#}
-{#		  <pre>{{ dump(options) }}</pre>#}
-{#	  </div>#}
+	  </div>
 
   {% endif %}
 {% endblock %}
