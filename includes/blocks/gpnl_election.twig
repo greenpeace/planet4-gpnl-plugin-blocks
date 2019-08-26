@@ -110,8 +110,10 @@
 							  <div class="card-body">
 								  <h5 class="card-title">{{ fields.thanktitle|e('wp_kses_post')|raw }}</h5>
 								  <p class="card-text">{{ fields.thanktext|e('wp_kses_post')|raw }}</p>
-								  <a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebutton }}</a>
-								  {% if not fields.hidesharingbuttons %}
+									  {% if (fields.donatebutton) %}
+										  <a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebutton }}</a>
+									  {% endif %}
+									  {% if not fields.hidesharingbuttons %}
 									  <div class="gpnl-petitionshare">
 										  <a class="btn btn-primary btn-block gpnl-share-facebook"
 											 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
