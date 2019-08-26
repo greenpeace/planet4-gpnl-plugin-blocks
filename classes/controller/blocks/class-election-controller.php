@@ -51,8 +51,14 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				[
 					'label' => __( 'Doneerknop tekst', 'planet4-gpnl-blocks' ),
 					'attr'  => 'donatebutton',
-					'type'  => 'textarea',
+					'type'  => 'text',
 					'value' => '',
+				],
+				[
+					'label' => __( 'Link van doneerknop', 'planet4-gpnl-blocks' ),
+					'attr'  => 'donatebuttonlink',
+					'type'  => 'text',
+					'value' => '/doneren',
 				],
 				[
 					'label' => __( 'Opt in tekst', 'planet4-gpnl-blocks' ),
@@ -108,6 +114,27 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 							'label' => __( 'ja' ),
 						],
 					],
+				],
+				[
+					'label'   => __( 'Verberg social sharing buttons', 'planet4-gpnl-blocks' ),
+					'attr'    => 'hidesharingbuttons',
+					'type'    => 'select',
+					// somehow setting values to true/false will crash the wordpress editor.
+					'options' => [
+						[
+							'value' => '0',
+							'label' => __( 'nee' ),
+						],
+						[
+							'value' => '1',
+							'label' => __( 'ja' ),
+						],
+					],
+				],
+				[
+					'label' => __( 'Sharingtekst voor Twitter', 'planet4-gpnl-blocks' ),
+					'attr'  => 'twittertext',
+					'type'  => 'textarea',
 				],
 			];
 
@@ -182,6 +209,59 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			shortcode_ui_register_for_shortcode( 'shortcake_' . self::BLOCK_NAME, $shortcode_ui_args );
 
 		}
+		/**
+		 * Get the HTTP(S) URL of the current page.
+		 *
+		 * @param $server The $_SERVER superglobals array.
+		 * @return string The URL.
+		 */
+		private function current_url( $server ): string {
+			//Figure out whether we are using http or https.
+			$http = 'http';
+			//If HTTPS is present in our $_SERVER array, the URL should
+			//start with https:// instead of http://
+			if ( isset( $server['HTTPS'] ) ) {
+				$http = 'https';
+			}
+			//Get the HTTP_HOST.
+			$host = $server['HTTP_HOST'];
+			//Get the REQUEST_URI. i.e. The Uniform Resource Identifier.
+			$request_uri = strtok( $_SERVER['REQUEST_URI'], '?' );
+			//Finally, construct the full URL.
+			//Use the function htmlentities to prevent XSS attacks.
+			return $http . '://' . htmlentities( $host ) . htmlentities( $request_uri );
+		}
+
+
+		/**
+		 * Get the defined menu with social accounts for usage in sharing buttons
+		 *
+		 * @param $social_menu
+		 *
+		 * @return array
+		 */
+		private function get_social_accounts( $social_menu ) : array {
+			$social_accounts = [];
+			if ( null !== $social_menu ) {
+
+				$brands = [
+					'facebook',
+					'twitter',
+					'youtube',
+					'instagram',
+				];
+				foreach ( $social_menu as $social_menu_item ) {
+					$url_parts = explode( '/', rtrim( $social_menu_item->url, '/' ) );
+					foreach ( $brands as $brand ) {
+						if ( false !== strpos( $social_menu_item->url, $brand ) ) {
+							$social_accounts[ $brand ] = \count( $url_parts ) > 0 ? $url_parts[ \count( $url_parts ) - 1 ] : '';
+						}
+					}
+				}
+			}
+
+			return $social_accounts;
+		}
 
 		/**
 		 * Callback for the shortcake_noindex shortcode.
@@ -203,18 +283,21 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			wp_enqueue_script( 'gpnl_election_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-election.js', [ 'jquery', 'slick' ], '2.11.0', true );
 			// Enqueue the script:
 			$attributes = [
-				'title'           => '',
-				'until'           => '',
-				'backgroundimage' => '',
-				'thanktitle'      => '',
-				'thanktext'       => '',
-				'donatebutton'    => '',
-				'consent'         => '',
-				'campaignpolicy'  => '',
-				'literaturecode'  => '',
-				'campaigncode'    => '',
-				'countermin'      => '',
-				'hideresults'     => '',
+				'title'              => '',
+				'until'              => '',
+				'backgroundimage'    => '',
+				'thanktitle'         => '',
+				'thanktext'          => '',
+				'donatebutton'       => '',
+				'consent'            => '',
+				'campaignpolicy'     => '',
+				'literaturecode'     => '',
+				'campaigncode'       => '',
+				'countermin'         => '',
+				'hideresults'        => '',
+				'hidesharingbuttons' => '',
+				'donatebuttonlink'   => '',
+				'twittertext'        => '',
 			];
 
 			$options = [];
@@ -254,6 +337,11 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				$fields,
 				$shortcode_tag
 			);
+
+			$social_menu               = wp_get_nav_menu_items( 'Footer Social' );
+			$fields['social_accounts'] = $this->get_social_accounts( $social_menu );
+			$fields['current_url']     = $this->current_url( $_SERVER );
+			$fields['twittertext']     = rawurlencode( $fields['twittertext'] );
 
 			$fields['backgroundimage'] =
 							[
