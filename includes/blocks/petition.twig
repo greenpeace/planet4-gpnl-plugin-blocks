@@ -52,11 +52,11 @@
 						</noscript>
 						<div class="gpnl-petition-form front" style="display:none;">
 							<div class="counter">
-					          <div class="counter__slider"></div>
-					          <div class="counter__text">
-					            <span class="counter__gettext"></span>
-					          </div>
-					        </div>
+								<div class="counter__slider"></div>
+								<div class="counter__text">
+									<span class="counter__gettext"></span>
+								</div>
+							</div>
 							<form class="gpnl-petitionform" onsubmit="return false;">
 								<div class="form-group">
 									<label hidden for="name">Naam</label>
@@ -97,8 +97,6 @@
 								</div>
 							</form>
 						</div>
-						{# Used for hiding the petitionform, unless JS is enabled #}
-						<script>jQuery('.gpnl-petition-form').show();</script>
 						<div class="gpnl-petition-thank back">
 							<div class="card">
 								<div class="card-body">
@@ -107,12 +105,12 @@
 									<a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebuttontext }}</a>
 									{% if not fields.hidesharingbuttons %}
 										<div class="gpnl-petitionshare">
-											<a class="btn btn-primary btn-block gpnl-share-facebook" 
-											href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
+											<a class="btn btn-primary btn-block gpnl-share-facebook"
+											   href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
 												FACEBOOK
 											</a>
-											<a class="btn btn-primary btn-block gpnl-share-twitter" 
-												href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
+											<a class="btn btn-primary btn-block gpnl-share-twitter"
+											   href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
 												TWITTER
 											</a>
 											{#<a class="btn btn-primary btn-block gpnl-share-whatsapp" target="_blank" href="whatsapp://send?text={{ fields.whatsapptext }} via {{ fields.current_url }}" role="button" onclick="fireShareEvent('whatsapp');">WHATSAPP</a>#}
@@ -121,8 +119,9 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					
+\					</div>
+					<script>jQuery('.gpnl-petition-form').show();</script>
+
 				</div>
 			</div>
 		</div>

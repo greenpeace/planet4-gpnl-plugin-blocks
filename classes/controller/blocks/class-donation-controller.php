@@ -224,12 +224,14 @@ if ( ! class_exists( 'Donation_Controller' ) ) {
 			];
 
 
-			wp_enqueue_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js', null, '', true );
-            wp_enqueue_script( 'vueform', 'https://cdn.jsdelivr.net/npm/vue-form-wizard@0.8.4/dist/vue-form-wizard.min.js', [ 'vue' ], '0.8.4', true );
-            wp_enqueue_script( 'vueresource', 'https://cdn.jsdelivr.net/npm/vue-resource@1.5.0/dist/vue-resource.min.js', [ 'vue', 'vueform' ], '1.5.0', true );
-            wp_enqueue_script( 'vuelidate', 'https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/vuelidate.min.js', [ 'vue', 'vueform' ], '0.7.4', true );
-            wp_enqueue_script( 'vuelidators', 'https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/validators.min.js', [ 'vue', 'vueform' ], '0.7.4', true );
-            wp_enqueue_script( 'donationform', P4NLBKS_ASSETS_DIR . 'js/donationform.js', ['vue', 'vueresource', 'vueform', 'vuelidate', 'vuelidators'], '2.10.2', true );
+			wp_enqueue_script( 'vue', 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.15/vue.min.js', null, '', true );
+            wp_enqueue_script( 'vueform', P4NLBKS_ASSETS_DIR . 'js/vue-form-wizard.min.js', [ 'vue' ], '0.8.4', true );
+            wp_enqueue_script( 'vueresource', 'https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.0/vue-resource.min.js', [ 'vue', 'vueform' ], '1.5.0', true );
+            wp_enqueue_script( 'vuelidate', P4NLBKS_ASSETS_DIR . 'js/vuelidate.min.js', [ 'vue', 'vueform' ], '0.7.4', true );
+            wp_enqueue_script( 'vuelidators', P4NLBKS_ASSETS_DIR . 'js/validators.min.js', [ 'vue', 'vueform' ], '0.7.4', true );
+            wp_enqueue_script( 'donationform', P4NLBKS_ASSETS_DIR . 'js/donationform.js', ['vue', 'vueresource', 'vueform', 'vuelidate', 'vuelidators'], '2.11.0', true );
+//			wp_enqueue_script( 'gpnl_address_autofill', P4NLBKS_ASSETS_DIR . 'js/gpnl-address-autofill.js', [ 'jquery' ], '0.0.1', true );
+
 			// Pass options to frontend code
 			wp_localize_script(
 				'donationform',
@@ -260,7 +262,17 @@ if ( ! class_exists( 'Donation_Controller' ) ) {
 				)
 			);
 
-            wp_enqueue_style( 'vueform_style', 'https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.min.css', [], '2.7.3' );
+			// Pass option for address autofill to frontend code.
+			wp_localize_script(
+				'donationform',
+				'get_address_object',
+				[
+					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'GPNL_get_address_donation_form' )
+				]
+			);
+
+            wp_enqueue_style( 'vueform_style', P4NLBKS_ASSETS_DIR . 'css/vue-form-wizard.min.css', [], '2.7.3' );
             wp_enqueue_style( 'gpnl_donationform_style', P4NLBKS_ASSETS_DIR . 'css/donationform.css', 'vueform_style', '2.10.3' );
 
             // Shortcode callbacks must return content, hence, output buffering here.
@@ -271,3 +283,87 @@ if ( ! class_exists( 'Donation_Controller' ) ) {
 		}
 	}
 }
+
+
+/**
+ * Get address with API call.
+ */
+function get_address_donation_form() {
+
+	check_ajax_referer( 'GPNL_get_address_donation_form', 'nonce' );
+
+	// getting the options from the gnnp-settings where the API-key and API-URL are stored.
+	$options = get_option( 'planet4nl_options' );
+
+	// Get data from form and validate
+	$zipcode = wp_strip_all_tags( $_POST['zipcode'] );
+	validate_zipcode_donation_form($zipcode) or die();
+	$house_no = wp_strip_all_tags( $_POST['house_no'] );
+	is_numeric($house_no) or die();
+
+	$data_array = [
+		'postcode'   => $zipcode,
+		'huisnummer' => $house_no,
+		'wachtwoord' => $options['gpnl_api_key']
+	];
+
+	$data = wp_json_encode( $data_array );
+
+	// URL for production
+	$url = $options['register_url'] . '/validate/postcode';
+
+	$curl = curl_init( $url );
+
+	// API call options:
+	curl_setopt( $curl, CURLOPT_POSTFIELDS, $data );
+	curl_setopt( $curl, CURLOPT_URL, $url );
+	curl_setopt( $curl, CURLOPT_HTTPHEADER,
+		[
+			'Content-Type:application/json',
+			'Content-Length: ' . strlen( $data )
+		]
+	);
+	curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, "POST" );
+	curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
+	curl_setopt( $curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+
+
+	// Execute API call
+	$result = json_decode( curl_exec( $curl ) );
+	// Get HTTP statuscode
+	$http_code = curl_getinfo( $curl, CURLINFO_HTTP_CODE );
+
+	curl_close( $curl );
+
+	// Give the appropriate response to the frontend
+	if ( false === $result || 200 !== $http_code ) {
+		wp_send_json_error(
+			[
+				'statuscode' => $http_code,
+			],
+			$http_code
+		);
+	}
+
+	wp_send_json_success(
+		[
+			'statuscode' => $http_code,
+			'cUrlresult' => $result,
+		],
+		$http_code
+	);
+}
+
+function validate_zipcode_donation_form($zipcode)
+{
+	$regex = '/^(?:NL-)?(\d{4})\s*([A-Z]{2})$/i';
+
+	if ( preg_match($regex,$zipcode) ) {
+		return true;
+	}
+}
+
+// call php function whenever the ajax call is made to get the address for non-logged in users
+add_action( 'wp_ajax_nopriv_get_address_donation_form', 'P4NLBKS\Controllers\Blocks\get_address_donation_form' );
+// call php function whenever the ajax call is made to get the address for logged in users
+add_action( 'wp_ajax_get_address_donation_form', 'P4NLBKS\Controllers\Blocks\get_address_donation_form' );

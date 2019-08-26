@@ -18,8 +18,6 @@ $('.gpnl-petitionform').on('submit', function () {
     url:     window[form_config].ajaxUrl,
     data:    post_form_value,
     success: function(data) {
-      // eslint-disable-next-line no-console
-      console.log('^-^');
 
       // Send conversion event to the GTM
       if (typeof dataLayer !== 'undefined') {

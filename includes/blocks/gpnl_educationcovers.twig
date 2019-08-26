@@ -1,0 +1,50 @@
+{% block gpnl_educationcovers %}
+    {% if ( fields ) %}
+	<section>
+		<div class="row">
+			<div class="col">
+				<h3>Selecteer een thema: </h3>
+				{% if fields.tags %}
+					<div class="tagselector">
+						{% for tag in fields.tags %}
+							<input type="checkbox" id="{{ tag }}" name="{{ tag }}" style="opacity: unset; position:unset;">
+							<label for="{{ tag }}">{{ tag }}</label>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+			<div class="col">
+				<h3>Selecteer een doelgroep: </h3>
+				{% if fields.audiences %}
+					<div class="tagselector">
+						{% for audience in fields.audiences %}
+							<input type="checkbox" id="{{ audience }}" name="{{ audience }}" style="opacity: unset; position:unset;">
+							<label for="{{ audience }}">{{ audience }}</label>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+		<div class="row limit-visibility">
+			{% for cover in fields.pages %}
+				<div class="col-lg-3 col-md-4 cover-card-column" data-tags="{{ cover.tags }}">
+					<div class="cover-card card-one" style="background-image: url({{ cover.image }});">
+						<div class="cover-card-content">
+							<a href="{{cover.link|e('esc_url')}}">
+								<h2 class="cover-card-heading">{{ cover.post_title|e('wp_kses_post')|raw }}</h2>
+							</a>
+						</div>
+						{% if cover.post_excerpt %}
+						<p class="educationcovers__card__p">{{ cover.post_excerpt|truncate(20)|e('wp_kses_post')|raw }}</p>
+						{% endif %}
+						<a class="btn btn-action btn-block cover-card-btn"
+						   href="{{ cover.link}}">Lees meer</a>
+					</div>
+
+				</div>
+			{% endfor %}
+		</div>
+</section>
+
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,149 @@
+@import "base";
+
+.block-election {
+  .inner_block {
+    padding: 32px 0;
+    margin: 0 calc(50% - 50vw) 32px;
+  }
+
+  h1 {
+    padding: 15px !important;
+    margin: 0;
+  }
+
+  h3 {
+    margin-top: 15px;
+  }
+
+  .cover-card {
+    padding-bottom: 140%;
+    position: relative;
+    min-height: unset;
+    max-height: unset;
+  }
+
+  .site-footer {
+    z-index: 1;
+  }
+
+  .full-width-container {
+    margin: 0 calc(calc(50% - 50vw) + 24px) 32px;
+    padding: 0 !important;
+    @media screen and (min-width: $large-width) {
+      margin: 0 calc(50% - 50vw) 32px;
+      padding: 0 15px;
+    }
+  }
+
+  .slick-next::before, .slick-prev::before {
+    //color: $blood-orange;
+    font-size: 30px;
+    opacity: 1;
+    //background-color: white;
+  }
+
+  .slick-dots li.slick-active button::before {
+    color: $dark-green;
+  }
+
+  .slick-arrow {
+    //margin: 5px;
+    z-index: 100;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+  }
+
+  .slick-prev {
+    left: 0;
+  }
+
+  .slick-next {
+    right: 0;
+  }
+
+  .educationcovers__card__p {
+    width: 100%;
+    color: $white !important;
+  }
+
+  .cover-card-column {
+    padding: 0 10px;
+  }
+
+  .btn.btn-action.btn-block.cover-card-btn {
+    @media screen and (max-width: $extra-small-width) {
+      padding: 0 15px;
+      right: 5px;
+    }
+    @media screen and (max-width: $small-width) {
+      padding: 0 20px;
+      right: 10px;
+    }
+  }
+}
+
+// modal is outside of block
+.modal {
+  position: fixed !important;
+  z-index: 1050 !important;
+  padding: 0 16px;
+
+  .gpnl-petition {
+    padding: 15px;
+  }
+
+  .btn-cancel {
+    background-color: $slate-grey;
+    border-color: $slate-grey;
+
+    &:hover, &:focus {
+      background-color: $slate-grey;
+      border-color: $slate-grey;
+    }
+  }
+
+  .modal-dialog {
+    max-width: 800px;
+  }
+
+  .modal-subtitle {
+    margin-bottom: 0;
+  }
+
+  .modal-form {
+    padding: 1rem;
+  }
+
+  input[type=checkbox].gpnl-petition-checkbox {
+    opacity: 1;
+    margin-left: 0;
+  }
+
+  .gpnl-petition-checkbox-label {
+    margin-bottom: 0;
+  }
+
+  .gpnl-petition-checkbox-label small {
+    margin-left: 1.5rem;
+  }
+
+  .modal-content {
+    border-top: 4px solid #6c0;
+  }
+
+  .fade {
+    transition: opacity .1s linear;
+  }
+}
+
+.page-header, .page-header-title, .page-header-subtitle, .page-header-content {
+  .top-page-tags {
+    display: none;
+  }
+
+  /*display: none;*/
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+}

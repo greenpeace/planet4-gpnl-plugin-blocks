@@ -1,0 +1,122 @@
+{% block gpnl_inforequest %}
+    {% if ( fields ) %}
+		<section class="block inforequest__wrapper">
+
+			<noscript>
+				<p>
+					Je browser ondersteunt geen Javascript.<br>
+					Het is hierdoor niet mogelijk om een petitie te ondertekenen via deze weg.<br>
+					Bel onze Supporter Care via 0800-4223344 of stuur een mail via <a href="https://www.greenpeace.org/nl/contact/contact-formulier/">dit contactformulier.</a>
+				</p>
+			</noscript>
+			<h3 class="inforequest__title">{{ fields.formtitle }}</h3>
+			<div class="inforequest__form-collection">
+
+				<form class="gpnl-request__form inforequest_form" onsubmit="return false;" style="display:none;">
+					<p>Vul het onderstaande formulier in en krijg toegang tot het Greenpeace-materiaal: lessen, docentenhandleidingen en werkbladen.
+
+						Na registratie ontvang je een downloadlink naar alle materialen. Ook ontvang je 6 keer per jaar de docentennieuwsbrief met actuele tips om je lessen nóg groener en boeiender te maken.</p>
+					<div class="row">
+						<div class="form-group col">
+							<label hidden for="name">Voornaam</label>
+							<input name="name" required type="text" class="form-control" placeholder="Voornaam">
+						</div>
+						<div class="form-group col">
+							<label hidden for="surname">Achternaam</label>
+							<input name="surname" required type="text" class="form-control" placeholder="Achternaam">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label hidden for="mail">Email</label>
+						<input name="mail"  required type="email" class="form-control" placeholder="E-mail">
+					</div>
+					<div class="form-group">
+						<label hidden for="schoolname">Naam school</label>
+						<input name="schoolname" required type="text" class="form-control" placeholder="Naam school">
+					</div>
+					<div class="row">
+						<div class="form-group col">
+							<label hidden for="postal-code">Postcode</label>
+							<input name="postal-code" id="postal-code" required type="text" pattern="[0-9]{4}[a-zA-Z]{2}" maxlength="6" class="form-control" placeholder="Postcode">
+						</div>
+						<div class="form-group col">
+							<label hidden for="housenumber">Huisnummer</label>
+							<input name="housenumber" id="housenumber" required type="text" class="form-control" placeholder="Huisnummer">
+						</div>
+						<div class="form-group col">
+							<label hidden for="housenumberaddition">Toevoeging</label>
+							<input name="housenumberaddition" type="text" class="form-control" placeholder="Toevoeging">
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col">
+							<label hidden for="street">Straatnaam</label>
+							<input name="street" id="street" required disabled type="text" class="form-control" placeholder="Straatnaam">
+						</div>
+						<div class="form-group col">
+							<label hidden for=city">Stad</label>
+							<input name="city" id="city" required disabled type="text" class="form-control" placeholder="Stad">
+						</div>
+					</div>
+					<div class="form-group">
+						<select name="subscription">
+							<option disabled selected value> {{ fields.itemtitle }} </option>
+							{% for mcode in fields.mcodes %}
+								<option value="{{ mcode._code }}">{{ mcode._label }}</option>
+							{% endfor %}
+
+						</select>
+					</div>
+					<div class="input__human" style="display: none">
+						<input type="text" class="form-control" name="human" id="human"
+							   aria-describedby="emailHelpId"
+							   placeholder="Vul dit veld niet in">
+					</div>
+					<div class="form-group">
+						<input class="form-check-input" name="consent" type="checkbox" />
+						<label class="gpnl-petition-checkbox-" for="consent"><small class="form-check-label">{{ fields.consent }}</small></label>
+					</div>
+					<input type="submit" class="btn btn-primary btn-block signBtn" value="{{ fields.sign }}">
+					<input type="reset" class="btn btn-primary btn-block resetBtn" value="Annuleren">
+					<div class="small policies">
+						<div class="row">
+							<div class="col-8">
+								Greenpeace beschermt je gegevens en geeft ze niet aan derden voor commerci&euml;le
+								doeleinden. Lees ook ons
+								<a href="https://www.greenpeace.org/nl/privacystatement/" target="_blank">privacy-beleid</a> en
+								de <a href="{{ fields.campaignpolicy }}" target="_blank" >algemene voorwaarden</a> van deze actie.
+							</div>
+							<div class="col-4">
+								<a href="https://privacywaarborg.nl/bedrijven/stichting-greenpeace-nederland/" target="_blank" class="privacywaarborg">
+									<img class="img-fluid" src="https://secured.greenpeace.nl/Global/nederland/image/template/privacy/PW-logo.png">
+								</a>
+							</div>
+						</div>
+					</div>
+
+
+				</form>
+				<form class="gpnl-check__form inforequest_form" onsubmit="return false;" style="display:none;">
+					<p>Heb je je al eens eerder opgegeven? Vul je emailadres dan hieronder in.</p>
+					<div class="form-group">
+						<label hidden for="mail">Email</label>
+						<input name="mail"  required type="email" class="form-control" placeholder="E-mail">
+					</div>
+
+					<div class="input__human" style="display: none">
+						<input type="text" class="form-control" name="human" id="human"
+							   aria-describedby="emailHelpId"
+							   placeholder="Vul dit veld niet in">
+					</div>
+					<input type="submit" class="btn btn-primary btn-block signBtn" value="Inloggen">
+					<input type="reset" class="btn btn-primary btn-block resetBtn" value="Annuleren">
+				</form>
+				<input type="submit" class="btn btn-primary hideshowbtn" value="Registreren" data-target=".gpnl-request__form" style="display:none;">
+				<input type="submit" class="btn btn-primary hideshowbtn" value="Inloggen" data-target=".gpnl-check__form" style="display:none;">
+			</div>
+		</section>
+
+
+    {% endif %}
+{% endblock %}
