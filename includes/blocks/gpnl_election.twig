@@ -39,7 +39,7 @@
 										{% if option.subtitle %}
 											<p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
 										{% endif %}
-										<div class="counter subcounter" style="display: none">
+										<div class="counter subcounter" style="display: none" data-id="{{ i }}">
 											<div class="counter__slider"></div>
 											<div class="counter__text">
 												<span class="counter__gettext"></span>
