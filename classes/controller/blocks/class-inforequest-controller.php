@@ -194,8 +194,12 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 
 			$fields['mcodes'] = $sorted_mcodes;
 
+			global $post;
+			$parent = wp_get_canonical_url( $post->post_parent );
+
 			$data = [
 				'fields' => $fields,
+				'parent' => $parent,
 			];
 
 			// Pass options to frontend code

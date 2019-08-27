@@ -1,7 +1,11 @@
 {% block gpnl_inforequest %}
     {% if ( fields ) %}
+		{% if (fields.hider) and (parent) %}
+			<a class="educationrequest__button" href="{{ parent }}">
+				<input type="button" class="btn btn-primary btn-block" value="Naar overzicht">
+			</a>
+		{% endif %}
 		<section class="block inforequest__wrapper">
-
 			<noscript>
 				<p>
 					Je browser ondersteunt geen Javascript.<br>
@@ -115,6 +119,9 @@
 				<input type="submit" class="btn btn-primary hideshowbtn" value="Registreren" data-target=".gpnl-request__form" style="display:none;">
 				<input type="submit" class="btn btn-primary hideshowbtn" value="Inloggen" data-target=".gpnl-check__form" style="display:none;">
 			</div>
+				{% if (fields.hider) %}
+				<div id="downloads"></div>
+				{% endif %}
 		</section>
 
 
