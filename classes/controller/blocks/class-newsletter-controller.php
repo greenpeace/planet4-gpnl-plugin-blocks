@@ -197,6 +197,21 @@ if ( ! class_exists( 'GPNL_Newsletter_Controller' ) ) {
 				'fields' => $fields,
 			];
 
+//			$key   = bin2hex( random_bytes(5) );
+//			$nonce = wp_create_nonce( 'GPNL_Newsletters' );
+//			$token = $this->current_url( $_SERVER ) . $nonce;
+//
+////			Check if the generated key already exists in the cache
+//			$cachekey_exists = wp_cache_get($key, 'gpnl_cache', true);
+////			Generate new cachekeys until an unused one is found
+//			while ( $cachekey_exists ) {
+//				$key = bin2hex( random_bytes(5) );
+//				$cachekey_exists = wp_cache_get($key, 'gpnl_cache', true);
+//			}
+
+//			when a suitable key is found, persist the sessiontoken to the cache using the random key
+//			wp_cache_add($key, $token, 'gpnl_cache', 300);
+
 			// Pass options to frontend code
 			wp_localize_script(
 				'gpnl_newsletter_js',
@@ -217,6 +232,23 @@ if ( ! class_exists( 'GPNL_Newsletter_Controller' ) ) {
 			return ob_get_clean();
 		}
 
+		private function current_url( $server ): string {
+			//Figure out whether we are using http or https.
+			$http = 'http';
+			//If HTTPS is present in our $_SERVER array, the URL should
+			//start with https:// instead of http://
+			if ( isset( $server['HTTPS'] ) ) {
+				$http = 'https';
+			}
+			//Get the HTTP_HOST.
+			$host = $server['HTTP_HOST'];
+			//Get the REQUEST_URI. i.e. The Uniform Resource Identifier.
+			$request_uri = strtok( $_SERVER['REQUEST_URI'], '?' );
+			//Finally, construct the full URL.
+			//Use the function htmlentities to prevent XSS attacks.
+			return $http . '://' . htmlentities( $host ) . htmlentities( $request_uri );
+		}
+
 
 	}
 }
@@ -231,19 +263,25 @@ function newsletter_form_process () {
 	$screenid       = htmlspecialchars( wp_strip_all_tags( $_POST['screenid'] ) );
 
 	// Get and sanitize the formdata
-	$naam  = wp_strip_all_tags( $_POST['name'] );
-	$email = wp_strip_all_tags( $_POST['mail'] );
-	$human = wp_strip_all_tags( $_POST['human'] );
+	$naam    = wp_strip_all_tags( $_POST['name'] );
+	$email   = wp_strip_all_tags( $_POST['mail'] );
+	$human   = wp_strip_all_tags( $_POST['human'] );
 
-	if ( "" !== $human ) {
+	$ip = wp_strip_all_tags( $_SERVER['REMOTE_ADDR'] );
+//			Check if the generated key already exists in the cache
+	$cachekey_exists = wp_cache_get($key, 'gpnl_cache', true);
+
+	if ( "" !== $human || $cachekey_exists) {
 		wp_send_json_error(
 			[
 				'statuscode' => 400,
 				// 'cUrlresult'    => $result,
 			],
-			500
+			400
 		);
 	}
+
+	wp_cache_add($key, $token, 'gpnl_cache', 300);
 
 	$data_array = [
 		'voornaam'       => $naam,
@@ -255,7 +293,8 @@ function newsletter_form_process () {
 
 	$data = wp_json_encode( $data_array );
 
-	$url = 'https://www.mygreenpeace.nl/GPN.RegistrerenApi/register/email';
+	$options = get_option( 'planet4nl_options' );
+	$url     = $options['register_url'].'/register/email';
 
 	// initiate a cUrl request to the database
 	$request = curl_init( $url );
@@ -293,7 +332,7 @@ function newsletter_form_process () {
 	);
 }
 
-# use this version for if you want the callback to work for users who are logged in
+# use this if you want the callback to work for users who are logged in
 add_action( 'wp_ajax_newsletter_form_process', 'P4NLBKS\Controllers\Blocks\newsletter_form_process' );
-# use this version for if you want the callback to work for users who are not logged in
+# use this if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_newsletter_form_process', 'P4NLBKS\Controllers\Blocks\newsletter_form_process' );

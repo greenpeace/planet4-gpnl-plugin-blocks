@@ -6,11 +6,11 @@ $('.gpnl-newsletter__form').on('submit', function () {
   var post_form_value = getFormObj(newsletter_form_element);
   var form_config = 'newsletter_form_object_' + post_form_value['form_id'];
 
-  post_form_value.action = 'newsletter_form_process';
-  post_form_value.nonce  = window[form_config].nonce;
-  post_form_value.marketingcode  = window[form_config].marketingcode;
+  post_form_value.action          = 'newsletter_form_process';
+  post_form_value.nonce           = window[form_config].nonce;
+  post_form_value.marketingcode   = window[form_config].marketingcode;
   post_form_value.literaturecode  = window[form_config].literaturecode;
-  post_form_value.screenid  = window[form_config].screenid;
+  post_form_value.screenid        = window[form_config].screenid;
 
 
   toggleDisable($(newsletter_form_element).find('*'));
@@ -18,6 +18,8 @@ $('.gpnl-newsletter__form').on('submit', function () {
     showErrorMessage(newsletter_form_element);
     return;
   }
+
+  console.log(post_form_value);
 
   $.ajax({
     type:    'POST',
