@@ -9,3 +9,19 @@
     border-color: $slate-grey;
   }
 }
+
+.page-template .educationrequest__button {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-left: 0 !important;
+  margin-top: 54px;
+  @media (min-width: 768px) {
+    margin-top: 60px;
+  }
+
+  .btn.btn-primary.btn-block {
+    padding: 0 15px !important;
+  }
+
+}
