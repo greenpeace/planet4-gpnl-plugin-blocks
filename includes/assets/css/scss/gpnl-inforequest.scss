@@ -19,3 +19,11 @@
     margin-top: 60px;
   }
 }
+
+.hero__title {
+  margin-top: 60px;
+
+  @media (min-width: 1480px) {
+    margin-top: 0;
+  }
+}
