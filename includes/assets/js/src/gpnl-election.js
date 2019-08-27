@@ -24,7 +24,7 @@ $(document).ready(function() {
       arrows: true,
       dots: true,
       centerMode: true,
-      centerPadding: '20px',
+      centerPadding: '50px',
       initialSlide: 3,
       responsive: [
         {
