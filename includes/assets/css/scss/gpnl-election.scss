@@ -26,20 +26,19 @@
     z-index: 1;
   }
 
-  .full-width-container {
-    margin: 0 calc(calc(50% - 50vw) + 24px) 32px;
+  .election-options {
     padding: 0 !important;
+    margin: 0;
     @media screen and (min-width: $large-width) {
-      margin: 0 calc(50% - 50vw) 32px;
+      margin: 0 calc(calc(50% - 50vw) + 24px) 32px;
+      //margin: 0 calc(50% - 50vw) 32px;
       padding: 0 15px;
     }
   }
 
   .slick-next::before, .slick-prev::before {
-    //color: $blood-orange;
     font-size: 30px;
     opacity: 1;
-    //background-color: white;
   }
 
   .slick-dots li.slick-active button::before {
@@ -55,11 +54,11 @@
   }
 
   .slick-prev {
-    left: 0;
+    left: 10px;
   }
 
   .slick-next {
-    right: 0;
+    right: 10px;
   }
 
   .educationcovers__card__p {
