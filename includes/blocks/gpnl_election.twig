@@ -4,22 +4,25 @@
 			<div class="inner_block" style="background-image: url({{ fields.backgroundimage.src }})">
 				<div class="page-template">
 					<h1>{{ fields.title }}</h1>
+					<h4>{{ fields.subtitle }}</h4>
 
 					{# Showing a line of text explaining how many days are left to vote #}
-					{% set difference = date(endDate).diff(date(fields.until)) %}
-					{% set leftDays = difference.days %}
-					<span>
-						{% if leftDays <= 0 %}
+					{% set today = date('now') | date ("Y-m-d") %}
+					{% set difference = date(today).diff(date(fields.until)).days %}
+
+					<p>
+						{% if fields.until < today %}
 							Stemmen is niet meer mogelijk.
-						{% elseif leftDays == 0 %}
-							 Je kunt alleen vandaag nog stemmen!
-						{% elseif leftDays == 1 %}
-							Je kunt nog maar 1 dag stemmen!
-						{% elseif leftDays <= 7 %}
-							Stemmen kan nog maar {{ leftDays }} dagen!
+						{% else %}
+							{% if difference == 0 %}
+								Je kunt alleen vandaag nog stemmen!
+							{% elseif difference <= 7 %}
+								Stemmen kan nog maar {{ difference }} dagen!
 							{% else %}
-							Stemmen kan tot {{ fields.until | date ("d F Y")}}.
-						{% endif %}</span>
+								Stemmen kan tot en met {{ fields.until | date ("j F Y") }}.
+							{% endif %}
+						{% endif %}
+					</p>
 
 					<h3 id="counter_total" data-num=""> </h3>
 
