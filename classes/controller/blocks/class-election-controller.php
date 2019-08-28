@@ -29,6 +29,12 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'value' => '',
 				],
 				[
+					'label' => __( 'Subtitel', 'planet4-gpnl-blocks' ),
+					'attr'  => 'subtitle',
+					'type'  => 'text',
+					'value' => '',
+				],
+				[
 					'label'       => __( 'Achtergrondafbeelding', 'planet4-blocks-backend' ),
 					'attr'        => 'backgroundimage',
 					'type'        => 'attachment',
@@ -67,7 +73,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'value' => 'Als je dit aanvinkt, mag Greenpeace je per e-mail op de hoogte houden over onze campagnes. Ook vragen we je af en toe om steun. Afmelden kan natuurlijk altijd.',
 				],
 				[
-					'label' => __( 'Tot wanneer kan er gestemd worden? (<u>tot</u>, niet tot en met)', 'planet4-gpnl-blocks' ),
+					'label' => __( 'Tot en met wanneer kan er gestemd worden? (geef de laatste dag aan))', 'planet4-gpnl-blocks' ),
 					'attr'  => 'until',
 					'type'  => 'date',
 				],
@@ -284,6 +290,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			// Enqueue the script:
 			$attributes = [
 				'title'              => '',
+				'subtitle'           => '',
 				'until'              => '',
 				'backgroundimage'    => '',
 				'thanktitle'         => '',
