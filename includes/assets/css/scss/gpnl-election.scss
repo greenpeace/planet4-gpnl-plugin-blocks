@@ -29,6 +29,8 @@
 
   .educationcovers__card__p {
     padding-bottom: 28px;
+    width: 100%;
+    color: $white !important;
   }
 
   .site-footer {
@@ -70,11 +72,6 @@
     right: 10px;
   }
 
-  .educationcovers__card__p {
-    width: 100%;
-    color: $white !important;
-  }
-
   .cover-card-column {
     padding: 0 10px;
   }
@@ -113,14 +110,20 @@
 
   .modal-header {
     display: block;
+
+    .modal-subtitle {
+      margin-bottom: 0;
+    }
+
+    .close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
   }
 
   .modal-dialog {
     max-width: 800px;
-  }
-
-  .modal-subtitle {
-    margin-bottom: 0;
   }
 
   .modal-form {
