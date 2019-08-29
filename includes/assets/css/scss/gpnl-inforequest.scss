@@ -10,20 +10,13 @@
   }
 }
 
-.page-template .educationrequest__button {
-  position: fixed;
-  top: 0;
-  left: 0;
-  margin-top: 54px;
-  @media (min-width: 768px) {
-    margin-top: 60px;
-  }
+.inforequest__wrapper {
+  padding: 15px;
 }
 
-.hero__title {
-  margin-top: 60px;
-
-  @media (min-width: 1480px) {
-    margin-top: 0;
-  }
+.page-template .educationrequest__button {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1100;
 }
