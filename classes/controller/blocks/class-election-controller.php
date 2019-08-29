@@ -17,7 +17,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 		const BLOCK_NAME = 'gpnl_election';
 
 		/**
-		Shortcode UI setup for the election shortcode.
+		 * Shortcode UI setup for the election shortcode.
 		 * It is called when the Shortcake action hook `register_shortcode_ui` is called.
 		 */
 		public function prepare_fields() {
@@ -25,6 +25,36 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				[
 					'label' => __( 'Titel', 'planet4-gpnl-blocks' ),
 					'attr'  => 'title',
+					'type'  => 'text',
+					'value' => '',
+				],
+				[
+					'label'       => __( 'Titelafbeelding', 'planet4-blocks-backend' ),
+					'attr'        => 'titleimage',
+					'type'        => 'attachment',
+					'libraryType' => [ 'image' ],
+					'addButton'   => __( 'Selecteer afbeelding', 'planet4-blocks-backend' ),
+					'frameTitle'  => __( 'Selecteer afbeelding', 'planet4-blocks-backend' ),
+				],
+				[
+					'label'   => __( 'Titel of afbeelding?', 'planet4-gpnl-blocks' ),
+					'attr'    => 'istitleimage',
+					'type'    => 'select',
+					// somehow setting values to true/false will crash the wordpress editor.
+					'options' => [
+						[
+							'value' => 'title',
+							'label' => __( 'titel' ),
+						],
+						[
+							'value' => 'image',
+							'label' => __( 'afbeelding' ),
+						],
+					],
+				],
+				[
+					'label' => __( 'Subtitel', 'planet4-gpnl-blocks' ),
+					'attr'  => 'subtitle',
 					'type'  => 'text',
 					'value' => '',
 				],
@@ -67,7 +97,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'value' => 'Als je dit aanvinkt, mag Greenpeace je per e-mail op de hoogte houden over onze campagnes. Ook vragen we je af en toe om steun. Afmelden kan natuurlijk altijd.',
 				],
 				[
-					'label' => __( 'Tot wanneer kan er gestemd worden? (<u>tot</u>, niet tot en met)', 'planet4-gpnl-blocks' ),
+					'label' => __( 'Tot en met wanneer kan er gestemd worden? (geef de laatste dag aan))', 'planet4-gpnl-blocks' ),
 					'attr'  => 'until',
 					'type'  => 'date',
 				],
@@ -267,23 +297,29 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 		 * Callback for the shortcake_noindex shortcode.
 		 * It renders the shortcode based on supplied attributes.
 		 *
-		 * @param array  $fields        Array of fields that are to be used in the template.
-		 * @param string $content       The content of the post.
+		 * @param array $fields Array of fields that are to be used in the template.
+		 * @param string $content The content of the post.
 		 * @param string $shortcode_tag The shortcode tag (shortcake_blockname).
 		 *
 		 * @return string The complete html of the block
 		 */
-		public function prepare_template( $fields, $content, $shortcode_tag ) : string {
+		public function prepare_template( $fields, $content, $shortcode_tag ): string {
 
 			wp_enqueue_style( 'gpnl_education_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-educationcovers.css', [], '2.11.0' );
 			wp_enqueue_style( 'gpnl_slick_css', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css', [ 'slick' ], '2.11.0' );
 			wp_enqueue_style( 'gpnl_election_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-election.css', [], '2.11.0' );
 			wp_enqueue_style( 'gpnl_petition_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-petition.css', [], '2.3.6' );
 
-			wp_enqueue_script( 'gpnl_election_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-election.js', [ 'jquery', 'slick' ], '2.11.0', true );
+			wp_enqueue_script( 'gpnl_election_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-election.js', [
+				'jquery',
+				'slick'
+			], '2.11.0', true );
 			// Enqueue the script:
 			$attributes = [
 				'title'              => '',
+				'titleimage'         => '',
+				'istitleimage'       => '',
+				'subtitle'           => '',
 				'until'              => '',
 				'backgroundimage'    => '',
 				'thanktitle'         => '',
@@ -301,19 +337,19 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			];
 
 			$options = [];
-			for ( $i = 1; $i <= 5; $i++ ) {
+			for ( $i = 1; $i <= 5; $i ++ ) {
 				if ( isset( $fields[ 'title_' . $i ] ) ) {
 					$option_tmp    =
-					[
-						'title'       => $fields[ 'title_' . $i ],
-						'subtitle'    => $fields[ 'subtitle_' . $i ],
-						'description' => $fields[ 'description_' . $i ],
-						'mcode'       => $fields[ 'mcode_' . $i ],
-						'attachment'  =>
-							[
-								'src' => wp_get_attachment_image_src( $fields[ 'attachment_' . $i ], 'large' )[0],
-							],
-					];
+						[
+							'title'       => $fields[ 'title_' . $i ],
+							'subtitle'    => $fields[ 'subtitle_' . $i ],
+							'description' => $fields[ 'description_' . $i ],
+							'mcode'       => $fields[ 'mcode_' . $i ],
+							'attachment'  =>
+								[
+									'src' => wp_get_attachment_image_src( $fields[ 'attachment_' . $i ], 'large' )[0],
+								],
+						];
 					$options[ $i ] = $option_tmp;
 
 					// Pass options to frontend code
@@ -343,10 +379,15 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			$fields['current_url']     = $this->current_url( $_SERVER );
 			$fields['twittertext']     = rawurlencode( $fields['twittertext'] );
 
+			$fields['titleimage'] =
+				[
+					'src' => wp_get_attachment_image_src( $fields['titleimage'], 'full' )[0],
+				];
+
 			$fields['backgroundimage'] =
-							[
-								'src' => wp_get_attachment_image_src( $fields['backgroundimage'], 'full' )[0],
-							];
+				[
+					'src' => wp_get_attachment_image_src( $fields['backgroundimage'], 'full' )[0],
+				];
 
 			$data = [
 				'fields'  => $fields,

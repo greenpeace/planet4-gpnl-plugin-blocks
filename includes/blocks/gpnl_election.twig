@@ -3,25 +3,36 @@
 		<section class="block block-election">
 			<div class="inner_block" style="background-image: url({{ fields.backgroundimage.src }})">
 				<div class="page-template">
+
+					{% if fields.istitleimage == 'title' %}
 					<h1>{{ fields.title }}</h1>
+						{% else %}
+							<div class="col-12 col-md-8 col-lg-6">
+								<img src="{{ fields.titleimage.src }}">
+							</div>
+							{% endif %}
+
+					<h2 class="subtitle">{{ fields.subtitle }}</h2>
 
 					{# Showing a line of text explaining how many days are left to vote #}
-					{% set difference = date(endDate).diff(date(fields.until)) %}
-					{% set leftDays = difference.days %}
-					<span>
-						{% if leftDays <= 0 %}
-							Stemmen is niet meer mogelijk.
-						{% elseif leftDays == 0 %}
-							 Je kunt alleen vandaag nog stemmen!
-						{% elseif leftDays == 1 %}
-							Je kunt nog maar 1 dag stemmen!
-						{% elseif leftDays <= 7 %}
-							Stemmen kan nog maar {{ leftDays }} dagen!
-							{% else %}
-							Stemmen kan tot {{ fields.until | date ("d F Y")}}.
-						{% endif %}</span>
+					{% set today = date('now') | date ("Y-m-d") %}
+					{% set difference = date(today).diff(date(fields.until)).days %}
 
-					<h3 id="counter_total" data-num=""> </h3>
+					<h5>
+						<span id="counter_total" data-num=""> </span>
+						{% if fields.until < today %}
+							Stemmen is niet meer mogelijk.
+						{% else %}
+							{% if difference == 0 %}
+								Je kunt alleen vandaag nog stemmen!
+							{% elseif difference <= 7 %}
+								Stemmen kan nog maar {{ difference }} dagen!
+							{% else %}
+								Stemmen kan tot en met {{ fields.until | date ("j F Y") }}.
+							{% endif %}
+						{% endif %}
+					</h5>
+
 
 					<div class="row limit-visibility election-options">
 						{% set i = 1 %}
@@ -45,8 +56,13 @@
 												<span class="counter__gettext"></span>
 											</div>
 										</div>
+
 										<a class="btn btn-action btn-block cover-card-btn"
-										   data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Stem</a>
+										   data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Info
+											{% if not (fields.until < today) %}
+											& Stem
+											{% endif %}
+										</a>
 									</div>
 
 									</div>
@@ -61,10 +77,6 @@
 			</div>
 		</section>
 
-{#			  <div>#}
-{#				  <pre>{{ dump(fields) }}</pre>#}
-{#				  <pre>{{ dump(options) }}</pre>#}
-{#			  </div>#}
 
 	  {# Voting modal #}
 	  <div class="modal fade" id="electionModal" tabindex="-1" role="dialog" aria-labelledby="electionModalLabel" aria-hidden="true" data-num="{{ i - 1 }}">
@@ -72,16 +84,19 @@
 			  <div class="modal-content">
 				  <div class="modal-header">
 					  <h2 class="modal-title" id="electionModalLabel"></h2>
-					  <h2> - </h2>
-					  <i> <h2 class="modal-subtitle"></h2></i>
+					  <h3 class="modal-subtitle"></h3>
 					  <button type="button" class="close" data-dismiss="modal" aria-label="Sluit">
 						  <span aria-hidden="true">&times;</span>
 					  </button>
 				  </div>
 				  <div class="modal-body"></div>
-				  <div class="modal-form gpnl-petition">
+
+		<div class="modal-form gpnl-petition">
+
 					  <div class="front">
-						  <form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
+	{% if not (fields.until < today) %}
+
+		<form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
 							  <div class="form-group">
 								  <label hidden for="name">Naam</label>
 								  <input name="name" required type="text" class="form-control" placeholder="Voornaam">
@@ -104,7 +119,9 @@
 							  <input type="text" name="literaturecode" value="{{ fields.literaturecode }}" hidden readonly>
 							  <input type="text" name="form_id" value="" hidden readonly>
 						  </form>
-					  </div>
+
+		{% endif %}
+		</div>
 					  <div class="gpnl-petition-thank back">
 						  <div class="card">
 							  <div class="card-body">
@@ -131,7 +148,11 @@
 				  </div>
 				  <div class="modal-footer">
 					  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
-					  <button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
+	{% if not (fields.until < today) %}
+
+		<button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
+	{% endif %}
+
 				  </div>
 			  </div>
 		  </div>

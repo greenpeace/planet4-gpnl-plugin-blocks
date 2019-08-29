@@ -7,8 +7,13 @@
   }
 
   h1 {
-    padding: 15px !important;
+    padding: 0 15px 5px !important;
     margin: 0;
+  }
+
+  .subtitle {
+    font-size: 1.4em;
+    font-weight: 400;
   }
 
   h3 {
@@ -20,6 +25,10 @@
     position: relative;
     min-height: unset;
     max-height: unset;
+  }
+
+  .educationcovers__card__p {
+    padding-bottom: 28px;
   }
 
   .site-footer {
@@ -100,6 +109,10 @@
       background-color: $slate-grey;
       border-color: $slate-grey;
     }
+  }
+
+  .modal-header {
+    display: block;
   }
 
   .modal-dialog {
