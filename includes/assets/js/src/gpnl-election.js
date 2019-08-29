@@ -361,7 +361,7 @@ function prefillByGuid(type, form) {
           if (Number(response) >= config.counter_min) {
             if (form.type === 'total'){
               $('#counter_total').data('num', response);
-              $('#counter_total').text(response + ' stemmen');
+              $('#counter_total').text(response + ' mensen hebben al gestemd.');
             }
             console.log(response);
           }

@@ -17,7 +17,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 		const BLOCK_NAME = 'gpnl_election';
 
 		/**
-		Shortcode UI setup for the election shortcode.
+		 * Shortcode UI setup for the election shortcode.
 		 * It is called when the Shortcake action hook `register_shortcode_ui` is called.
 		 */
 		public function prepare_fields() {
