@@ -16,7 +16,7 @@
   overflow: hidden;
   width: 100vw;
   background-size: cover;
-  margin: 54px 0 0 $sm;
+  margin: 0;
   border-bottom: 3px solid $light-green;
 
   &.hero__small {
@@ -43,8 +43,6 @@
       }
 
       .hero__title {
-        margin: 15px 0 10px 0;
-
         span {
           padding: 15px;
           background-color: $white;
@@ -71,11 +69,5 @@
         box-shadow: none;
       }
     }
-  }
-}
-
-@include medium-and-up {
-  .hero {
-    margin-top: 60px;
   }
 }

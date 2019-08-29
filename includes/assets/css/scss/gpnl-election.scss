@@ -7,8 +7,13 @@
   }
 
   h1 {
-    padding: 15px !important;
+    padding: 0 15px 5px !important;
     margin: 0;
+  }
+
+  .subtitle {
+    font-size: 1.4em;
+    font-weight: 400;
   }
 
   h3 {
@@ -22,24 +27,29 @@
     max-height: unset;
   }
 
+  .educationcovers__card__p {
+    padding-bottom: 28px;
+    width: 100%;
+    color: $white !important;
+  }
+
   .site-footer {
     z-index: 1;
   }
 
-  .full-width-container {
-    margin: 0 calc(calc(50% - 50vw) + 24px) 32px;
+  .election-options {
     padding: 0 !important;
+    margin: 0;
     @media screen and (min-width: $large-width) {
-      margin: 0 calc(50% - 50vw) 32px;
+      margin: 0 calc(calc(50% - 50vw) + 24px) 32px;
+      //margin: 0 calc(50% - 50vw) 32px;
       padding: 0 15px;
     }
   }
 
   .slick-next::before, .slick-prev::before {
-    //color: $blood-orange;
     font-size: 30px;
     opacity: 1;
-    //background-color: white;
   }
 
   .slick-dots li.slick-active button::before {
@@ -55,16 +65,11 @@
   }
 
   .slick-prev {
-    left: 0;
+    left: 10px;
   }
 
   .slick-next {
-    right: 0;
-  }
-
-  .educationcovers__card__p {
-    width: 100%;
-    color: $white !important;
+    right: 10px;
   }
 
   .cover-card-column {
@@ -103,12 +108,22 @@
     }
   }
 
-  .modal-dialog {
-    max-width: 800px;
+  .modal-header {
+    display: block;
+
+    .modal-subtitle {
+      margin-bottom: 0;
+    }
+
+    .close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
   }
 
-  .modal-subtitle {
-    margin-bottom: 0;
+  .modal-dialog {
+    max-width: 800px;
   }
 
   .modal-form {
