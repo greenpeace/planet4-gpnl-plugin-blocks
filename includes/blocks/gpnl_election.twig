@@ -141,8 +141,25 @@
 					  </div>
 				  </div>
 				  <div class="modal-footer">
+						{% if not (fields.until < today) %}
+						  <div class="small policies">
+							  <div class="row">
+								  <div class="col-8">
+									  Greenpeace beschermt je gegevens en geeft ze niet aan derden voor commerci&euml;le
+									  doeleinden. Lees ook ons
+									  <a href="https://www.greenpeace.org/nl/privacystatement/" target="_blank">privacy-beleid</a> en
+									  de <a href="{{ fields.campaignpolicy }}" target="_blank" >algemene voorwaarden</a> van deze actie.
+								  </div>
+								  <div class="col-4">
+									  <a href="https://privacywaarborg.nl/bedrijven/stichting-greenpeace-nederland/" target="_blank" class="privacywaarborg">
+										  <img class="img-fluid" src="https://secured.greenpeace.nl/Global/nederland/image/template/privacy/PW-logo.png">
+									  </a>
+								  </div>
+							  </div>
+						  </div>
+						{% endif %}
 					  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
-					{% if not (fields.until < today) %}
+					  {% if not (fields.until < today) %}
 						<button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
 					{% endif %}
 				  </div>
