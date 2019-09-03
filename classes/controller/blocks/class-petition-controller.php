@@ -366,6 +366,12 @@ function petition_form_process() {
 	$naam  = wp_strip_all_tags( $_POST['name'] );
 	$email = wp_strip_all_tags( $_POST['mail'] );
 
+	$known = checkKnown( 'mail', $email );
+	$mail  = $known['response'];
+	if ( intval( $known['code'] ) >= 400 ) {
+		$mail = $known['code'];
+	}
+
 	// Accept only numeric characters in the phonenumber
 	$phonenumber = preg_replace( '/[^0-9]/', '', wp_strip_all_tags( $_POST['phone'] ) );
 	// Remove countrycode from phonenumber
@@ -377,6 +383,12 @@ function petition_form_process() {
 	}
 	// Accept only phonenumbers of 10 characters long
 	$phonenumber = ( \strlen( $phonenumber ) === 10 ? $phonenumber : '' );
+
+	$known = checkKnown( 'telnr', $phonenumber );
+	$tel   = $known['response'];
+	if ( intval( $known['code'] ) >= 400 ) {
+		$tel = $known['code'];
+	}
 
 	// Flip the consent checkbox
 	$consent = htmlspecialchars( wp_strip_all_tags( $_POST['consent'] ) );
@@ -415,18 +427,6 @@ function petition_form_process() {
 		);
 	}
 
-	$known = checkEmail( $email );
-	$mail  = $known['response'];
-	if ( intval( $known['code'] ) >= 400 ) {
-		$mail = $known['code'];
-	}
-
-	$known = checkPhone( $phonenumber );
-	$tel   = $known['response'];
-	if ( intval( $known['code'] ) >= 400 ) {
-		$tel = $known['code'];
-	}
-
 	wp_send_json_success(
 		[
 			'statuscode'     => $httpcode,
@@ -444,31 +444,20 @@ add_action( 'wp_ajax_petition_form_process', 'P4NLBKS\Controllers\Blocks\petitio
 // use this version for if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_petition_form_process', 'P4NLBKS\Controllers\Blocks\petition_form_process' );
 
-function checkEmail( $email ) {
-	$url             = 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' . rawurlencode( $email );
-	$args['headers'] = [
-		'Origin' => 'https://www.greenpeace.org',
-	];
+function checkKnown( $request, $data ) {
+	$options  = get_option( 'planet4nl_options' );
+	$base_url = '';
 
-	$response = wp_remote_get( $url, $args );
-	if ( is_array( $response ) ) {
-		$http_code = wp_remote_retrieve_response_code( $response );
-		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
-		$success   = substr( $body, 0, strlen( $body ) - 2 );
-		$success   = 'true' === $success ? true : false;
-		return [
-			'code'     => $http_code,
-			'response' => $success,
-		];
+	switch ( $request ) {
+		case 'mail':
+			$base_url = $options['knownemail_url'];
+			break;
+		case 'telnr':
+			$base_url = $options['knownphone_url'];
+			break;
 	}
-	return [
-		'code'     => 500,
-		'response' => null,
-	];
-}
 
-function checkPhone( $phonenumber ) {
-	$url             = 'https://secure.greenpeacephp.nl/kenikdezetel.php?telnr=' . rawurlencode( $phonenumber );
+	$url             = $base_url . '?' . $request . '=' . rawurlencode( $data );
 	$args['headers'] = [
 		'Origin' => 'https://www.greenpeace.org',
 	];
