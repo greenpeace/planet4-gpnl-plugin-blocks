@@ -18,7 +18,6 @@
 					{% set today = date('now') | date ("Y-m-d") %}
 					{% set difference = date(today).diff(date(fields.until)).days %}
 
-{#					{{ fields.until }}#}
 					<h5>
 						<span id="counter_total" data-num=""> </span>
 						{% if fields.until < today %}
@@ -36,41 +35,36 @@
 						{% endif %}
 					</h5>
 
-
 					<div class="row limit-visibility election-options">
 						{% set i = 1 %}
 						{% for option in options %}
 							{% if (option.title) %}
 								<div class="col-xl cover-card-column">
 									<div class="fixed-ratio-wrapper">
+										<div class="cover-card card-one" style="background-image: url({{ option.attachment.src }});background-position: center center;">
+											<div class="cover-card-content">
+												<a data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">
+													<h2 class="cover-card-heading">{{ option.title|e('wp_kses_post')|raw }}</h2>
+												</a>
+											</div>
+											{% if option.subtitle %}
+												<p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
+											{% endif %}
+											<div class="counter subcounter" style="display: none" data-id="{{ i }}">
+												<div class="counter__slider"></div>
+												<div class="counter__text">
+													<span class="counter__gettext"></span>
+												</div>
+											</div>
 
-									<div class="cover-card card-one" style="background-image: url({{ option.attachment.src }});background-position: center center;">
-										<div class="cover-card-content">
-											<a data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">
-												<h2 class="cover-card-heading">{{ option.title|e('wp_kses_post')|raw }}</h2>
+											<a class="btn btn-action btn-block cover-card-btn"
+											   data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Info
+												{% if not (fields.until < today) %}
+												& Stem
+												{% endif %}
 											</a>
 										</div>
-										{% if option.subtitle %}
-											<p class="educationcovers__card__p">{{ option.subtitle|e('wp_kses_post')|raw }}</p>
-										{% endif %}
-										<div class="counter subcounter" style="display: none" data-id="{{ i }}">
-											<div class="counter__slider"></div>
-											<div class="counter__text">
-												<span class="counter__gettext"></span>
-											</div>
-										</div>
-
-										<a class="btn btn-action btn-block cover-card-btn"
-										   data-toggle="modal" data-target="#electionModal" data-id="{{ i }}">Info
-											{% if not (fields.until < today) %}
-											& Stem
-											{% endif %}
-										</a>
 									</div>
-
-									</div>
-
-
 								</div>
 								{% set i = i + 1 %}
 							{% endif %}
@@ -94,37 +88,34 @@
 				  </div>
 				  <div class="modal-body"></div>
 
-		<div class="modal-form gpnl-petition">
-
+				  <div class="modal-form gpnl-petition">
 					  <div class="front">
-	{% if not (fields.until < today) %}
+						{% if not (fields.until < today) %}
+							<form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
+							    <div class="form-group">
+							  	  <label hidden for="name">Naam</label>
+							  	  <input name="name" required type="text" class="form-control" placeholder="Voornaam">
+							    </div>
+							    <div class="form-group">
+							  	  <label hidden for="mail">Email</label>
+							  	  <input name="mail"  required type="email" class="form-control" placeholder="E-mail">
+							    </div>
 
-		<form class="gpnl-petitionform" id="election-form" onsubmit="return false;">
-							  <div class="form-group">
-								  <label hidden for="name">Naam</label>
-								  <input name="name" required type="text" class="form-control" placeholder="Voornaam">
-							  </div>
-							  <div class="form-group">
-								  <label hidden for="mail">Email</label>
-								  <input name="mail"  required type="email" class="form-control" placeholder="E-mail">
-							  </div>
-
-							  <div class="form-group">
-								  <label hidden for="phone">Telefoonnummer</label>
-								  <input name="phone" type="text" class="form-control" placeholder="Telefoonnummer">
-							  </div>
-							  <div class="form-group optin">
-								  <input class="form-check-input gpnl-petition-checkbox" name="consent" type="checkbox" />
-								  <label class="gpnl-petition-checkbox-label" for="consent"><small class="form-check-label">{{ fields.consent }}</small></label>
-							  </div>
-							  <label for="phone"><small >Vul je je telefoonnummer in? Dan kan Greenpeace jou telefonisch benaderen voor giftverzoeken of updates rondom lopende campagnes.</small></label>
-							  <input type="text" name="marketingcode" value="" hidden readonly>
-							  <input type="text" name="literaturecode" value="{{ fields.literaturecode }}" hidden readonly>
-							  <input type="text" name="form_id" value="" hidden readonly>
-						  </form>
-
-		{% endif %}
-		</div>
+							    <div class="form-group">
+							  	  <label hidden for="phone">Telefoonnummer</label>
+							  	  <input name="phone" type="text" class="form-control" placeholder="Telefoonnummer">
+							    </div>
+							    <div class="form-group optin">
+							  	  <input class="form-check-input gpnl-petition-checkbox" name="consent" type="checkbox" />
+							  	  <label class="gpnl-petition-checkbox-label" for="consent"><small class="form-check-label">{{ fields.consent }}</small></label>
+							    </div>
+							    <label for="phone"><small >Vul je je telefoonnummer in? Dan kan Greenpeace jou telefonisch benaderen voor giftverzoeken of updates rondom lopende campagnes.</small></label>
+							    <input type="text" name="marketingcode" value="" hidden readonly>
+							    <input type="text" name="literaturecode" value="{{ fields.literaturecode }}" hidden readonly>
+							    <input type="text" name="form_id" value="" hidden readonly>
+							</form>
+						  {% endif %}
+					  </div>
 					  <div class="gpnl-petition-thank back">
 						  <div class="card">
 							  <div class="card-body">
@@ -136,11 +127,11 @@
 									  {% if not fields.hidesharingbuttons %}
 									  <div class="gpnl-petitionshare">
 										  <a class="btn btn-primary btn-block gpnl-share-facebook"
-											 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
+											 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook');">
 											  FACEBOOK
 										  </a>
 										  <a class="btn btn-primary btn-block gpnl-share-twitter"
-											 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
+											 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter');">
 											  TWITTER
 										  </a>
 									  </div>
@@ -150,12 +141,27 @@
 					  </div>
 				  </div>
 				  <div class="modal-footer">
+						{% if not (fields.until < today) %}
+						  <div class="small policies">
+							  <div class="row">
+								  <div class="col-8">
+									  Greenpeace beschermt je gegevens en geeft ze niet aan derden voor commerci&euml;le
+									  doeleinden. Lees ook ons
+									  <a href="https://www.greenpeace.org/nl/privacystatement/" target="_blank">privacy-beleid</a> en
+									  de <a href="{{ fields.campaignpolicy }}" target="_blank" >algemene voorwaarden</a> van deze actie.
+								  </div>
+								  <div class="col-4">
+									  <a href="https://privacywaarborg.nl/bedrijven/stichting-greenpeace-nederland/" target="_blank" class="privacywaarborg">
+										  <img class="img-fluid" src="https://secured.greenpeace.nl/Global/nederland/image/template/privacy/PW-logo.png">
+									  </a>
+								  </div>
+							  </div>
+						  </div>
+						{% endif %}
 					  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
-	{% if not (fields.until < today) %}
-
-		<button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
-	{% endif %}
-
+					  {% if not (fields.until < today) %}
+						<button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
+					{% endif %}
 				  </div>
 			  </div>
 		  </div>

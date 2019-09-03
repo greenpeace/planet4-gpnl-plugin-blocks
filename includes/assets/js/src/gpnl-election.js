@@ -86,7 +86,7 @@ $(document).ready(function() {
       }
     });
 
-    if (!(istwitter || isfacebook) && url_cg != undefined) {
+    if (!(istwitter || isfacebook) && this.url_cg != undefined) {
       prefillByGuid('prefill', this);
     }
   }
@@ -258,13 +258,13 @@ function flip_positionattribute (el){
 }
 
 /* eslint-disable */
-function fireShareEvent (platform, form_id){
+function fireShareEvent (platform){
   if (typeof dataLayer !== 'undefined') {
-    let form_config = 'petition_form_object_' + form_id;
+    let global_config = window['election_object'];
     dataLayer.push({
       'event'         :'petitiebutton',
-      'conv_campaign' :window[form_config].analytics_campaign,
-      'conv_action'   :window[form_config].ga_action,
+      'conv_campaign' :global_config.analytics_campaign,
+      'conv_action'   :'verkiezing',
       'conv_label'    :'share_' + platform});
   }
   else{
@@ -363,7 +363,6 @@ function prefillByGuid(type, form) {
               $('#counter_total').data('num', response);
               $('#counter_total').text(response + ' mensen hebben al gestemd.');
             }
-            console.log(response);
           }
         }
       }
