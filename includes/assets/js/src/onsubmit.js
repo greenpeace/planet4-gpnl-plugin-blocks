@@ -20,9 +20,28 @@ $('.gpnl-petitionform').on('submit', function () {
     success: function(data) {
       // eslint-disable-next-line no-console
       console.log('^-^');
+      const {phone, consent} = post_form_value;
+      let optin = ('on' === consent);
+      let phoneFilled = ('' !== phone);
+      let phonetmp = data['data']['phoneresult'];
+      let phoneResult = (false === phonetmp || true === phonetmp) ? phonetmp : null;
+
+      let mailtmp = data['data']['mailresult'];
+      let mailResult = (false === mailtmp || true === mailtmp) ? mailtmp : null;
 
       // Send conversion event to the GTM
       if (typeof dataLayer !== 'undefined') {
+        // New conversion object
+        dataLayer.push(
+          {
+            'event':      'RegisterComplete',
+            'emailKnown': mailResult,
+            'telKnown':   phoneResult,
+            'telFilled':  phoneFilled,
+            'optin':      optin,
+          });
+
+        // Temp old stuff to compare
         dataLayer.push({
           'event'         :'petitiebutton',
           'conv_campaign' : window[form_config].analytics_campaign,
@@ -30,37 +49,15 @@ $('.gpnl-petitionform').on('submit', function () {
           'conv_label'    :'registreer'
         });
 
-        let phonetmp = parseInt(data['data']['phoneresult']);
-        let phoneresult = (0 === phonetmp || phonetmp === 1) ? phonetmp : null;
-        dataLayer.push({
-          'event'         :'petitiebutton',
-          'conv_campaign' : window[form_config].analytics_campaign,
-          'conv_action'   : window[form_config].ga_action,
-          'conv_label'    :'phoneknown',
-          'conv_value'    : phoneresult,
-        });
-
-        let mailtmp = parseInt(data['data']['mailresult']);
-        let mailresult = (0 === mailtmp || mailtmp === 1) ? mailtmp : null;
-        dataLayer.push({
-          'event'         :'petitiebutton',
-          'conv_campaign' : window[form_config].analytics_campaign,
-          'conv_action'   : window[form_config].ga_action,
-          'conv_label'    :'mailknown',
-          'conv_value'    : mailresult,
-        });
-
         // if consent was given by entering phonenumber
-        if (post_form_value.phone !== '') {
+        if (phoneFilled) {
           // Send conversion event to the GTM
+          // Temp old stuff to compare
           dataLayer.push({
             'event'         :'petitiebutton',
             'conv_campaign' : window[form_config].analytics_campaign,
             'conv_action'   :'telnr',
             'conv_label'    :'Ja',
-            // 'conv_action'   : window[form_config].ga_action,
-            // 'conv_label'    :'telnr',
-            // 'conv_value'    : 1,
           });
           // If an ad campaign is run by an external company fire the conversiontracking
           if (window[form_config].ad_campaign === 'SB') {
@@ -72,17 +69,14 @@ $('.gpnl-petitionform').on('submit', function () {
           }
         }
         else{
+          // Temp old stuff to compare
           dataLayer.push({
             'event'         :'petitiebutton',
             'conv_campaign' : window[form_config].analytics_campaign,
             'conv_action'   :'telnr',
             'conv_label'    :'Nee',
-            // 'conv_action'   : window[form_config].ga_action,
-            // 'conv_label'    : 'telnr',
-            // 'conv_value'    : 0,
           });
         }
-
       }
 
 
