@@ -86,7 +86,7 @@ $(document).ready(function() {
       }
     });
 
-    if (!(istwitter || isfacebook) && url_cg != undefined) {
+    if (!(istwitter || isfacebook) && this.url_cg != undefined) {
       prefillByGuid('prefill', this);
     }
   }
@@ -363,7 +363,6 @@ function prefillByGuid(type, form) {
               $('#counter_total').data('num', response);
               $('#counter_total').text(response + ' mensen hebben al gestemd.');
             }
-            console.log(response);
           }
         }
       }
