@@ -261,7 +261,7 @@ if ( ! class_exists( 'Donation_Controller' ) ) {
 			);
 
             wp_enqueue_style( 'vueform_style', P4NLBKS_ASSETS_DIR . 'css/vue-form-wizard.min.css', [], '2.7.3' );
-            wp_enqueue_style( 'gpnl_donationform_style', P4NLBKS_ASSETS_DIR . 'css/donationform.css', 'vueform_style', '2.10.3' );
+            wp_enqueue_style( 'gpnl_donationform_style', P4NLBKS_ASSETS_DIR . 'css/donationform.css', 'vueform_style', '2.11.3' );
 
             // Shortcode callbacks must return content, hence, output buffering here.
 			ob_start();
