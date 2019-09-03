@@ -393,7 +393,7 @@ function petition_form_process() {
 		'stop'   => $consent,
 	];
 
-	$querystring = http_build_query($data_array);
+	$querystring = http_build_query( $data_array );
 
 	// initiate a cUrl request to the database
 	$request = curl_init( $baseurl . $querystring );
@@ -416,15 +416,15 @@ function petition_form_process() {
 	}
 
 	$known = checkEmail( $email );
-	$mail  = $known[1];
-	if ( intval( $known[0] ) >= 400 ) {
-		$mail = $known[0];
+	$mail  = $known['response'];
+	if ( intval( $known['code'] ) >= 400 ) {
+		$mail = $known['code'];
 	}
 
 	$known = checkPhone( $phonenumber );
-	$tel   = $known[1];
-	if ( intval( $known[0] ) >= 400 ) {
-		$tel = $known[0];
+	$tel   = $known['response'];
+	if ( intval( $known['code'] ) >= 400 ) {
+		$tel = $known['code'];
 	}
 
 	wp_send_json_success(
@@ -455,10 +455,16 @@ function checkEmail( $email ) {
 		$http_code = wp_remote_retrieve_response_code( $response );
 		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
 		$success   = substr( $body, 0, strlen( $body ) - 2 );
-		$success   = $success === 'true' ? 1 : 0;
-		return [ $http_code, $success ];
+		$success   = 'true' === $success ? true : false;
+		return [
+			'code'     => $http_code,
+			'response' => $success,
+		];
 	}
-	return [ 500, 0 ];
+	return [
+		'code'     => 500,
+		'response' => null,
+	];
 }
 
 function checkPhone( $phonenumber ) {
@@ -472,8 +478,14 @@ function checkPhone( $phonenumber ) {
 		$http_code = wp_remote_retrieve_response_code( $response );
 		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
 		$success   = substr( $body, 0, strlen( $body ) - 2 );
-		$success   = $success === 'true' ? 1 : 0;
-		return [ $http_code, $success ];
+		$success   = 'true' === $success ? true : false;
+		return [
+			'code'     => $http_code,
+			'response' => $success,
+		];
 	}
-	return [ 500, 0 ];
+	return [
+		'code'     => 500,
+		'response' => null,
+	];
 }
