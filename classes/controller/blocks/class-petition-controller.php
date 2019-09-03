@@ -456,8 +456,9 @@ function checkEmail( $email ) {
 		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
 		$success   = substr( $body, 0, strlen( $body ) - 2 );
 		$success   = $success === 'true' ? 1 : 0;
+		return [ $http_code, $success ];
 	}
-	return [ $http_code, $success ];
+	return [ 500, 0 ];
 }
 
 function checkPhone( $phonenumber ) {
@@ -472,6 +473,7 @@ function checkPhone( $phonenumber ) {
 		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
 		$success   = substr( $body, 0, strlen( $body ) - 2 );
 		$success   = $success === 'true' ? 1 : 0;
+		return [ $http_code, $success ];
 	}
-	return [ $http_code, $success ];
+	return [ 500, 0 ];
 }
