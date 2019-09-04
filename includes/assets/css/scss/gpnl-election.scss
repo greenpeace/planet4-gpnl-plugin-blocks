@@ -2,12 +2,11 @@
 
 .block-election {
   .inner_block {
-    padding: 32px 0;
+    padding: 8px 0;
     margin: 0 calc(50% - 50vw) 32px;
   }
 
   h1 {
-    padding: 0 15px 5px !important;
     margin: 0;
   }
 
@@ -25,6 +24,9 @@
     position: relative;
     min-height: unset;
     max-height: unset;
+    @media screen and (max-width: $medium-width) {
+      margin-top: 16px;
+    }
   }
 
   .educationcovers__card__p {
