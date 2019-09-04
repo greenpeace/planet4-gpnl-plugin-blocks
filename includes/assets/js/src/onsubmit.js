@@ -35,6 +35,8 @@ $('.gpnl-petitionform').on('submit', function () {
         dataLayer.push(
           {
             'event':      'RegisterComplete',
+            'campaign':   window[form_config].analytics_campaign,
+            'action':     window[form_config].ga_action,
             'emailKnown': mailResult,
             'telKnown':   phoneResult,
             'telFilled':  phoneFilled,
