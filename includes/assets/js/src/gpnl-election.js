@@ -165,45 +165,37 @@ $('.gpnl-petitionform').on('submit', function () {
             'telFilled': phoneFilled,
             'optin': optin,
           });
-      }
 
-      // Send conversion event to the GTM
-      if (typeof dataLayer !== 'undefined') {
         dataLayer.push({
-          'event'         :'petitiebutton',
-          'conv_campaign' : global_config.analytics_campaign,
-          'conv_action'   : 'verkiezing',
-          'conv_label'    :'registreer'
+          'event': 'petitiebutton',
+          'conv_campaign': global_config.analytics_campaign,
+          'conv_action': 'verkiezing',
+          'conv_label': 'registreer'
         });
-      }
 
-      // if consent was given by entering phonenumber
-      if (post_form_value.phone !== '') {
-        // Send conversion event to the GTM
-        if (typeof dataLayer !== 'undefined') {
+        // if consent was given by entering phonenumber
+        if (post_form_value.phone !== '') {
+          // Send conversion event to the GTM
           dataLayer.push({
-            'event'         :'petitiebutton',
-            'conv_campaign' : global_config.analytics_campaign,
-            'conv_action'   :'telnr',
-            'conv_label'    :'Ja'
+            'event': 'petitiebutton',
+            'conv_campaign': global_config.analytics_campaign,
+            'conv_action': 'telnr',
+            'conv_label': 'Ja'
           });
-        }
-        // If an ad campaign is run by an external company fire the conversiontracking
-        // if (global_config.ad_campaign === 'SB') {
-        //   fbq('track', 'Lead');
-        //   // if it is run by social blue, also deduplicate
-        //   socialBlueDeDuplicate(post_form_value['mail'], data['data']['phone'], global_config.apref);
-        // } else if (global_config.ad_campaign === 'JA') {
-        //   fbq('track', global_config.jalt_track);
-        // }
-      }
-      else{
-        if (typeof dataLayer !== 'undefined') {
+          // If an ad campaign is run by an external company fire the conversiontracking
+          // if (global_config.ad_campaign === 'SB') {
+          //   fbq('track', 'Lead');
+          //   // if it is run by social blue, also deduplicate
+          //   socialBlueDeDuplicate(post_form_value['mail'], data['data']['phone'], global_config.apref);
+          // } else if (global_config.ad_campaign === 'JA') {
+          //   fbq('track', global_config.jalt_track);
+          // }
+        } else {
           dataLayer.push({
-            'event'         :'petitiebutton',
-            'conv_campaign' : global_config.analytics_campaign,
-            'conv_action'   :'telnr',
-            'conv_label'    :'Nee'
+            'event': 'petitiebutton',
+            'conv_campaign': global_config.analytics_campaign,
+            'conv_action': 'telnr',
+            'conv_label': 'Nee'
           });
         }
       }
