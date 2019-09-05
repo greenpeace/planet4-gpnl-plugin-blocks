@@ -174,7 +174,7 @@ $('.gpnl-petitionform').on('submit', function () {
         });
 
         // if consent was given by entering phonenumber
-        if (post_form_value.phone !== '') {
+        if (phoneFilled) {
           // Send conversion event to the GTM
           dataLayer.push({
             'event': 'petitiebutton',
