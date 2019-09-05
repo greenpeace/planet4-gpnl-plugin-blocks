@@ -143,6 +143,30 @@ $('.gpnl-petitionform').on('submit', function () {
       // eslint-disable-next-line no-console
       console.log('^-^');
 
+      const {phone, consent} = post_form_value;
+      let optin = ('on' === consent);
+      let phoneFilled = ('' !== phone);
+      let phonetmp = data['data']['phoneresult'];
+      let phoneResult = (false === phonetmp || true === phonetmp) ? phonetmp : null;
+
+      let mailtmp = data['data']['mailresult'];
+      let mailResult = (false === mailtmp || true === mailtmp) ? mailtmp : null;
+
+      // Send conversion event to the GTM
+      if (typeof dataLayer !== 'undefined') {
+        // New conversion object
+        dataLayer.push(
+          {
+            'event': 'RegisterComplete',
+            'campaign': global_config.analytics_campaign,
+            'action': 'verkiezing',
+            'emailKnown': mailResult,
+            'telKnown': phoneResult,
+            'telFilled': phoneFilled,
+            'optin': optin,
+          });
+      }
+
       // Send conversion event to the GTM
       if (typeof dataLayer !== 'undefined') {
         dataLayer.push({
