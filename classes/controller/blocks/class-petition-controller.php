@@ -127,8 +127,8 @@ if ( ! class_exists( 'Petition_Controller' ) ) {
 					'value' => 'handtekeningen',
 				),
 				array(
-					'label' =>'<hr class="hr-dashed"><br><div class="message error">' .
-						__('LET OP! De instellingen hieronder alleen gebruiken als je weet wat ze doen en waar ze voor zijn ') . '</div>' .
+					'label' => '<hr class="hr-dashed"><br><div class="message error">' .
+						__( 'LET OP! De instellingen hieronder alleen gebruiken als je weet wat ze doen en waar ze voor zijn ' ) . '</div>' .
 						'<p>' . __( 'Google Analytics action', 'planet4-gpnl-blocks' ) . '</p>',
 					'attr'  => 'ga_action',
 					'type'  => 'text',
@@ -194,19 +194,19 @@ if ( ! class_exists( 'Petition_Controller' ) ) {
 		 * @return string The URL.
 		 */
 		private function current_url( $server ): string {
-			//Figure out whether we are using http or https.
+			// Figure out whether we are using http or https.
 			$http = 'http';
-			//If HTTPS is present in our $_SERVER array, the URL should
-			//start with https:// instead of http://
+			// If HTTPS is present in our $_SERVER array, the URL should
+			// start with https:// instead of http://
 			if ( isset( $server['HTTPS'] ) ) {
 				$http = 'https';
 			}
-			//Get the HTTP_HOST.
+			// Get the HTTP_HOST.
 			$host = $server['HTTP_HOST'];
-			//Get the REQUEST_URI. i.e. The Uniform Resource Identifier.
+			// Get the REQUEST_URI. i.e. The Uniform Resource Identifier.
 			$request_uri = strtok( $_SERVER['REQUEST_URI'], '?' );
-			//Finally, construct the full URL.
-			//Use the function htmlentities to prevent XSS attacks.
+			// Finally, construct the full URL.
+			// Use the function htmlentities to prevent XSS attacks.
 			return $http . '://' . htmlentities( $host ) . htmlentities( $request_uri );
 		}
 
@@ -313,12 +313,12 @@ if ( ! class_exists( 'Petition_Controller' ) ) {
 				wp_enqueue_script( 'jalt-landing-script', P4NLBKS_ASSETS_DIR . 'js/jalt-landing.js', [], '2.3.6', true );
 			}
 
-			//  Include the script and styling for the counter
+			// Include the script and styling for the counter
 			wp_enqueue_script( 'petitioncounterjs', P4NLBKS_ASSETS_DIR . 'js/onload.js', [ 'jquery', 'jquery-effects-core' ], '2.6.9', true );
 			wp_enqueue_style( 'petitioncountercss', P4NLBKS_ASSETS_DIR . 'css/gpnl-petition.css', [], '2.11.4' );
 
-
-			/* ========================
+			/*
+			 ========================
 				C S S / JS
 			   ======================== */
 				// Enqueue the script:
@@ -330,7 +330,7 @@ if ( ! class_exists( 'Petition_Controller' ) ) {
 					'petition_form_object_' . $fields['form_id'],
 					array(
 						'ajaxUrl'            => admin_url( 'admin-ajax.php' ),
-						//url for php file that process ajax request to WP
+						// url for php file that process ajax request to WP
 						'nonce'              => wp_create_nonce( 'GPNL_Petitions' ),
 						'analytics_campaign' => $fields['campaigncode'],
 						'countermin'         => $fields['countermin'],
@@ -350,7 +350,8 @@ if ( ! class_exists( 'Petition_Controller' ) ) {
 		}
 	}
 }
-	/* ========================
+	/*
+	 ========================
 		P E T I T I O N F O R M
    ======================== */
 function petition_form_process() {
@@ -365,6 +366,12 @@ function petition_form_process() {
 	$naam  = wp_strip_all_tags( $_POST['name'] );
 	$email = wp_strip_all_tags( $_POST['mail'] );
 
+	$known = checkKnown( 'mail', $email );
+	$mail  = $known['response'];
+	if ( intval( $known['code'] ) >= 400 ) {
+		$mail = $known['code'];
+	}
+
 	// Accept only numeric characters in the phonenumber
 	$phonenumber = preg_replace( '/[^0-9]/', '', wp_strip_all_tags( $_POST['phone'] ) );
 	// Remove countrycode from phonenumber
@@ -377,12 +384,28 @@ function petition_form_process() {
 	// Accept only phonenumbers of 10 characters long
 	$phonenumber = ( \strlen( $phonenumber ) === 10 ? $phonenumber : '' );
 
+	$known = checkKnown( 'telnr', $phonenumber );
+	$tel   = $known['response'];
+	if ( intval( $known['code'] ) >= 400 ) {
+		$tel = $known['code'];
+	}
+
 	// Flip the consent checkbox
 	$consent = htmlspecialchars( wp_strip_all_tags( $_POST['consent'] ) );
 	$consent = ( 'on' === $consent ? 0 : 1 );
 
-	$baseurl     = 'https://www.mygreenpeace.nl/registreren/pixel.aspx';
-	$querystring = '?source=' . $marketingcode . '&per=' . $literatuurcode . '&fn=' . $naam . '&email=' . $email . '&tel=' . $phonenumber . '&stop=' . $consent;
+	$baseurl = 'https://www.mygreenpeace.nl/registreren/pixel.aspx?';
+
+	$data_array = [
+		'source' => $marketingcode,
+		'per'    => $literatuurcode,
+		'fn'     => $naam,
+		'email'  => $email,
+		'tel'    => $phonenumber,
+		'stop'   => $consent,
+	];
+
+	$querystring = http_build_query( $data_array );
 
 	// initiate a cUrl request to the database
 	$request = curl_init( $baseurl . $querystring );
@@ -391,11 +414,11 @@ function petition_form_process() {
 	curl_setopt( $request, CURLOPT_RETURNTRANSFER, 1 );
 
 	$result   = curl_exec( $request );
-	$httpcode = curl_getinfo( $request, CURLINFO_HTTP_CODE );
+	$httpcode = intval( curl_getinfo( $request, CURLINFO_HTTP_CODE ) );
 	curl_close( $request );
 
 	// Give the appropriate response to the frontend
-	if ( false === $result ) {
+	if ( $httpcode >= 400 || false === $result ) {
 		wp_send_json_error(
 			[
 				'statuscode' => $httpcode,
@@ -403,16 +426,55 @@ function petition_form_process() {
 			500
 		);
 	}
+
 	wp_send_json_success(
 		[
-			'statuscode' => $httpcode,
+			'statuscode'     => $httpcode,
+			'phonesanitized' => $phonenumber,
+			'mailresult'     => $mail,
+			'phoneresult'    => $tel,
 		],
 		200
 	);
 
 }
 
-# use this version for if you want the callback to work for users who are logged in
+// use this version for if you want the callback to work for users who are logged in
 add_action( 'wp_ajax_petition_form_process', 'P4NLBKS\Controllers\Blocks\petition_form_process' );
-# use this version for if you want the callback to work for users who are not logged in
+// use this version for if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_petition_form_process', 'P4NLBKS\Controllers\Blocks\petition_form_process' );
+
+function checkKnown( $request, $data ) {
+	$options  = get_option( 'planet4nl_options' );
+	$base_url = '';
+
+	switch ( $request ) {
+		case 'mail':
+			$base_url = $options['knownemail_url'];
+			break;
+		case 'telnr':
+			$base_url = $options['knownphone_url'];
+			break;
+	}
+
+	$url             = $base_url . '?' . $request . '=' . rawurlencode( $data );
+	$args['headers'] = [
+		'Origin' => 'https://www.greenpeace.org',
+	];
+
+	$response = wp_remote_get( $url, $args );
+	if ( is_array( $response ) ) {
+		$http_code = wp_remote_retrieve_response_code( $response );
+		$body      = substr( wp_remote_retrieve_body( $response ), 5 );
+		$success   = substr( $body, 0, strlen( $body ) - 2 );
+		$success   = 'true' === $success ? true : false;
+		return [
+			'code'     => $http_code,
+			'response' => $success,
+		];
+	}
+	return [
+		'code'     => 500,
+		'response' => null,
+	];
+}
