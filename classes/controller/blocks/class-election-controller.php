@@ -313,7 +313,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			wp_enqueue_script( 'gpnl_election_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-election.js', [
 				'jquery',
 				'slick'
-			], '2.11.3', true );
+			], '2.12.0', true );
 			// Enqueue the script:
 			$attributes = [
 				'title'              => '',
