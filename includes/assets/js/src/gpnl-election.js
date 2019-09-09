@@ -111,6 +111,7 @@ $(document).ready(function() {
       this.id = id;
       this.type = 'subtotal';
       this.tellerCode = counter_config.mcode;
+      this.config = counter_config;
       prefillByGuid('teller', this);
     });
   }
@@ -379,6 +380,9 @@ function prefillByGuid(type, form) {
             if (form.type === 'total'){
               $('#counter_total').data('num', response);
               $('#counter_total').text(response + ' mensen hebben al gestemd.');
+            }
+            else {
+              form.config.count = response;
             }
           }
         }
