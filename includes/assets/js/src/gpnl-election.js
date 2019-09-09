@@ -10,12 +10,14 @@ $('#electionModal').on('show.bs.modal', function (event) {
   modal.find('.modal-body').text( config.description );
   modal.find('input[name=\'form_id\']').val(id);
   modal.find('input[name=\'marketingcode\']').val(config.mcode);
+  modal.find('.counter').data('counter', id);
 });
 
 $(document).ready(function() {
   // convert an element to slider using slick js
   function slickify(element) {
     let numOptions = $('#electionModal').data('num');
+    let halfSize = Math.floor(numOptions / 2);
     $(element).slick({
       infinite: false,
       mobileFirst: true,
@@ -25,7 +27,7 @@ $(document).ready(function() {
       dots: true,
       centerMode: true,
       centerPadding: '50px',
-      initialSlide: 3,
+      initialSlide: halfSize,
       responsive: [
         {
           breakpoint: 992,
@@ -101,17 +103,16 @@ $(document).ready(function() {
 
   if (!Number(global_config.hideresults)) {
     // opvragen stemmen per opties (verborgen tot na stemmen)
-    let counters = $('.subcounter');
-    let halfSize = Math.floor(counters.length / 2);
-    counters = counters.slice(0, halfSize);
-    $(counters).each(function () {
-      let id = $(this).data('id');
-      let counter_config = window['election_object_' + id];
-      this.id = id;
-      this.type = 'subtotal';
-      this.tellerCode = counter_config.mcode;
-      prefillByGuid('teller', this);
-    });
+    var numOptions = $('#electionModal').data('num');
+    for (let i = 1; i <= numOptions; i++) {
+      var counter = {};
+      var counter_config = window['election_object_' + i];
+      counter.id = i;
+      counter.type = 'subtotal';
+      counter.tellerCode = counter_config.mcode;
+      counter.config = counter_config;
+      prefillByGuid('teller', counter);
+    }
   }
 });
 
@@ -202,6 +203,9 @@ $('.gpnl-petitionform').on('submit', function () {
 
       // cardflip the card, positionattribute flips to make sure no problems arises with different lengths of the front and back of the card, finally hide the front
       cardflip(petition_form_element);
+      if (!Number(global_config.hideresults)) {
+        showCounter();
+      }
 
 
 
@@ -326,14 +330,32 @@ function getUrlVars(){
 }
 
 // TODO add language preference detection for better formatting of numbers
-function showCounter(num_responses, counter){
-  let total = $('#counter_total').data('num');
-  $(counter).find('.counter').show();
-  let perc_slider = Math.round(100 *(num_responses / total));
+function showCounter(){
+  let modal = $('#electionModal');
+  let totalVotes = $('#counter_total').data('num');
+  let numOptions = modal.data('num');
+  let modalCounter= modal.find('.counter');
+  let modalCounterId = modalCounter.data('counter');
 
-  $(counter).find('.counter__slider').animate({width: perc_slider+'%', opacity: 1}, 2000, 'easeInOutCubic');
-  $(counter).find('.counter__gettext').html(perc_slider + '% van de stemmen');
-  $(counter).find('.counter__text').fadeIn(2000);
+  // Show the counters on the cards
+  for (let i = 1; i <= numOptions; i++) {
+    let counter_config = window['election_object_' + i];
+    let num_responses = counter_config.count;
+    let counter = $('[data-counter="'+i+'"]');
+    let perc_slider = Math.round(100 *(num_responses / totalVotes));
+    counter.show();
+    counter.find('.counter__slider').animate({width: perc_slider+'%', opacity: 1}, 2000, 'easeInOutCubic');
+    counter.find('.counter__gettext').html(perc_slider + '% van de stemmen');
+    counter.find('.counter__text').fadeIn(2000);
+
+    // When processing data which is the same as the modal, also inject it there
+    if (i === modalCounterId) {
+      modalCounter.show();
+      modalCounter.find('.counter__slider').animate({width: perc_slider+'%', opacity: 1}, 2000, 'easeInOutCubic');
+      modalCounter.find('.counter__gettext').html(perc_slider + '% van de stemmen');
+      modalCounter.find('.counter__text').fadeIn(2000);
+    }
+  }
 }
 
 // soap request naar charibase
@@ -378,6 +400,9 @@ function prefillByGuid(type, form) {
             if (form.type === 'total'){
               $('#counter_total').data('num', response);
               $('#counter_total').text(response + ' mensen hebben al gestemd.');
+            }
+            else {
+              form.config.count = response;
             }
           }
         }
