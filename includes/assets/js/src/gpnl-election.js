@@ -16,6 +16,7 @@ $(document).ready(function() {
   // convert an element to slider using slick js
   function slickify(element) {
     let numOptions = $('#electionModal').data('num');
+    let halfSize = Math.floor(numOptions / 2);
     $(element).slick({
       infinite: false,
       mobileFirst: true,
@@ -25,7 +26,7 @@ $(document).ready(function() {
       dots: true,
       centerMode: true,
       centerPadding: '50px',
-      initialSlide: 3,
+      initialSlide: halfSize,
       responsive: [
         {
           breakpoint: 992,
