@@ -89,6 +89,7 @@ $(document).ready(function() {
       success: function(response) {
         // eslint-disable-next-line no-console
         window[form_config].nonce = response.data.nonce;
+        toggleDisable($(form).find(':submit'));
       },
       error: function(){
         // If the backend sends an error, hide the thank element and show an error urging to try again
