@@ -297,3 +297,33 @@ function newsletter_form_process() {
 add_action( 'wp_ajax_newsletter_form_process', 'P4NLBKS\Controllers\Blocks\newsletter_form_process' );
 // use this version for if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_newsletter_form_process', 'P4NLBKS\Controllers\Blocks\newsletter_form_process' );
+
+
+
+
+function request_id() {
+
+	// Generate an id and try to get it from cache
+	$unique_id       = hexdec( bin2hex( openssl_random_pseudo_bytes( 2 ) ) );
+	$key_unavailable = wp_cache_get( $unique_id, 'gpnl_cache' );
+
+	// If it's already in the cache, keep on trying to find a open position
+	while ( $key_unavailable ) {
+		$unique_id       = hexdec( bin2hex( openssl_random_pseudo_bytes( 2 ) ) );
+		$key_unavailable = wp_cache_get( $unique_id, 'gpnl_cache', true );
+	}
+	wp_cache_add( $unique_id, true, 'gpnl_cache', 300 );
+
+	wp_send_json_success(
+		[
+			'id' => $unique_id,
+		],
+		200
+	);
+}
+
+
+// use this version for if you want the callback to work for users who are logged in
+add_action( 'wp_ajax_request_id', 'P4NLBKS\Controllers\Blocks\request_id' );
+// use this version for if you want the callback to work for users who are not logged in
+add_action( 'wp_ajax_nopriv_request_id', 'P4NLBKS\Controllers\Blocks\request_id' );
