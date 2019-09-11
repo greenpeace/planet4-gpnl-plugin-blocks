@@ -27,6 +27,16 @@
     @media screen and (max-width: $medium-width) {
       margin-top: 16px;
     }
+
+    .counter {
+      margin-top: 0;
+      background-color: $white;
+
+      .counter__text {
+        color: $black;
+        font-weight: 400;
+      }
+    }
   }
 
   .educationcovers__card__p {
