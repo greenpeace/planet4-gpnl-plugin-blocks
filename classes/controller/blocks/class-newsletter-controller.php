@@ -224,6 +224,17 @@ if ( ! class_exists( 'GPNL_Newsletter_Controller' ) ) {
 function newsletter_form_process() {
 
 	check_ajax_referer( 'GPNL_Newsletters', 'nonce' );
+	$id           = htmlspecialchars( wp_strip_all_tags( $_POST['id'] ) );
+	$key_in_cache = wp_cache_get( $id, 'gpnl_cache' );
+	if ( ! $key_in_cache ) {
+		wp_send_json_error(
+			[
+				'statuscode' => 400,
+			],
+			500
+		);
+	}
+	wp_cache_delete( $id, 'gpnl_cache' );
 
 	// get codes for processing in the database and sanitize
 	$marketingcode  = htmlspecialchars( wp_strip_all_tags( $_POST['marketingcode'] ) );
