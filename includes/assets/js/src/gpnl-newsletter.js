@@ -11,8 +11,6 @@ $('.gpnl-newsletter__form').on('submit', function () {
   post_form_value.marketingcode  = window[form_config].marketingcode;
   post_form_value.literaturecode  = window[form_config].literaturecode;
   post_form_value.screenid  = window[form_config].screenid;
-  post_form_value.id  = window[form_config].id;
-
 
   toggleDisable($(newsletter_form_element).find('*'));
   if (post_form_value.human !== '') {
@@ -90,7 +88,7 @@ $(document).ready(function() {
       data:    {'action' : 'request_id'},
       success: function(response) {
         // eslint-disable-next-line no-console
-        window[form_config].id = response.data.id;
+        window[form_config].nonce = response.data.nonce;
       },
       error: function(){
         // If the backend sends an error, hide the thank element and show an error urging to try again

@@ -223,9 +223,8 @@ if ( ! class_exists( 'GPNL_Newsletter_Controller' ) ) {
 
 function newsletter_form_process() {
 
-	check_ajax_referer( 'GPNL_Newsletters', 'nonce' );
-	$id           = htmlspecialchars( wp_strip_all_tags( $_POST['id'] ) );
-	$key_in_cache = wp_cache_get( $id, 'gpnl_cache' );
+	$nonce        = htmlspecialchars( wp_strip_all_tags( $_POST['nonce'] ) );
+	$key_in_cache = wp_cache_get( $nonce, 'gpnl_cache' );
 	if ( ! $key_in_cache ) {
 		wp_send_json_error(
 			[
@@ -234,7 +233,7 @@ function newsletter_form_process() {
 			500
 		);
 	}
-	wp_cache_delete( $id, 'gpnl_cache' );
+	wp_cache_delete( $nonce, 'gpnl_cache' );
 
 	// get codes for processing in the database and sanitize
 	$marketingcode  = htmlspecialchars( wp_strip_all_tags( $_POST['marketingcode'] ) );
@@ -327,7 +326,7 @@ function request_id() {
 
 	wp_send_json_success(
 		[
-			'id' => $unique_id,
+			'nonce' => $unique_id,
 		],
 		200
 	);
