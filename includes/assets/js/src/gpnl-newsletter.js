@@ -12,7 +12,6 @@ $('.gpnl-newsletter__form').on('submit', function () {
   post_form_value.literaturecode  = window[form_config].literaturecode;
   post_form_value.screenid  = window[form_config].screenid;
 
-
   toggleDisable($(newsletter_form_element).find('*'));
   if (post_form_value.human !== '') {
     showErrorMessage(newsletter_form_element);
@@ -75,3 +74,29 @@ function showErrorMessage(newsletter_form_element) {
     '<a href=\''+window.location.href +'\' class="btn btn-primary btn-block"' +
     '">Probeer je het nog eens? </a>');
 }
+
+$(document).ready(function() {
+  let forms = $('.gpnl-newsletter__form');
+
+  $.each(forms, function(){
+    let form = this;
+    let form_id = $(form).find('[name="form_id"]').val();
+    let form_config = 'newsletter_form_object_' + form_id;
+    $.ajax({
+      type:    'POST',
+      url:     window['p4_vars'].ajaxurl,
+      data:    {'action' : 'request_id'},
+      success: function(response) {
+        // eslint-disable-next-line no-console
+        window[form_config].nonce = response.data.nonce;
+        toggleDisable($(form).find(':submit'));
+      },
+      error: function(){
+        // If the backend sends an error, hide the thank element and show an error urging to try again
+        // eslint-disable-next-line no-console
+        console.log('o_o');
+        showErrorMessage(form);
+      }
+    });
+  });
+});

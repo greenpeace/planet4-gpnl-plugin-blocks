@@ -221,9 +221,19 @@ if ( ! class_exists( 'GPNL_Newsletter_Controller' ) ) {
 	}
 }
 
-function newsletter_form_process () {
+function newsletter_form_process() {
 
-	check_ajax_referer( 'GPNL_Newsletters', 'nonce' );
+	$nonce        = htmlspecialchars( wp_strip_all_tags( $_POST['nonce'] ) );
+	$key_in_cache = wp_cache_get( $nonce, 'gpnl_cache' );
+	if ( ! $key_in_cache ) {
+		wp_send_json_error(
+			[
+				'statuscode' => 400,
+			],
+			500
+		);
+	}
+	wp_cache_delete( $nonce, 'gpnl_cache' );
 
 	// get codes for processing in the database and sanitize
 	$marketingcode  = htmlspecialchars( wp_strip_all_tags( $_POST['marketingcode'] ) );
@@ -235,7 +245,7 @@ function newsletter_form_process () {
 	$email = wp_strip_all_tags( $_POST['mail'] );
 	$human = wp_strip_all_tags( $_POST['human'] );
 
-	if ( "" !== $human ) {
+	if ( '' !== $human ) {
 		wp_send_json_error(
 			[
 				'statuscode' => 400,
@@ -259,13 +269,15 @@ function newsletter_form_process () {
 
 	// initiate a cUrl request to the database
 	$request = curl_init( $url );
-	curl_setopt( $request, CURLOPT_POSTFIELDS, $data);
-	curl_setopt( $request, CURLOPT_CUSTOMREQUEST, "POST" );
+	curl_setopt( $request, CURLOPT_POSTFIELDS, $data );
+	curl_setopt( $request, CURLOPT_CUSTOMREQUEST, 'POST' );
 	curl_setopt( $request, CURLOPT_HEADER, true );
-	curl_setopt( $request, CURLOPT_HTTPHEADER,
+	curl_setopt(
+		$request,
+		CURLOPT_HTTPHEADER,
 		[
 			'Content-Type:application/json',
-			'Content-Length: ' . strlen($data)
+			'Content-Length: ' . strlen( $data ),
 		]
 	);
 	curl_setopt( $request, CURLOPT_RETURNTRANSFER, true );
@@ -279,7 +291,6 @@ function newsletter_form_process () {
 		wp_send_json_error(
 			[
 				'statuscode' => $httpcode,
-				// 'cUrlresult'    => $result,
 			],
 			500
 		);
@@ -287,13 +298,42 @@ function newsletter_form_process () {
 	wp_send_json_success(
 		[
 			'statuscode' => $httpcode,
-			 'cUrlresult'    => $result,
 		],
 		200
 	);
 }
 
-# use this version for if you want the callback to work for users who are logged in
+// use this version for if you want the callback to work for users who are logged in.
 add_action( 'wp_ajax_newsletter_form_process', 'P4NLBKS\Controllers\Blocks\newsletter_form_process' );
-# use this version for if you want the callback to work for users who are not logged in
+// use this version for if you want the callback to work for users who are not logged in.
 add_action( 'wp_ajax_nopriv_newsletter_form_process', 'P4NLBKS\Controllers\Blocks\newsletter_form_process' );
+
+
+
+
+function request_id() {
+
+	// Generate an id and try to get it from cache.
+	$unique_id       = hexdec( bin2hex( openssl_random_pseudo_bytes( 2 ) ) );
+	$key_unavailable = wp_cache_get( $unique_id, 'gpnl_cache' );
+
+	// If it's already in the cache, keep on trying to find a open position.
+	while ( $key_unavailable ) {
+		$unique_id       = hexdec( bin2hex( openssl_random_pseudo_bytes( 2 ) ) );
+		$key_unavailable = wp_cache_get( $unique_id, 'gpnl_cache', true );
+	}
+	wp_cache_add( $unique_id, true, 'gpnl_cache', 300 );
+
+	wp_send_json_success(
+		[
+			'nonce' => $unique_id,
+		],
+		200
+	);
+}
+
+
+// use this version for if you want the callback to work for users who are logged in
+add_action( 'wp_ajax_request_id', 'P4NLBKS\Controllers\Blocks\request_id' );
+// use this version for if you want the callback to work for users who are not logged in
+add_action( 'wp_ajax_nopriv_request_id', 'P4NLBKS\Controllers\Blocks\request_id' );
