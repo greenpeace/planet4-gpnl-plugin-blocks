@@ -82,6 +82,14 @@ $(document).ready(function() {
     let form = this;
     let form_id = $(form).find('[name="form_id"]').val();
     let form_config = 'newsletter_form_object_' + form_id;
+    let form_disabled = $(form).find(':submit').prop('disabled');
+
+    // Check if the submit button is disabled.
+    // FF seems to remember btn state from last request, which might break the form.
+    if ( ! form_disabled ) {
+      toggleDisable($(form).find(':submit'));
+    }
+
     $.ajax({
       type:    'POST',
       url:     window['p4_vars'].ajaxurl,
