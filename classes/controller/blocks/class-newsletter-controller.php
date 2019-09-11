@@ -221,7 +221,7 @@ if ( ! class_exists( 'GPNL_Newsletter_Controller' ) ) {
 	}
 }
 
-function newsletter_form_process () {
+function newsletter_form_process() {
 
 	check_ajax_referer( 'GPNL_Newsletters', 'nonce' );
 
@@ -235,7 +235,7 @@ function newsletter_form_process () {
 	$email = wp_strip_all_tags( $_POST['mail'] );
 	$human = wp_strip_all_tags( $_POST['human'] );
 
-	if ( "" !== $human ) {
+	if ( '' !== $human ) {
 		wp_send_json_error(
 			[
 				'statuscode' => 400,
@@ -259,13 +259,15 @@ function newsletter_form_process () {
 
 	// initiate a cUrl request to the database
 	$request = curl_init( $url );
-	curl_setopt( $request, CURLOPT_POSTFIELDS, $data);
-	curl_setopt( $request, CURLOPT_CUSTOMREQUEST, "POST" );
+	curl_setopt( $request, CURLOPT_POSTFIELDS, $data );
+	curl_setopt( $request, CURLOPT_CUSTOMREQUEST, 'POST' );
 	curl_setopt( $request, CURLOPT_HEADER, true );
-	curl_setopt( $request, CURLOPT_HTTPHEADER,
+	curl_setopt(
+		$request,
+		CURLOPT_HTTPHEADER,
 		[
 			'Content-Type:application/json',
-			'Content-Length: ' . strlen($data)
+			'Content-Length: ' . strlen( $data ),
 		]
 	);
 	curl_setopt( $request, CURLOPT_RETURNTRANSFER, true );
@@ -279,7 +281,6 @@ function newsletter_form_process () {
 		wp_send_json_error(
 			[
 				'statuscode' => $httpcode,
-				// 'cUrlresult'    => $result,
 			],
 			500
 		);
@@ -287,13 +288,12 @@ function newsletter_form_process () {
 	wp_send_json_success(
 		[
 			'statuscode' => $httpcode,
-			 'cUrlresult'    => $result,
 		],
 		200
 	);
 }
 
-# use this version for if you want the callback to work for users who are logged in
+// use this version for if you want the callback to work for users who are logged in
 add_action( 'wp_ajax_newsletter_form_process', 'P4NLBKS\Controllers\Blocks\newsletter_form_process' );
-# use this version for if you want the callback to work for users who are not logged in
+// use this version for if you want the callback to work for users who are not logged in
 add_action( 'wp_ajax_nopriv_newsletter_form_process', 'P4NLBKS\Controllers\Blocks\newsletter_form_process' );
