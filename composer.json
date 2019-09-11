@@ -24,7 +24,8 @@
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4.0"
   },
   "require": {
-		"ext-curl": "*"
+		"ext-curl": "*",
+		"ext-openssl": "*"
 	},
   "autoload": {
     "psr-4": {
