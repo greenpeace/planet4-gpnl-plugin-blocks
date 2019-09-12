@@ -289,9 +289,7 @@ if ( ! class_exists( 'Donation_Controller' ) ) {
  * Get address with API call.
  */
 function get_address_donation_form() {
-
-	check_ajax_referer( 'GPNL_get_address_donation_form', 'nonce' );
-
+	
 	// getting the options from the gnnp-settings where the API-key and API-URL are stored.
 	$options = get_option( 'planet4nl_options' );
 

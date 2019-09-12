@@ -333,8 +333,6 @@ add_action( 'wp_ajax_nopriv_request_form_process', 'P4NLBKS\Controllers\Blocks\r
  */
 function get_address() {
 
-	check_ajax_referer( 'GPNL_get_address', 'nonce' );
-
 	// getting the options from the gnnp-settings where the API-key and API-URL are stored.
 	$options = get_option( 'planet4nl_options' );
 
