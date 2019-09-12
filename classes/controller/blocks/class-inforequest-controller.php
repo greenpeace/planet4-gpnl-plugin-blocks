@@ -227,8 +227,6 @@ if ( ! class_exists( 'GPNL_Inforequest_Controller' ) ) {
 
 function request_form_process() {
 
-	check_ajax_referer( 'GPNL_Inforequest', 'nonce' );
-
 	// get codes for processing in the database and sanitize
 	$literatuurcode = htmlspecialchars( wp_strip_all_tags( $_POST['literaturecode'] ) );
 
@@ -318,8 +316,6 @@ add_action( 'wp_ajax_nopriv_request_form_process', 'P4NLBKS\Controllers\Blocks\r
 
 
 function check_form_process() {
-
-	check_ajax_referer( 'GPNL_Inforequest', 'nonce' );
 
 	$email           = wp_strip_all_tags( $_POST['mail'] );
 	$url             = 'https://secure.greenpeacephp.nl/kenikdeze.php?mail=' . rawurlencode( $email );
