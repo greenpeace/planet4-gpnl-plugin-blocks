@@ -221,6 +221,7 @@ if ( ! class_exists( 'GPNL_Newsletter_Controller' ) ) {
 	}
 }
 
+// TODO Refactor to put the functions as methods
 function newsletter_form_process() {
 
 	$nonce        = htmlspecialchars( wp_strip_all_tags( $_POST['nonce'] ) );

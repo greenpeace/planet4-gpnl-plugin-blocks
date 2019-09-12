@@ -350,6 +350,7 @@ if ( ! class_exists( 'Petition_Controller' ) ) {
 		}
 	}
 }
+// TODO Refactor to put the AJAX functions as methods
 	/*
 	 ========================
 		P E T I T I O N F O R M
