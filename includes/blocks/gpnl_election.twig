@@ -34,8 +34,11 @@
 						{% endif %}
 					</h5>
 
-					<div class="row limit-visibility election-options">
+
+				<div class="row limit-visibility election-options"
+				{%  if  options | length  < 4 %} style="margin: auto;" {% endif %}>
 						{% set i = 1 %}
+
 						{% for option in options %}
 							{% if (option.title) %}
 								<div class="col-xl cover-card-column">

@@ -47,12 +47,46 @@ $(document).ready(function() {
   }
 
   $('.gpnl-petitionform').each(function(){
-    var post_form_value = getFormObj(this);
-    var form_config = 'petition_form_object_' + post_form_value['form_id'];
+    let form = this;
+    let post_form_value = getFormObj(form);
+    let form_id = post_form_value['form_id'];
+    let form_config = 'petition_form_object_' + form_id;
     this.tellerCode = window[form_config].analytics_campaign;
     this.counter_min = Number(window[form_config].countermin);
     this.counter_max = Number(window[form_config].countermax);
     this.counter_text = window[form_config].countertext;
+
+    let form_disabled = $(form).find(':submit').prop('disabled');
+
+    // Check if the submit button is disabled.
+    // FF seems to remember btn state from last request, which might break the form.
+    if ( ! form_disabled ) {
+      toggleDisable($(form).find(':submit'));
+    }
+
+    $.ajax({
+      type:    'POST',
+      url:     window['p4_vars'].ajaxurl,
+      data:    {'action' : 'request_id'},
+      success: function(response) {
+        // eslint-disable-next-line no-console
+        window[form_config].nonce = response.data.nonce;
+        toggleDisable($(this).find(':submit'));
+      },
+      error: function(){
+        // If the backend sends an error, hide the thank element and show an error urging to try again
+        // eslint-disable-next-line no-console
+        console.log('o_o');
+        var cardback = $(form.parentNode.nextElementSibling);
+        cardback.find('*').hide('');
+        cardback.append('<p>Sorry, er gaat momenteel iets fout, probeer het nu of later opnieuw.</p>');
+        cardback.append(
+          '<a href=\''+window.location.href +'\' class="btn btn-primary btn-block"' +
+          '">Probeer opnieuw</a>');
+        cardflip(form);
+      }
+    });
+
 
     prefillByGuid('teller', this);
   });
@@ -138,7 +172,7 @@ $(document).ready(function() {
 });
 
 function getUrlVars(){
-  var vars = [], 
+  var vars = [],
     hash;
   var uri = window.location.href.split('#')[0];
   var hashes = uri.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -158,4 +192,38 @@ function getFormObj(el) {
     formObj[input.name] = input.value;
   });
   return formObj;
+}
+
+// Toggle the disabled state on form elements
+function toggleDisable(el) {
+  el.prop('disabled', !el.prop('disabled'));
+
+}
+
+// toggle the flipped class for the card parent
+function cardflip(el) {
+  let element = $(el);
+  let parent =  el.parentNode;
+  let card = $(el.parentNode.parentNode);
+
+  // first hide the signing button
+  $(element.find('.signBtn')).toggle();
+  $(element.find('.policies')).toggle();
+  // then cardflip the position attribute on the front and back of the card to support different lengths front and back
+  $(parent.nextElementSibling).css( 'position', flip_positionattribute(parent.nextElementSibling));
+  $(parent).css( 'position', flip_positionattribute(parent));
+  // then cardflip the card
+  card.toggleClass('flipped');
+
+  // after animation hide the front
+  card.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+    function() {
+      $(parent).toggle();
+      card.off('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend');
+    });
+
+}
+
+function flip_positionattribute (el){
+  return $(el).css('position') === 'absolute' ? 'relative' : 'absolute';
 }
