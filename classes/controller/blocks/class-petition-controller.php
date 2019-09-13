@@ -355,8 +355,6 @@ if ( ! class_exists( 'Petition_Controller' ) ) {
 		P E T I T I O N F O R M
    ======================== */
 function petition_form_process() {
-	// First check if the nonce is correct
-	check_ajax_referer( 'GPNL_Petitions', 'nonce' );
 
 	// get petition specific codes for processing in the database and sanitize
 	$marketingcode  = htmlspecialchars( wp_strip_all_tags( $_POST['marketingcode'] ) );
