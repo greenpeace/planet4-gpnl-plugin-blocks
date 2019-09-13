@@ -203,7 +203,8 @@ $('.gpnl-petitionform').on('submit', function () {
 
       // cardflip the card, positionattribute flips to make sure no problems arises with different lengths of the front and back of the card, finally hide the front
       cardflip(petition_form_element);
-      if (!Number(global_config.hideresults)) {
+      let totalVotes = $('#counter_total').data('num');
+      if (!Number(global_config.hideresults) && totalVotes >= global_config.counter_min) {
         showCounter();
       }
 
