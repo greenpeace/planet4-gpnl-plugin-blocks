@@ -154,8 +154,9 @@
 					  </div>
 				  </div>
 				  <div class="modal-footer">
+					  <div class="row">
 						{% if not (fields.until < today) %}
-						  <div class="small policies">
+						  <div class="small policies col-md-8">
 							  <div class="row">
 								  <div class="col-8">
 									  Greenpeace beschermt je gegevens en geeft ze niet aan derden voor commerci&euml;le
@@ -171,10 +172,16 @@
 							  </div>
 						  </div>
 						{% endif %}
-					  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
-					  {% if not (fields.until < today) %}
-						<button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
-					{% endif %}
+						  <div class="col-md-4">
+							  <div class="float-right">
+								  <button type="button" class="btn btn-cancel" data-dismiss="modal">Sluit</button>
+								  {% if not (fields.until < today) %}
+									<button type="submit" class="btn btn-primary btn-submit" form="election-form">Stem</button>
+								  {% endif %}
+							  </div>
+
+						  </div>
+					  </div>
 				  </div>
 			  </div>
 		  </div>
