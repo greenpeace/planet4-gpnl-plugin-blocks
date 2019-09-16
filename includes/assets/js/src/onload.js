@@ -70,8 +70,9 @@ $(document).ready(function() {
       data:    {'action' : 'request_id'},
       success: function(response) {
         // eslint-disable-next-line no-console
+        console.log('succes');
         window[form_config].nonce = response.data.nonce;
-        toggleDisable($(this).find(':submit'));
+        toggleDisable($(form).find(':submit'));
       },
       error: function(){
         // If the backend sends an error, hide the thank element and show an error urging to try again
