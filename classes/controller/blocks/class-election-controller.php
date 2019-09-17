@@ -166,6 +166,21 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'attr'  => 'twittertext',
 					'type'  => 'textarea',
 				],
+				[
+					'label'   => __( 'Toon telefoonnummer veld?', 'planet4-gpnl-blocks' ),
+					'attr'    => 'showphonefield',
+					'type'    => 'select',
+					'options' => [
+						[
+							'value' => 'yes',
+							'label' => __( 'ja' ),
+						],
+						[
+							'value' => 'no',
+							'label' => __( 'nee' ),
+						],
+					],
+				],
 			];
 
 			for ( $i = 1; $i <= 5; $i++ ) {
@@ -335,6 +350,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				'hidesharingbuttons' => '',
 				'donatebuttonlink'   => '',
 				'twittertext'        => '',
+				'showphonefield'     => '',
 			];
 
 			$options = [];
