@@ -397,14 +397,13 @@ function prefillByGuid(type, form) {
           var email = res[1];
           $(form).find('input[name=\'mail\']').val(email);
         } else if (type === 'teller') {
-          if (Number(response) >= config.counter_min) {
-            if (form.type === 'total'){
-              $('#counter_total').data('num', response);
-              $('#counter_total').text(response + ' mensen hebben al gestemd.');
-            }
-            else {
-              form.config.count = response;
-            }
+          if (form.type === 'total' && Number(response) >= config.counter_min){
+            $('#counter_total').data('num', response);
+            $('#counter_total').text(response + ' mensen hebben al gestemd.');
+          }
+
+          else {
+            form.config.count = response;
           }
         }
       }
