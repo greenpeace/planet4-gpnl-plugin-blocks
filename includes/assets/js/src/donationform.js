@@ -933,6 +933,8 @@ $(document).ready(function() {
             dataType: 'script',
           });
         }
+
+        let transaction_id = donationformVue.getGTMTransactionId();
         this.result.msg = '';
         this.result.hasError = false;
         this.idealData.initials = this.finalModel.initialen;
@@ -944,6 +946,27 @@ $(document).ready(function() {
         this.idealData.phonenumber = this.finalModel.telefoonnummer;
         this.idealData.description = 'Eenmalige donatie Greenpeace tnv ' + this.finalModel.voornaam + ' ' + this.finalModel.achternaam;
         this.idealData.amount = this.finalModel.bedrag;
+        this.idealData.returnUrlSuccess = this.idealData.returnUrlSuccess + '?don_trans=' + transaction_id;
+
+        let data_string_cache = JSON.stringify({
+          'amount'    : this.finalModel.bedrag,
+          'method'    : this.finalModel.betaling,
+          'frequency' : this.getFrequency(),
+        });
+
+        let cache_data = {
+          'action' : 'cache_donation',
+          'nonce'  : formconfig.nonce,
+          'transaction' : transaction_id,
+          'data' : data_string_cache,
+        };
+
+        $.ajax({
+          type:    'POST',
+          url:     window['p4_vars'].ajaxurl,
+          data:    cache_data,
+        });
+
         $.ajax({
           method: 'POST',
           url: 'https://www.mygreenpeace.nl/GPN.RegistrerenApi/payment/ideal',
