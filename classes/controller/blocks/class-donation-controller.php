@@ -402,3 +402,39 @@ function cache_donation() {
 add_action( 'wp_ajax_nopriv_cache_donation', 'P4NLBKS\Controllers\Blocks\cache_donation' );
 // call php function whenever the ajax call is made to get the address for logged in users
 add_action( 'wp_ajax_cache_donation', 'P4NLBKS\Controllers\Blocks\cache_donation' );
+
+/**
+ * Store donation for analytics
+ */
+function get_donation() {
+
+	$nonce        = htmlspecialchars( wp_strip_all_tags( $_POST['nonce'] ) );
+	$key_in_cache = wp_cache_get( $nonce, 'gpnl_cache' );
+	if ( ! $key_in_cache ) {
+		wp_send_json_error(
+			[
+				'statuscode' => 400,
+			],
+			500
+		);
+	}
+	wp_cache_delete( $nonce, 'gpnl_cache' );
+
+	$transaction = wp_strip_all_tags( $_POST['transaction'] );
+
+	$donation_data = wp_cache_get( $transaction, 'gpnl_cache' );
+	$donation_data = str_replace("\\", '', $donation_data);
+
+	wp_send_json_success(
+		[
+			'data' => $donation_data,
+		],
+		200
+	);
+}
+
+
+// call php function whenever the ajax call is made to get the address for non-logged in users
+add_action( 'wp_ajax_nopriv_get_donation', 'P4NLBKS\Controllers\Blocks\get_donation' );
+// call php function whenever the ajax call is made to get the address for logged in users
+add_action( 'wp_ajax_get_donation', 'P4NLBKS\Controllers\Blocks\get_donation' );
