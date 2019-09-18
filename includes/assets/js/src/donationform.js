@@ -121,6 +121,16 @@ $(document).ready(function() {
     formconfig.suggested_frequency = ['M', 'maandelijks voor 12 maanden'];
   }
 
+  $.ajax({
+    type:    'POST',
+    url:     window['p4_vars'].ajaxurl,
+    data:    {'action' : 'request_id'},
+    success: function(response) {
+      // eslint-disable-next-line no-console
+      formconfig.nonce = response.data.nonce;
+    }
+  });
+
   Vue.use(window.vuelidate.default);
   const {
     required,
