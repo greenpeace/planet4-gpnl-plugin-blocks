@@ -329,7 +329,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				'jquery',
 				'slick',
 				'jquery-effects-core',
-			], '2.13.0', true );
+			], '2.13.4', true );
 			// Enqueue the script:
 			$attributes = [
 				'title'              => '',
