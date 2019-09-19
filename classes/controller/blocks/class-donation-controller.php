@@ -423,8 +423,9 @@ function get_donation() {
 	$transaction = wp_strip_all_tags( $_POST['transaction'] );
 
 	$donation_data = wp_cache_get( $transaction, 'gpnl_cache' );
-	$donation_data = str_replace("\\", '', $donation_data);
+	$donation_data = str_replace( '\\', '', $donation_data );
 
+	wp_cache_delete( $transaction, 'gpnl_cache' );
 	wp_send_json_success(
 		[
 			'data' => $donation_data,
