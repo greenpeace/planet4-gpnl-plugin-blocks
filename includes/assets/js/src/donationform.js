@@ -870,7 +870,6 @@ $(document).ready(function() {
         /** Build an event send to the Datalayer, which needs to trigger the E-commerce transaction in the GTM backend
          *  Additional datalayer items are send to the datalayer and processed by the GTM as an transaction
          */
-        // TODO make transactionId configurable
         dataLayer.push({
           'event': 'trackTrans',
           'transactionId': donationformVue.getGTMTransactionId(),
