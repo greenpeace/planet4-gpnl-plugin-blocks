@@ -41,11 +41,9 @@
 
 /* front side of the card */
 .front {
-  /*position: absolute;*/
   height: 100%;
   width: 100%;
 
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -55,22 +53,12 @@
   height: 100%;
   width: 100%;
 
-  -ms-transform: rotateY(-180deg);
-  /* IE 9 */
-  -webkit-transform: rotateY(-180deg);
-  /* Safari */
   transform: rotateY(-180deg);
-
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
 /* flipping the card on hover */
 .flipped {
-  -ms-transform: rotateY(-180deg);
-  /* IE 9 */
-  -webkit-transform: rotateY(-180deg);
-  /* Safari */
   transform: rotateY(-180deg);
 }
 
