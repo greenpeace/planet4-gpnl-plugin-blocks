@@ -307,7 +307,7 @@ function request_form_process() {
 	$iserrorpage = ( false !== strpos( $http_location, $errorpage ) ? 1 : 0 );
 
 	// Give the appropriate response to the frontend
-	if ( $http_code >= 400 || $iserrorpage ) {
+	if ( $http_code >= 400 || $iserrorpage || 0 === $http_code ) {
 		wp_send_json_error(
 			[
 				'statuscode' => $http_code,
