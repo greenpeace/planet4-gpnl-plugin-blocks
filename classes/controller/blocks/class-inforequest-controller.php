@@ -288,6 +288,7 @@ function request_form_process() {
 	curl_setopt( $request, CURLOPT_POSTFIELDS, $data );
 	curl_setopt( $request, CURLOPT_POST, 1 );
 	curl_setopt( $request, CURLOPT_HEADER, true );
+	curl_setopt( $request, CURLOPT_VERBOSE, true );
 	curl_setopt(
 		$request,
 		CURLOPT_HTTPHEADER,
@@ -297,6 +298,7 @@ function request_form_process() {
 	);
 	curl_setopt( $request, CURLOPT_RETURNTRANSFER, true );
 
+	curl_exec( $request );
 	$http_code     = curl_getinfo( $request, CURLINFO_HTTP_CODE );
 	$http_location = curl_getinfo( $request, CURLINFO_REDIRECT_URL );
 	curl_close( $request );
