@@ -323,7 +323,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			wp_enqueue_style( 'gpnl_education_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-educationcovers.css', [], '2.11.2' );
 			wp_enqueue_style( 'gpnl_slick_css', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css', [ 'slick' ], '2.11.0' );
 			wp_enqueue_style( 'gpnl_election_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-election.css', [], '2.12.1' );
-			wp_enqueue_style( 'gpnl_petition_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-petition.css', [], '2.11.4' );
+			wp_enqueue_style( 'gpnl_petition_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-petition.css', [], '2.13.5' );
 
 			wp_enqueue_script( 'gpnl_election_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-election.js', [
 				'jquery',
