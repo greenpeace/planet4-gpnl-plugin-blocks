@@ -950,7 +950,7 @@ $(document).ready(function() {
         let data_string_cache = JSON.stringify({
           'amount'    : this.finalModel.bedrag,
           'method'    : this.finalModel.betaling,
-          'frequency' : this.getFrequency(),
+          'frequency' : this.finalModel.machtigingType
         });
 
         let cache_data = {
