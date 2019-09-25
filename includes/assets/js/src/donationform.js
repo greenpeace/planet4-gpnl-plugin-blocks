@@ -873,7 +873,7 @@ $(document).ready(function() {
         dataLayer.push({
           'event': 'trackTrans',
           'transactionId': donationformVue.getGTMTransactionId(),
-          'transactionAffiliation': '',
+          'transactionAffiliation': this.finalModel.machtigingType,
           'transactionTotal': this.finalModel.bedrag,
           'transactionTax': '',
           'transactionShipping': '',
