@@ -14,10 +14,6 @@ class ComposerStaticInit336100170ff2882375cd04c4c76f9df3
             'P4NLBKS\\Controllers\\' => 20,
             'P4NLBKS\\' => 8,
         ),
-        'D' => 
-        array (
-            'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 55,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -37,14 +33,9 @@ class ComposerStaticInit336100170ff2882375cd04c4c76f9df3
         array (
             0 => __DIR__ . '/../..' . '/classes',
         ),
-        'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dealerdirect/phpcodesniffer-composer-installer/src',
-        ),
     );
 
     public static $classMap = array (
-        'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin' => __DIR__ . '/..' . '/dealerdirect/phpcodesniffer-composer-installer/src/Plugin.php',
         'P4NLBKS\\Controllers\\Blocks\\Controller' => __DIR__ . '/../..' . '/classes/controller/blocks/class-controller.php',
         'P4NLBKS\\Controllers\\Blocks\\Donation_Controller' => __DIR__ . '/../..' . '/classes/controller/blocks/class-donation-controller.php',
         'P4NLBKS\\Controllers\\Blocks\\GPNL_2colembed_Controller' => __DIR__ . '/../..' . '/classes/controller/blocks/class-2colembed-controller.php',
