@@ -288,7 +288,6 @@ function request_form_process() {
 	curl_setopt( $request, CURLOPT_POSTFIELDS, $data );
 	curl_setopt( $request, CURLOPT_POST, 1 );
 	curl_setopt( $request, CURLOPT_HEADER, true );
-	curl_setopt( $request, CURLOPT_VERBOSE, true );
 	curl_setopt(
 		$request,
 		CURLOPT_HTTPHEADER,
