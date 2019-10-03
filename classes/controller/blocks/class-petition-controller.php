@@ -297,7 +297,7 @@ if ( ! class_exists( 'Petition_Controller' ) ) {
 			$fields['social_accounts'] = $this->get_social_accounts( $social_menu );
 			$fields['current_url']     = $this->current_url( $_SERVER );
 			$fields['twittertext']     = rawurlencode( $fields['twittertext'] );
-			$fields['whatsapptext']    = rawurlencode( $fields['whatsapptext'] );
+			$fields['whatsapptext']    = ($fields['whatsapptext'] === '' )? $fields['twittertext'] : rawurlencode( $fields['whatsapptext'] );
 
 			$fields['isloggedin'] = is_user_logged_in();
 			$fields['lastedit']   = get_the_modified_author();
