@@ -169,7 +169,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				[
 					'label' => __( 'Sharingtekst voor Whatsapp', 'planet4-gpnl-blocks' ),
 					'attr'  => 'whatsapptext',
-					'type'  => 'text',
+					'type'  => 'textarea',
 				],
 				[
 					'label'   => __( 'Toon telefoonnummer veld?', 'planet4-gpnl-blocks' ),
