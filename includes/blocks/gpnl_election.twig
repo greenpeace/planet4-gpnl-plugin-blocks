@@ -138,16 +138,17 @@
 									  {% if (fields.donatebutton) %}
 										  <a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebutton }}</a>
 									  {% endif %}
-									  {% if not fields.hidesharingbuttons %}
-									  <div class="gpnl-petitionshare">
-										  <a class="btn btn-primary btn-block gpnl-share-facebook"
-											 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook');">
+								  {% if not fields.hidesharingbuttons %}
+									  <div class="gpnl-petitionshare row mx-0">
+										  <a class="btn btn-primary gpnl-share-facebook col-md-4"
+											 href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
 											  FACEBOOK
 										  </a>
-										  <a class="btn btn-primary btn-block gpnl-share-twitter"
-											 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter');">
+										  <a class="btn btn-primary gpnl-share-twitter col-md-4"
+											 href="https://twitter.com/share?url={{ fields.current_url }}&text={{ fields.twittertext }}&via={{ fields.social_accounts.twitter }}&related={{ fields.social_accounts.twitter }}" target="_blank" role="button" onclick="fireShareEvent('twitter', {{ fields.form_id }});">
 											  TWITTER
 										  </a>
+										  <a class="btn btn-primary gpnl-share-whatsapp col-md-4" target="_blank" href="https://api.whatsapp.com/send?text={{ fields.whatsapptext }} via {{ fields.current_url }}" role="button" onclick="fireShareEvent('whatsapp');">WHATSAPP</a>
 									  </div>
 								  {% endif %}
 							  </div>
