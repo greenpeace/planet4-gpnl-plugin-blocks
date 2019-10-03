@@ -167,6 +167,11 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 					'type'  => 'textarea',
 				],
 				[
+					'label' => __( 'Sharingtekst voor Whatsapp', 'planet4-gpnl-blocks' ),
+					'attr'  => 'whatsapptext',
+					'type'  => 'textarea',
+				],
+				[
 					'label'   => __( 'Toon telefoonnummer veld?', 'planet4-gpnl-blocks' ),
 					'attr'    => 'showphonefield',
 					'type'    => 'select',
@@ -350,6 +355,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 				'hidesharingbuttons' => '',
 				'donatebuttonlink'   => '',
 				'twittertext'        => '',
+				'whatsapptext'       => '',
 				'showphonefield'     => '',
 			];
 
@@ -395,6 +401,7 @@ if ( ! class_exists( 'GPNL_Election_Controller' ) ) {
 			$fields['social_accounts'] = $this->get_social_accounts( $social_menu );
 			$fields['current_url']     = $this->current_url( $_SERVER );
 			$fields['twittertext']     = rawurlencode( $fields['twittertext'] );
+			$fields['whatsapptext']    = rawurlencode( $fields['whatsapptext'] );
 
 			$fields['titleimage'] =
 				[
