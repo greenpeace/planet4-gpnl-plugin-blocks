@@ -13,17 +13,20 @@ $(document).ready(function() {
     $('.inforequest__title').html('<h3>Welkom terug!</h3>');
     $('.inforequest__message').html('<p>Je kan nu gebruikmaken van de lesmaterialen.</p>');
     $('.inforequest__wrapper').nextAll().show(1000);
+    $('.fallbackbtn').show(1000);
   }
   else{
     $('.hideshowbtn').show(1000);
   }
 });
 
-$('.hideshowbtn').on('click', function () {
+
+$('.hideshowbtn, .fallbackbtn').on('click', function () {
   let btn = $(this);
+  let classname = '.' + btn.attr('class').split(/\s+/).pop();
   let form  = btn.data('target');
   $(form).show(1000);
-  $('.hideshowbtn').hide(1000);
+  $(classname).hide(1000);
 });
 
 $('.inforequest_form').on('reset', function () {
@@ -52,6 +55,7 @@ $('.gpnl-request__form').on('submit', function () {
       $(request_form_element).find('*').hide(1000);
       $('.inforequest__title').html('<h3>Dank je voor je aanmelding!</h3>');
       $(request_form_element).prepend('<p>Je kan nu gebruikmaken van de lesmaterialen.</p>');
+      $('.fallbackbtn').show(1000);
       if (null !== readCookie('greenpeace')){
         createCookie('gpnl_education', 1, 365);
         if (window[form_config].hider === '1') {
@@ -92,6 +96,7 @@ $('.gpnl-check__form').on('submit', function () {
       $(check_form_element).find('*').hide(1000);
       $('.inforequest__title').html('<h3>Welkom terug!</h3>');
       $(check_form_element).prepend('<p>Je kan nu gebruikmaken van de lesmaterialen.</p>');
+      $('.fallbackbtn').show(1000);
       if (null !== readCookie('greenpeace')){
         createCookie('gpnl_education', 1, 365);
         if (window[form_config].hider === '1') {

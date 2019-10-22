@@ -30,16 +30,11 @@
   // TODO add option for hero with only title white on green
   .hero__wrapper {
     .hero__text {
-      top: 0;
-      margin: 0 -15px;
+      margin: 15px 0;
       max-width: 100%;
 
       @include medium-and-up {
-        //left: $xlrg;
-      }
-
-      @include x-large-and-up {
-        //left: 100px;
+        margin-top: 40px;
       }
 
       .hero__title {
