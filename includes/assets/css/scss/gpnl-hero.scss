@@ -30,11 +30,11 @@
   // TODO add option for hero with only title white on green
   .hero__wrapper {
     .hero__text {
-      margin: 15px 0;
+      padding: 15px 0;
       max-width: 100%;
 
       @include medium-and-up {
-        margin-top: 40px;
+        padding-top: 40px;
       }
 
       .hero__title {
