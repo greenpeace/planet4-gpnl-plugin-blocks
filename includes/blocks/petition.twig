@@ -104,7 +104,8 @@
 									<p class="card-text">{{ fields.thanktext|e('wp_kses_post')|raw }}</p>
 									<a class="btn btn-primary btn-block" href="{{ fields.donatebuttonlink }}" role="button">{{ fields.donatebuttontext }}</a>
 									{% if not fields.hidesharingbuttons %}
-										<div class="gpnl-petitionshare row mx-0">
+										<h5 class="card-title mt-2 mb-0">Deel dit via:</h5>
+										<div class="gpnl-petitionshare row mx-0 mt-0">
 											<a class="btn btn-primary gpnl-share-facebook col-md-4"
 											   href="https://www.facebook.com/sharer/sharer.php?u={{ fields.current_url|url_encode }}" target="_blank" role="button" onclick="fireShareEvent('facebook', {{ fields.form_id }});">
 												FACEBOOK
