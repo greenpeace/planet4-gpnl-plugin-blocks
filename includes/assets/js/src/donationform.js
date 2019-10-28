@@ -123,7 +123,7 @@ $(document).ready(function() {
 
   $.ajax({
     type:    'POST',
-    url:     window['p4_vars'].ajaxurl,
+    url:     window['p4nl_vars'].ajaxurl,
     data:    {'action' : 'request_id'},
     success: function(response) {
       // eslint-disable-next-line no-console
@@ -962,7 +962,7 @@ $(document).ready(function() {
 
         $.ajax({
           type:    'POST',
-          url:     window['p4_vars'].ajaxurl,
+          url:     window['p4nl_vars'].ajaxurl,
           data:    cache_data,
         });
 

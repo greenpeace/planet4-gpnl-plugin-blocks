@@ -159,7 +159,7 @@ if ( ! class_exists( 'GPNL_Newsletter_Controller' ) ) {
 		public function prepare_template( $fields, $content, $shortcode_tag ) : string {
 
 			wp_enqueue_style( 'gpnl_newsletter_css', P4NLBKS_ASSETS_DIR . 'css/gpnl-newsletter.css', [], '2.10.5' );
-			wp_enqueue_script( 'gpnl_newsletter_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-newsletter.js', [ 'jquery' ], '2.13.0', true );
+			wp_enqueue_script( 'gpnl_newsletter_js', P4NLBKS_ASSETS_DIR . 'js/gpnl-newsletter.js', [ 'jquery' ], '2.15.4', true );
 
 			$shortcode_atts_pairs = [
 				'background'     => '',
